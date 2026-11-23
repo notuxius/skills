@@ -17,8 +17,18 @@ Work in the consuming project's checkout, on the branch and working tree contain
 1. **Choose a baseline.** In a PR use its actual base (merge base for a branch). For local changes compare the index and working tree with HEAD and include relevant untracked manifests, config and source. For a change already merged, use the supplied commit range or the last reviewed workspace/package evidence. Examine the current working tree as well when it is part of the task. A checkout with no usable history can be inventoried as a baseline. Label earlier versions and first use as unknown where evidence is missing.
 2. **Resolve the affected package in its workspace.** Compare before and after declarations and lockfile resolutions, including direct development, optional and peer dependencies where relevant. Follow the importer's resolution in a shared lockfile. A changed range can resolve to the same version, and an unchanged range can resolve to a new version. With no lock or other reliable version evidence, record the declared constraint and mark the resolution unverified. Read files as data. Leave application dependencies and lockfiles alone during upkeep.
 3. **Check actual use.** Read relevant changed imports, scripts, config and CI entries. New use of an already-declared package counts even if the manifest and lockfile are identical. Check for earlier use in that workspace before calling it first use. Keep ordinary transitive churn and unchanged sibling workspaces out of scope unless evidence shows a change to a workflow they use. A removal can retire a workspace mapping once remaining usages have been checked.
-4. **Review the affected guidance now.** Map each material change to existing project skills and compare their commands, APIs, examples and project conventions with the resolved version. Check version-specific official documentation or locally available tooling. Recheck even a recently reviewed skill and even if its text never names a version. When editing a shared skill, keep its instructions valid for workspaces still using the previous version. Record an unaffected result when the guidance still works. An upstream release or a version number change alone is insufficient reason to edit.
+4. **Review the affected guidance now.** Map each material change to existing project skills and compare their commands, APIs, examples and project conventions with the resolved version. Check version-specific official documentation or locally available tooling. Recheck even a recently reviewed skill and even if its text never names a version. When editing a shared skill, keep its instructions valid for workspaces still using the previous version. Record an unaffected result when the guidance still works. For a major upgrade or known breaking change, record the version-specific migration note, the affected skill section and a focused check for that change. A command or flag check verifies availability. Use an example, contract test or equivalent when behavior changes.
 5. **Act and verify.** Use the decision table below. In apply mode change only affected project skills, their discovery entries and coverage rows. Preserve the package diff on the current branch. In report-only mode show the same decisions and proposed checks in the response. If an implementation or test is already requested, follow **Use a skill on a task** after the review.
+
+### Preview skills bundled with npm packages
+
+For an installed npm dependency, inspect the package's skill files and the workspace's existing skill names. When the project's approved Skills CLI supports the sync options, use its installed or cached executable to preview the affected package only:
+
+```sh
+skills experimental_sync --dry-run --no-remote --no-cleanup --no-frozen-lockfile --include '<package>'
+```
+
+Run from the affected workspace or use the CLI's documented workspace support. Check the preview for name collisions and package provenance. If the CLI is unavailable, inspect the installed package directly. Validate the bundled guidance against the resolved package version and follow the decision table for adoption. Use a targeted sync in apply mode only for a reviewed, compatible bundled skill, with the project's agent selection and install mode. Recheck the diff, lock and both discovery paths.
 
 ## Choose an action
 
@@ -33,6 +43,10 @@ Work in the consuming project's checkout, on the branch and working tree contain
 | The package needs no special guidance, evidence is missing, or installation is restricted | Record the reason and any unresolved gap. Use version-matched official documentation for the task when available. |
 
 Leave replacements of existing skills as proposals unless the user requests the replacement. For agents sharing a linked skill, edit its project-local source once. For separate copies, apply the correction in each intended agent directory and preserve its agent-specific instructions. Verify discovery, frontmatter, relative links, the change diff and any relevant local command. Distinguish checks actually run from checks that need a working project environment. Preserve each workspace's row in the package coverage section of the ledger. In a report, show workspace, package change, evidence, skill and action, and verification. Report-only mode writes no files.
+
+Record the minimum supported version only when the relevant command, API or feature has a documented or tested introduction point. Record the last verified version, exact check and result separately for each workspace or supported version that was actually tested. Carry forward prior verification evidence with its original version. Mark a check that could not run as unverified and include its proposed invocation.
+
+The compatibility fields draw on [Zapier's Workflows Doctor](https://skills.sh/zapier/agent-skills/workflows-doctor). The staged major-upgrade checks draw on [Dependency Upgrade](https://skills.sh/wshobson/agents/dependency-upgrade).
 
 ## Use a skill on a task
 

@@ -24,7 +24,7 @@ Compared the pull request with its merge base. The web workspace's Vitest resolu
 | `apps/web/package.json`, web importer in `pnpm-lock.yaml` | Vitest patch update | `^4.0.0` → `^4.0.0` | `4.0.1` → `4.0.4` | Reuse `.agents/skills/unit-tests/SKILL.md`. Checked the example's flags against the installed CLI help. The example still applies. |
 | `services/api/package.json`, API importer in `pnpm-lock.yaml`, new `services/api/src/jobs/retry.ts` | First direct use of BullMQ | `^2.0.0` → `^2.0.0` | `2.1.0` → `2.1.0` | Uncovered. The existing HTTP retry skill documents a different workflow. The public candidate covers another major. No verified queue skill to recommend. |
 
-The ledger preview contains these two workspace rows. The run made no project changes.
+The ledger preview contains these two workspace rows. Vitest 4.0.4 is the last verified version for `apps/web`. The minimum supported version is unknown. The recorded check is `npx --no-install vitest --help`, which showed the flags used in the skill. The run made no project changes.
 
 ## Use a skill during implementation
 
@@ -70,7 +70,7 @@ Proposed new skills (not installed)
 | EF Core migrations | `*.csproj` references EF Core, no skill covers it | example-org/dotnet-skills@ef-migrations | 4.2K / unverified / MIT | npx skills add example-org/dotnet-skills@ef-migrations |
 ```
 
-Unverified figure: stars for example-org/dotnet-skills. No candidate red flags were found in this example.
+The ledger records the auditor, finding and source link for any result that influenced the decision. Example: the reviewer checked a warning about an external URL against the candidate SHA and found that the warning referred to an earlier revision. Stars for `example-org/dotnet-skills` are unverified.
 
 ```
 Reviewed: 5 | Updated: 0 | Pointer: 0 | Supersede proposed: 1 | No change: 4 | Not covered: 3 | Gaps proposed: 1 | Branch: report-only | Confidence: Medium

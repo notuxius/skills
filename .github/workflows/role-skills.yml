@@ -24,6 +24,8 @@ jobs:
       - run: npm test
       - run: npm run skills:verify -- ..
       - run: python3 tools/replay_update.py
+      - name: Test a fresh install and an npm-bundled skill upgrade
+        run: npm run skills:bundle-test
       - name: Exercise installation and selective updates from the public catalog
         env:
           DISABLE_TELEMETRY: '1'
