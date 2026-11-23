@@ -27,6 +27,4 @@ jobs:
       - name: Test a fresh install and an npm-bundled skill upgrade
         run: npm run skills:bundle-test
       - name: Exercise installation and selective updates from the public catalog
-        env:
-          DISABLE_TELEMETRY: '1'
-        run: node tools/check-public-install.mjs
+        run: npm run skills:public-test

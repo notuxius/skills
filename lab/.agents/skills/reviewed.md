@@ -15,4 +15,4 @@ groups:
 | `qa/` | `node:test` and strict assertions | 22.20.0 | 26.13.1 | `queue-aqa` | `node --test qa/claim-race.test.mjs` passed and detected wrong ownership in the faulty service. |
 | `design/` | JSON design tokens consumed by the badge component | 22.20.0 | 26.13.1 | `queue-design` | `node --test design/status-badge.test.mjs` passed label, contrast and fallback checks. |
 
-The project minimum comes from `package.json`. Record the resolved dependency, minimum supported version when known, and the last verified version separately when a package affects a role.
+The project minimum comes from `package.json`. The role acceptance tests also passed on Node.js 22.20.0. Record the resolved dependency, minimum supported version when known, and the last verified version separately when a package affects a role.

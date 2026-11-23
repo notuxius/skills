@@ -18,6 +18,7 @@ cd lab
 npm test
 npm run skills:verify -- ..
 npm run skills:bundle-test
+npm run skills:public-test
 ```
 
 To try AQA, run these commands from the repository root.
@@ -35,7 +36,7 @@ Start independent sessions from identical copies of a practice fixture. Keep the
 
 For a routing tie, ask AQA to add the ownership regression while mentioning that the backend engineer owns the claim and retry code. Expect the QA files to change and the backend to stay intact. `npm test` includes a deterministic description-matching check for this prompt and a representative prompt for each catalog skill.
 
-The bundled-skill fixture uses the pinned Skills CLI and installs two local npm tarballs in a temporary project. It checks CLI installation of all five catalog skills, the read-only preview, both agents' updated copies, and preservation of a local skill with a colliding name.
+The bundled-skill fixture uses the pinned Skills CLI and installs two local npm tarballs in a temporary project. It checks CLI discovery of all five catalog skills, the read-only preview, flag compatibility before and after the upgrade, and updates to the reviewed skill in both agents. It also checks that a local skill with a colliding name is preserved and that an unreviewed bundled skill is skipped.
 
 Project instructions map tasks to skills. The installed `skills-upkeep` workflow handles package additions, upgrades and first use. Make reusable improvements in the [catalog](../skills/) and record lab-specific rules in [AGENTS.md](AGENTS.md).
 
