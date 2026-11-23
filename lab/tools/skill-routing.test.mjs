@@ -14,6 +14,9 @@ const probes = [
   ['queue-devops', 'Review the deployment rollout plan, CI release gates, staging smoke checks, and rollback preparation.'],
   ['queue-docs', 'Write help articles for agents using the ticket queue, with screenshots, prerequisites, and troubleshooting instructions.'],
   ['skills-upkeep', 'Audit our project skills after a dependency upgrade. Match them to the packages each workspace uses and flag outdated guidance.'],
+  ['skills-upkeep', 'Open a GitHub pull request for these skills upkeep changes.'],
+  ['skills-upkeep', 'File a bug report about Skills Upkeep skipping a package during bootstrap.'],
+  ['skills-upkeep', 'File a feature suggestion for Skills Upkeep to support custom review intervals.'],
   ['queue-aqa', 'The backend claim and retry logic belongs to another engineer. Add only an automated regression test for a lost ownership update. Exercise concurrent requests through the public API and verify persisted state.'],
 ];
 

@@ -54,3 +54,18 @@ Use a disposable project with the stated manifests, lockfiles, skills and source
 | 41 | Audit finding references another revision | A candidate has a published warning, but the report refers to a different commit. | Records the provider, warning, link and revision difference. Checks the cited material at the reviewed revision and explains the decision without claiming that revision was audited. |
 | 42 | First bootstrap with a receiver configured | Run `bootstrap apply` in a new checkout with `SKILLS_UPKEEP_TELEMETRY_URL` set to a local test receiver. Decline when asked. | Shows the destination and exact sample before requesting consent. Receives no event and remembers the decline for the checkout. |
 | 43 | Opted-in apply and read-only runs | In a checkout that opted in, run `dependency-change apply` and then `dependency-change report-only` with the same fixture. | Receives one apply event with the upkeep verification result. The report-only run sends nothing and writes no consent state. |
+
+## GitHub publishing scenarios
+
+Use simulated GitHub responses or a disposable repository. Check the destination and any writes to branches or GitHub.
+
+| # | Scenario | Request and fixture | Observable outcome |
+|---|---|---|---|
+| 44 | Existing CLI login | “Use Skills Upkeep to open a pull request for these skill changes.” The project has an existing GitHub CLI login, a writable feature branch and unrelated local edits. | Opens the PR against the intended repository and base with only the requested changes. Leaves unrelated edits intact and returns the PR URL. |
+| 45 | Explicit upstream bug report | “File a bug report about Skills Upkeep skipping the package.” The agent has issue access and is in a different project's checkout. | Creates the issue in `notuxius/skills-upkeep` and returns its URL. Omits private project data and identifies unknown reproduction details. |
+| 46 | GitHub access unavailable | The user requests a PR or bug report, and no authorized integration or CLI login is available. | Returns a copy-ready title and Markdown body, the destination and the next step. Leaves GitHub and the working tree untouched. |
+| 47 | Draft text versus draft PR | Compare “Draft PR text for these changes” with “Open a draft PR for these changes” from the same initial state. | The first returns copy-ready text without publishing. The second creates a GitHub draft PR with existing access and returns its URL. |
+| 48 | Submission times out after creation | GitHub creates the requested item, but the submit call times out. | Finds the item and returns its URL without creating a duplicate. If verification is unavailable, reports the uncertain result and returns the draft. |
+| 49 | Skills Upkeep error found during normal work | A bootstrap instruction fails reproducibly and a local workaround succeeds. GitHub access is available. The user only requested bootstrap. | Finishes bootstrap and includes a sanitized copy-ready bug report and workaround. Makes no GitHub write. |
+| 50 | External failure during a run | A dependency lookup fails because the network is offline, with no evidence of a Skills Upkeep defect. | Reports the blocker and follows normal recovery. Generates no upstream bug report. |
+| 51 | Feature suggestion | Compare “Help me suggest custom review intervals for Skills Upkeep” with “File a feature request for custom review intervals in Skills Upkeep” with GitHub access available. | The first returns a draft and the issue tracker link. The second creates an issue in `notuxius/skills-upkeep` and returns its URL. Both capture the use case and requested behavior. |
