@@ -9,11 +9,11 @@ export function createQueueView(load) {
 
     try {
       const result = await load(filter);
-      if (id === requestId) {
+      if (filter === state.filter) {
         state = { filter, phase: 'ready', rows: result, error: null };
       }
     } catch (error) {
-      if (id === requestId) {
+      if (filter === state.filter) {
         state = { filter, phase: 'error', rows, error: error.message };
       }
     }
