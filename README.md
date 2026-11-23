@@ -50,3 +50,11 @@ The project instructions guide the agent to `browser-tests`, where it finds the 
 After upgrading Playwright, ask the agent to check the guidance against the newly locked version.
 
 > Run skills-upkeep dependency-change apply for tests/e2e
+
+## Skills Upkeep pricing survey
+
+> Run skills-upkeep pricing-survey.
+
+Which would you choose for Skills Upkeep, a monthly subscription or a one-time purchase? Tell us what you’d pay and how likely you’d be to buy at the proposed one-time price of **$9 USD**.
+
+[Reply publicly on GitHub](https://github.com/notuxius/skills-upkeep/discussions/4) under your GitHub username, or [Answer anonymously in Google Forms](https://docs.google.com/forms/d/e/1FAIpQLSdF1nbzCIxOqb3atj0NxSk5d9f1UiYN7KNUx5CDQyNQFR_dsA/viewform) without signing in. We’ll share anonymous responses in aggregate.
