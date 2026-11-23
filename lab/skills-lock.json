@@ -2,7 +2,7 @@
   "version": 2,
   "skills": {
     "queue-api": {
-      "source": "notuxius/skills-upkeep",
+      "source": "notuxius/skills",
       "sourceType": "github",
       "skillPath": "skills/queue-api/SKILL.md",
       "computedHash": "fe0301074cb95d375f177fab84c476df0cf51842e87ef342025c527cd86668db",
@@ -10,7 +10,7 @@
       "installMode": "copy"
     },
     "queue-aqa": {
-      "source": "notuxius/skills-upkeep",
+      "source": "notuxius/skills",
       "sourceType": "github",
       "skillPath": "skills/queue-aqa/SKILL.md",
       "computedHash": "bac83877111adafd736b3cfa449c0526f709f69a38b9976ad2f1a5f66b5e1b7c",
@@ -18,7 +18,7 @@
       "installMode": "copy"
     },
     "queue-design": {
-      "source": "notuxius/skills-upkeep",
+      "source": "notuxius/skills",
       "sourceType": "github",
       "skillPath": "skills/queue-design/SKILL.md",
       "computedHash": "bd49fa0b0afc6c97e7eec9ac987f7c55580160ea7c76ac50f326cafe77e84cc4",
@@ -26,7 +26,7 @@
       "installMode": "copy"
     },
     "queue-ui": {
-      "source": "notuxius/skills-upkeep",
+      "source": "notuxius/skills",
       "sourceType": "github",
       "skillPath": "skills/queue-ui/SKILL.md",
       "computedHash": "244089588c87ca20f0e7da4f749f0480263904d8eb5fcb5c4acdde920c933dfa",

@@ -8,6 +8,6 @@
     "skills:verify": "node tools/verify-installs.mjs",
     "skills:bundle-test": "node tools/check-bundled-skills.mjs",
     "skills:public-test": "node tools/check-public-install.mjs",
-    "skills:refresh": "npx --yes skills@1.9.0 add notuxius/skills-upkeep --agent codex claude-code --copy --skill"
+    "skills:refresh": "npx --yes skills@1.9.0 add notuxius/skills --agent codex claude-code --copy --skill"
   }
 }

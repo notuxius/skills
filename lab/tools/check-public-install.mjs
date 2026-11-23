@@ -6,7 +6,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { verifyInstalls } from './verify-installs.mjs';
 
-const source = 'notuxius/skills-upkeep';
+const source = 'notuxius/skills';
 const baselineCommit = '4fc9a43aeb84034c9f7a2f8de3d957e5a7454f7d';
 const roles = ['queue-ui', 'queue-api', 'queue-aqa', 'queue-design'];
 const allSkills = [...roles, 'skills-upkeep'];
