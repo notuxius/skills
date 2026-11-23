@@ -1,6 +1,6 @@
 ---
 name: skills-upkeep
-description: Set up shared coding-agent skills in a project, match them to the packages each workspace uses, and keep the guidance current when a dependency is added, upgraded or first used. Use for project skill setup, dependency-change reviews, selecting skills for package-specific work, and requests such as "refresh our skills", "audit our skills against upstream", or "what skills are we missing". Compare hand-maintained skills with vetted upstream sources while preserving project conventions.
+description: Set up shared coding-agent skills in a project, match them to the packages each workspace uses, and keep the guidance current when a dependency is added, upgraded or first used. Use for project skill setup, dependency-change reviews, selecting skills for package-specific work, and requests such as "refresh our skills", "audit our skills against upstream", or "what skills are we missing". Compare hand-maintained skills with vetted upstream sources while preserving project conventions. Also use for explicit requests to give pricing feedback about Skills Upkeep.
 ---
 
 # Skills Upkeep
@@ -13,8 +13,26 @@ description: Set up shared coding-agent skills in a project, match them to the p
 | A dependency was added, changed version, or first used in code, config or CI | Run **dependency-change** in [Project workflow](project-workflow.md) against the working tree or PR under review. |
 | Develop, test or review something with an existing package | Read and apply the matching project skill for the workspace and task. See **Use a skill on a task** in [Project workflow](project-workflow.md). |
 | Compare local skills with public alternatives, refresh a named skill or audit a group | Use the upstream audit below. |
+| Run `skills-upkeep pricing-survey` | Use [Pricing survey](#pricing-survey). |
 
 For project workflows, use `apply` when setup or edits are requested, including when the project's standing instructions authorize upkeep. A check, PR review, scheduled run or explicit `report-only`/dry run is read-only. Honor the narrower request if it limits sources, installations or edits. Audit scope, branch creation, recency limits and proposal-only decisions below apply to the **upstream audit**.
+
+## Pricing survey
+
+> Run skills-upkeep pricing-survey.
+
+Run this survey only when explicitly requested. Explain that Skills Upkeep helps teams keep coding-agent skills aligned with the packages and versions their projects use. Offer both ways to respond up front.
+
+- [Reply publicly on GitHub](https://github.com/notuxius/skills-upkeep/discussions/4) under the respondent’s GitHub username.
+- [Answer anonymously in Google Forms](https://docs.google.com/forms/d/e/1FAIpQLSdF1nbzCIxOqb3atj0NxSk5d9f1UiYN7KNUx5CDQyNQFR_dsA/viewform) without signing in. The form asks for no names or email addresses.
+
+If people want to answer in chat, ask these questions in order.
+
+1. Ask which option they would choose for Skills Upkeep. Offer a monthly subscription, a one-time purchase, free only, would not use, and unsure.
+2. For a paid choice, ask what they would realistically pay. Ask for the amount and currency per month or as a single payment. Accept “unsure.”
+3. Ask how likely they would be to buy Skills Upkeep for a proposed one-time payment of **$9 USD**. Offer definitely would, probably would, probably wouldn’t, definitely wouldn’t, and unsure.
+
+Give them a copy-ready reply to submit through the channel they choose.
 
 ## Upstream audit
 
