@@ -18,13 +18,14 @@ npx skills add notuxius/role-skill-catalog --skill queue-ui queue-api queue-aqa 
 npx skills list --json
 ```
 
-Edit the source under `skills/`, run the matching exercise in [the companion role-skills-lab](https://github.com/notuxius/role-skills-lab), and merge the improvement into the default branch. From the consuming project, check for updates and apply the relevant skill.
+Edit the source under `skills/`, run the matching exercise in [the companion role-skills-lab](https://github.com/notuxius/role-skills-lab), and merge the improvement into the default branch.
+
+In the consuming project, run `npx skills check` and inspect the installed copies for local edits. Preserve any team-specific changes before refreshing. For an improved AQA skill, refresh the two project copies together.
 
 ```sh
-npx skills check
-npx skills update queue-aqa --project
+npx skills add notuxius/role-skill-catalog --skill queue-aqa --agent codex claude-code --copy
 ```
 
-Review the resulting skill and lockfile changes, then run the role tests in the consuming project. New installations from the default branch receive its current guidance. skills.sh indexes installations from the public repository. See the [directory FAQ](https://skills.sh/docs/faq) and the [CLI reference](https://github.com/vercel-labs/skills/blob/main/docs/commands.md).
+Verify that both `.agents/skills/queue-aqa/SKILL.md` and `.claude/skills/queue-aqa/SKILL.md` contain the revised guidance. Review the skill and lockfile changes, then run the AQA exercise. For another role, substitute its skill name. New installations from the default branch receive its current guidance. skills.sh indexes installations from the public repository. See the [directory FAQ](https://skills.sh/docs/faq) and the [CLI reference](https://github.com/vercel-labs/skills/blob/main/docs/commands.md).
 
 The refs `v1` and `v2` identify the baseline and improved revisions in the update exercise. Install from the default branch to follow later improvements.
