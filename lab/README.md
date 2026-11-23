@@ -50,12 +50,12 @@ python tools/replay_update.py
 
 ## Follow future improvements from skills.sh
 
-Edit the four skills in [notuxius/skills-upkeep](https://github.com/notuxius/skills-upkeep). The default branch supplies current installations. The bundled catalog keeps the original two releases available for the offline rehearsal.
+Edit the four skills in [notuxius/skills](https://github.com/notuxius/skills). The default branch supplies current installations. The bundled catalog keeps the original two releases available for the offline rehearsal.
 
 To install the four skills in another project, run these commands from its root. Preserve any existing same-name local customizations as project rules before adopting the upstream copies.
 
 ```sh
-npx skills add notuxius/skills-upkeep --skill queue-ui queue-api queue-aqa queue-design --agent codex claude-code --copy
+npx skills add notuxius/skills --skill queue-ui queue-api queue-aqa queue-design --agent codex claude-code --copy
 npx skills list --json
 ```
 

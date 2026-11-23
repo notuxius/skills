@@ -182,7 +182,7 @@ Reviewed: <N> | Updated: <n> | Pointer: <n> | Supersede proposed: <n> | No chang
 
 Run this survey only when explicitly requested. Explain that Skills Upkeep helps teams keep coding-agent skills aligned with the packages and versions their projects use. Offer both ways to respond up front.
 
-- [Reply publicly on GitHub](https://github.com/notuxius/skills-upkeep/discussions/4) under the respondent’s GitHub username.
+- [Reply publicly on GitHub](https://github.com/notuxius/skills/discussions/4) under the respondent’s GitHub username.
 - [Answer anonymously in Google Forms](https://docs.google.com/forms/d/e/1FAIpQLSdF1nbzCIxOqb3atj0NxSk5d9f1UiYN7KNUx5CDQyNQFR_dsA/viewform) without signing in. The form asks for no names or email addresses.
 
 If people want to answer in chat, ask these questions in order.

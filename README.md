@@ -7,7 +7,7 @@ Imagine your checkout app already uses React and Playwright. It has a lockfile a
 From the checkout app’s root, run this with Node.js 22.20 or later.
 
 ```powershell
-npx skills add notuxius/skills-upkeep --skill skills-upkeep --agent codex claude-code github-copilot --copy
+npx skills add notuxius/skills --skill skills-upkeep --agent codex claude-code github-copilot --copy
 ```
 
 Codex and GitHub Copilot share `.agents/skills/`. Claude Code gets a copy in `.claude/skills/`. The Skills CLI requires `claude-code` as the agent ID. [Supported agents](https://github.com/vercel-labs/skills/blob/main/docs/agents.md)
@@ -29,7 +29,7 @@ Then ask the agent to apply the preview.
 
 > Run skills-upkeep bootstrap apply for Codex, Claude Code, and GitHub Copilot.
 
-The agent applies the skill changes, records the workspace and resolved package versions in `reviewed.md`, and updates the project instructions so the agents know when to use each skill. [Bootstrap workflow](https://github.com/notuxius/skills-upkeep/blob/main/skills/skills-upkeep/project-workflow.md#bootstrap)
+The agent applies the skill changes, records the workspace and resolved package versions in `reviewed.md`, and updates the project instructions so the agents know when to use each skill. [Bootstrap workflow](https://github.com/notuxius/skills/blob/main/skills/skills-upkeep/project-workflow.md#bootstrap)
 
 ## 3. Verify the installation
 
@@ -80,7 +80,7 @@ Choose the roles that fit your work. Each skill can be installed separately from
 To install the DevOps and technical writing skills in Codex and Claude Code, run this from your project's root.
 
 ```powershell
-npx skills add notuxius/skills-upkeep --skill queue-devops queue-docs --agent codex claude-code --copy
+npx skills add notuxius/skills --skill queue-devops queue-docs --agent codex claude-code --copy
 ```
 
 ## Skills Upkeep pricing survey
@@ -89,4 +89,4 @@ npx skills add notuxius/skills-upkeep --skill queue-devops queue-docs --agent co
 
 Which would you choose for Skills Upkeep, a monthly subscription or a one-time purchase? Tell us what you’d pay and how likely you’d be to buy at the proposed one-time price of **$9 USD**.
 
-[Reply publicly on GitHub](https://github.com/notuxius/skills-upkeep/discussions/4) under your GitHub username, or [Answer anonymously in Google Forms](https://docs.google.com/forms/d/e/1FAIpQLSdF1nbzCIxOqb3atj0NxSk5d9f1UiYN7KNUx5CDQyNQFR_dsA/viewform) without signing in. We’ll share anonymous responses in aggregate.
+[Reply publicly on GitHub](https://github.com/notuxius/skills/discussions/4) under your GitHub username, or [Answer anonymously in Google Forms](https://docs.google.com/forms/d/e/1FAIpQLSdF1nbzCIxOqb3atj0NxSk5d9f1UiYN7KNUx5CDQyNQFR_dsA/viewform) without signing in. We’ll share anonymous responses in aggregate.
