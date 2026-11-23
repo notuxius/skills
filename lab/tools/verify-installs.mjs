@@ -6,9 +6,7 @@ import { fileURLToPath } from 'node:url';
 const project = fileURLToPath(new URL('../', import.meta.url));
 const roles = ['queue-ui', 'queue-api', 'queue-aqa', 'queue-design'];
 const catalog = process.argv[2] && resolve(process.argv[2], 'skills');
-const names = catalog
-  ? readdirSync(catalog, { withFileTypes: true }).filter(entry => entry.isDirectory()).map(entry => entry.name)
-  : roles;
+const names = catalog ? [...roles, 'skills-upkeep'] : roles;
 
 function files(directory, prefix = '') {
   return readdirSync(join(directory, prefix)).sort().flatMap(name => {
