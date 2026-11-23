@@ -1,59 +1,52 @@
-# Skills Upkeep
+# Skills Upkeep — **From Zero to Shared Project Skills**
 
-## TL;DR
+Imagine your checkout app already uses React and Playwright. It has a lockfile and a signed-in test fixture, but no project skills. Your team uses Codex, Claude Code, and GitHub Copilot.
 
-**Install** from your work project’s root, assuming `project-skills` is a sibling folder.
+## 1. Install Skills Upkeep
 
-```sh
-npx skills add "../project-skills" --skill skills-upkeep -a claude-code -a codex
+From the checkout app’s root, run this with Node.js 22.20 or later.
+
+```powershell
+npx skills add notuxius/skills-upkeep --skill skills-upkeep --agent codex claude-code github-copilot --copy
 ```
 
-**Ask your coding agent**
+Codex and GitHub Copilot share `.agents/skills/`. Claude Code gets a copy in `.claude/skills/`. The Skills CLI requires `claude-code` as the agent ID. [Supported agents](https://github.com/vercel-labs/skills/blob/main/docs/agents.md)
 
-| When | Prompt |
-| --- | --- |
-| First setup | `Run skills-upkeep bootstrap apply.` |
-| Package added, upgraded, or first used | `Run skills-upkeep dependency-change apply for this branch.` |
-| Preview setup or review a PR | Use `report-only` in place of `apply`. |
-| Check against upstream | `Audit our playwright-* skills against upstream in report-only mode.` |
+## 2. Preview and apply the project skills
 
-`apply` updates project skills and instructions as needed. `report-only` previews proposed changes.
+Open the checkout app in any of the three agents and ask for a preview.
 
-Skills Upkeep maps a project's dependencies and workflows to coding-agent skills. It checks those skills when a package is added, upgraded or first used. The [hands-on lab](lab/README.md) uses a fictional support queue to try four role skills with Codex or Claude Code.
+> Run skills-upkeep bootstrap report-only. Check our lockfile and how we use React and Playwright. Show which skills you’d install or write.
 
-| Skill | When to use it |
-|---|---|
-| [skills-upkeep](skills/skills-upkeep/SKILL.md) | Set up project skill coverage, review dependency changes and audit local skills |
-| [queue-ui](skills/queue-ui/SKILL.md) | Implement queue filtering, refresh and loading states |
-| [queue-api](skills/queue-api/SKILL.md) | Implement ticket ownership changes and retries |
-| [queue-aqa](skills/queue-aqa/SKILL.md) | Write a regression test that exposes a lost ownership update |
-| [queue-design](skills/queue-design/SKILL.md) | Specify accessible status badges for both themes |
+An example preview might propose these two skills.
 
-## Install from the public catalog
+| Workflow | Proposed skill | Why |
+| --- | --- | --- |
+| React development in `apps/web` | Install a reviewed revision of `vercel-react-best-practices` | It covers component performance and parallel data fetching. |
+| Playwright testing in `tests/e2e` | Write a local `browser-tests` skill | The team needs to know which signed-in fixture to import and how to run a focused test headlessly. |
 
-Run from the consuming project, using Node.js 22.20 or later.
+Then ask the agent to apply the preview.
 
-```sh
-npx skills add notuxius/skills-upkeep --skill skills-upkeep --agent codex claude-code --copy
+> Run skills-upkeep bootstrap apply for Codex, Claude Code, and GitHub Copilot.
+
+The agent applies the skill changes, records the workspace and resolved package versions in `reviewed.md`, and updates the project instructions so the agents know when to use each skill. [Bootstrap workflow](https://github.com/notuxius/skills-upkeep/blob/main/skills/skills-upkeep/project-workflow.md#bootstrap)
+
+## 3. Verify the installation
+
+```powershell
+npx skills list
 ```
 
-Ask your agent to run `skills-upkeep bootstrap report-only` to preview the skill mapping and project instructions. Use `bootstrap` in apply mode to set up coverage. On a package change, ask for `skills-upkeep dependency-change` in the affected workspace. See the [project workflow](skills/skills-upkeep/project-workflow.md) and [example reports](skills/skills-upkeep/example-report.md).
+Check for `skills-upkeep` and the skills selected during bootstrap. Commit the skill files, project instructions, `reviewed.md`, and `skills-lock.json` so teammates get the same setup on checkout.
 
-Use the named queue skills to set up a practice project.
+## 4. Use the skills and keep them current
 
-```sh
-npx skills add notuxius/skills-upkeep --skill queue-ui queue-api queue-aqa queue-design --agent codex claude-code --copy
-npx skills list --json
-```
+Give any of the three agents a normal task.
 
-Edit the source under `skills/`, refresh the two agent copies in `lab/`, and run the matching [lab exercise](lab/README.md). Keep each skill name and directory stable so consumers can update their existing installations.
+> Add a Playwright test that checks a signed-in customer can place an order.
 
-In the consuming project, run `npx skills check` and inspect the installed copies for local edits. Preserve any team-specific changes before refreshing. For an improved AQA skill, refresh the two project copies together.
+The project instructions guide the agent to `browser-tests`, where it finds the team’s fixture and the focused headless test command.
 
-```sh
-npx skills add notuxius/skills-upkeep --skill queue-aqa --agent codex claude-code --copy
-```
+After upgrading Playwright, ask the agent to check the guidance against the newly locked version.
 
-Verify that both `.agents/skills/queue-aqa/SKILL.md` and `.claude/skills/queue-aqa/SKILL.md` contain the revised guidance. Review the skill and lockfile changes, then run the AQA exercise. For another role, substitute its skill name. New installations from the default branch receive its current guidance. skills.sh indexes installations from the public repository. See the [directory FAQ](https://skills.sh/docs/faq) and the [CLI reference](https://github.com/vercel-labs/skills/blob/main/docs/commands.md).
-
-The refs `v1` and `v2` identify the baseline and improved revisions in the update exercise. Install from the default branch to follow later improvements.
+> Run skills-upkeep dependency-change apply for tests/e2e
