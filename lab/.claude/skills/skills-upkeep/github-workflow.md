@@ -4,11 +4,11 @@ Publish only when the user explicitly asks to open, file or submit the item. A r
 
 ## When Skills Upkeep encounters an error
 
-Diagnose and recover as part of the current task. If the evidence points to a defect in Skills Upkeep's instructions or workflow, include a copy-ready bug report and any workaround in the outcome, even if recovery succeeds. Distinguish confirmed facts from suspected causes. An unrelated application failure, access restriction or network error does not warrant a Skills Upkeep issue on its own. Share the draft in chat and include the [Skills Upkeep issue tracker](https://github.com/notuxius/skills-upkeep/issues) for manual submission.
+Diagnose and recover as part of the current task. If the evidence points to a defect in Skills Upkeep's instructions or workflow, include a copy-ready bug report and any workaround in the outcome, even if recovery succeeds. Distinguish confirmed facts from suspected causes. An unrelated application failure, access restriction or network error does not warrant a Skills Upkeep issue on its own. Share the draft in chat and include the [Skills Upkeep issue tracker](https://github.com/notuxius/skills/issues) for manual submission.
 
 ## Resolve the target and prepare the draft
 
-Use the repository the user names. For a bug or feature suggestion about Skills Upkeep itself, default to `github.com/notuxius/skills-upkeep`. For work in a consuming project, use its intended GitHub repository. Resolve the target from project instructions or the Git remotes when clear. Ask if the target is ambiguous, and provide the draft text while it is unresolved. Share only task-relevant material appropriate for that repository. Leave credentials, private logs and unrelated project data out of both the draft and the submission.
+Use the repository the user names. For a bug or feature suggestion about Skills Upkeep itself, default to `github.com/notuxius/skills`. For work in a consuming project, use its intended GitHub repository. Resolve the target from project instructions or the Git remotes when clear. Ask if the target is ambiguous, and provide the draft text while it is unresolved. Share only task-relevant material appropriate for that repository. Leave credentials, private logs and unrelated project data out of both the draft and the submission.
 
 Use the repository's template when available. Give the item a title and a Markdown body.
 

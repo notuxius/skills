@@ -59,7 +59,7 @@ If Skills Upkeep runs into a problem with its own workflow, it includes a copy-r
 
 To submit on your behalf, the agent uses your existing GitHub connection or CLI login. If it can't submit, it gives you the title, Markdown body and a link for posting. [GitHub workflow](skills/skills-upkeep/github-workflow.md)
 
-To give feedback without running the skill, sign in to GitHub and choose **New issue**. Describe what happened and how to reproduce it, or explain the feature you’d like and when it would help. [Skills Upkeep issues](https://github.com/notuxius/skills-upkeep/issues)
+To give feedback without running the skill, sign in to GitHub and choose **New issue**. Describe what happened and how to reproduce it, or explain the feature you’d like and when it would help. [Skills Upkeep issues](https://github.com/notuxius/skills/issues)
 
 ## Optional usage telemetry
 
