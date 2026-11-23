@@ -8,11 +8,11 @@ groups:
   designer: [queue-design]
 ```
 
-| Workspace | Package or runtime workflow | Requirement | Project skill | Evidence and verification |
-|---|---|---|---|---|
-| `frontend/` | Promises and request ordering | Node.js >=22.20.0 | `queue-ui` | `frontend/queue-view.test.mjs` covers overlapping refreshes. |
-| `backend/` | Web Request and Response APIs | Node.js >=22.20.0 | `queue-api` | `backend/claim.test.mjs` checks claims, retries, conflicts and persisted ownership. |
-| `qa/` | node:test and strict assertions | Node.js >=22.20.0 | `queue-aqa` | `qa/claim-race.test.mjs` runs the check against a working and a faulty service. |
-| `design/` | JSON design tokens consumed by the badge component | Node.js >=22.20.0 | `queue-design` | `design/status-badge.test.mjs` checks labels, contrast and fallback semantics. |
+| Workspace | Package or runtime workflow | Project minimum | Last verified | Project skill | Verification |
+|---|---|---|---|---|---|
+| `frontend/` | Node.js promises and request ordering | 22.20.0 | 26.13.1 | `queue-ui` | `node --test frontend/queue-view.test.mjs` passed overlapping refresh and retry checks. |
+| `backend/` | Node.js Web Request and Response APIs | 22.20.0 | 26.13.1 | `queue-api` | `node --test backend/claim.test.mjs` passed claim, retry, conflict and readback checks. |
+| `qa/` | `node:test` and strict assertions | 22.20.0 | 26.13.1 | `queue-aqa` | `node --test qa/claim-race.test.mjs` passed and detected wrong ownership in the faulty service. |
+| `design/` | JSON design tokens consumed by the badge component | 22.20.0 | 26.13.1 | `queue-design` | `node --test design/status-badge.test.mjs` passed label, contrast and fallback checks. |
 
-The runtime requirement comes from `package.json`. Record the exact resolved dependency and its workspace here when the project introduces a package that affects a role.
+The project minimum comes from `package.json`. Record the resolved dependency, minimum supported version when known, and the last verified version separately when a package affects a role.

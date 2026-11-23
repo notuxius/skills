@@ -1,9 +1,10 @@
 # Skills Upkeep
 
-Four agent skills for a fictional support queue and a [hands-on lab](lab/README.md) to try them with Codex or Claude Code. The lab includes one exercise per role and a rehearsal for upgrading installed skills.
+Skills Upkeep maps a project's dependencies and workflows to coding-agent skills. It checks those skills when a package is added, upgraded or first used. The [hands-on lab](lab/README.md) uses a fictional support queue to try four role skills with Codex or Claude Code.
 
 | Skill | When to use it |
 |---|---|
+| [skills-upkeep](skills/skills-upkeep/SKILL.md) | Set up project skill coverage, review dependency changes and audit local skills |
 | [queue-ui](skills/queue-ui/SKILL.md) | Implement queue filtering, refresh and loading states |
 | [queue-api](skills/queue-api/SKILL.md) | Implement ticket ownership changes and retries |
 | [queue-aqa](skills/queue-aqa/SKILL.md) | Write a regression test that exposes a lost ownership update |
@@ -12,6 +13,14 @@ Four agent skills for a fictional support queue and a [hands-on lab](lab/README.
 ## Install from the public catalog
 
 Run from the consuming project, using Node.js 22.20 or later.
+
+```sh
+npx skills add notuxius/skills-upkeep --skill skills-upkeep --agent codex claude-code --copy
+```
+
+Ask your agent to run `skills-upkeep bootstrap report-only` to preview the skill mapping and project instructions. Use `bootstrap` in apply mode to set up coverage. On a package change, ask for `skills-upkeep dependency-change` in the affected workspace. See the [project workflow](skills/skills-upkeep/project-workflow.md) and [example reports](skills/skills-upkeep/example-report.md).
+
+Use the named queue skills to set up a practice project.
 
 ```sh
 npx skills add notuxius/skills-upkeep --skill queue-ui queue-api queue-aqa queue-design --agent codex claude-code --copy

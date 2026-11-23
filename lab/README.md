@@ -16,7 +16,8 @@ From the repository root, enter the lab directory before running its commands.
 ```sh
 cd lab
 npm test
-npm run skills:verify
+npm run skills:verify -- ..
+npm run skills:bundle-test
 ```
 
 To try AQA, run these commands from the repository root.
@@ -27,6 +28,14 @@ cd ../queue-practice/lab
 ```
 
 The other practice branches are `practice-developer`, `practice-backend`, and `practice-designer`. Each exercise seeds one defect and keeps the other roles' reference implementations. Start your agent in the practice checkout's `lab/` directory, give it the role's task, and run the corresponding acceptance check before and after the repair.
+
+## Compare agent runs
+
+Start independent sessions from identical copies of a practice fixture. Keep the role skill and project instructions in one copy. For a baseline, use a copy without installed skills or their routing rules. Give both sessions the same task prompt and keep the model and test commands fixed. Record the skill each agent opened, which files it changed, and the acceptance result. For AQA, compare whether both runs catch the faulty service at ownership readback and keep the backend implementation intact.
+
+For a routing tie, ask AQA to add the ownership regression while mentioning that the backend engineer owns the claim and retry code. Expect the QA files to change and the backend to stay intact. `npm test` includes a deterministic description-matching check for this prompt and a representative prompt for each catalog skill.
+
+The bundled-skill fixture uses the pinned Skills CLI and installs two local npm tarballs in a temporary project. It checks CLI installation of all five catalog skills, the read-only preview, both agents' updated copies, and preservation of a local skill with a colliding name.
 
 Project instructions map tasks to skills. The installed `skills-upkeep` workflow handles package additions, upgrades and first use. Make reusable improvements in the [catalog](../skills/) and record lab-specific rules in [AGENTS.md](AGENTS.md).
 
