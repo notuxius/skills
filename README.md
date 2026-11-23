@@ -51,6 +51,19 @@ After upgrading Playwright, ask the agent to check the guidance against the newl
 
 > Run skills-upkeep dependency-change apply for tests/e2e
 
+## Optional usage telemetry
+
+Telemetry starts off. If you set a receiver URL in `SKILLS_UPKEEP_TELEMETRY_URL`, `bootstrap apply` shows the exact destination and sample event before asking for an opt-in for that checkout. Future apply runs can send the public Skills Upkeep release, workflow, and verification result, along with the schema version. Report-only runs send no event. Run the installed telemetry helper with `disable` from the project root to revoke that checkout's consent. `DISABLE_TELEMETRY=1` or `DO_NOT_TRACK=1` blocks sending.
+
+CI requires both `SKILLS_UPKEEP_TELEMETRY=1` and a receiver URL. The repository includes a loopback SQLite receiver for testing and local collection using Node.js 22.20 or later.
+
+```sh
+node telemetry/receiver.mjs serve events.sqlite
+node telemetry/receiver.mjs report events.sqlite
+```
+
+See the [telemetry workflow](skills/skills-upkeep/project-workflow.md#optional-telemetry) for the consent and recording steps.
+
 ## Install a role skill from the support queue catalog
 
 Choose the roles that fit your work. Each skill can be installed separately from your project's root.

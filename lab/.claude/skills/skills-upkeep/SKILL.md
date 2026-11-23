@@ -34,6 +34,8 @@ If people want to answer in chat, ask these questions in order.
 
 Give them a copy-ready reply to submit through the channel they choose.
 
+Whenever this skill uses `npx skills find`, use public package names or generic terms and set `DISABLE_TELEMETRY=1` for the CLI invocation.
+
 ## Upstream audit
 
 Compare local guidance with public skills on [skills.sh](https://skills.sh). Preserve hand edits, including edits to installed skills with a recorded source. Prefer leaving guidance unchanged when the comparison finds no concrete improvement.

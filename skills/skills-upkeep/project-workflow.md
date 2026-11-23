@@ -11,6 +11,7 @@ Work in the consuming project's checkout, on the branch and working tree contain
    > Before implementing, testing or reviewing package-specific work, read and use the project skill that covers the task in this workspace. When a package is added as a direct dependency, changes version, or is first used here, run skills-upkeep dependency-change for that workspace, then use the matching skill on the task. Apply relevant skill changes during implementation. During review or a dry run, report proposed changes. Follow the project's existing restrictions on sources and installation.
 
 4. Record the starting coverage in the [ledger](reviewed.template.md). In report-only mode, show the proposed rule, skill actions and ledger rows in the response. A repeated bootstrap should preserve a current mapping and add the rule only where missing.
+5. Finish an apply run with [Optional telemetry](#optional-telemetry). If the helper shows an available receiver, offer the project opt-in once before recording the run.
 
 ## Dependency-change
 
@@ -19,6 +20,7 @@ Work in the consuming project's checkout, on the branch and working tree contain
 3. **Check actual use.** Read relevant changed imports, scripts, config and CI entries. New use of an already-declared package counts even if the manifest and lockfile are identical. Check for earlier use in that workspace before calling it first use. Keep ordinary transitive churn and unchanged sibling workspaces out of scope unless evidence shows a change to a workflow they use. A removal can retire a workspace mapping once remaining usages have been checked.
 4. **Review the affected guidance now.** Map each material change to existing project skills and compare their commands, APIs, examples and project conventions with the resolved version. Check version-specific official documentation or locally available tooling. Recheck even a recently reviewed skill and even if its text never names a version. When editing a shared skill, keep its instructions valid for workspaces still using the previous version. Record an unaffected result when the guidance still works. For a major upgrade or known breaking change, record the version-specific migration note, the affected skill section and a focused check for that change. A command or flag check verifies availability. Use an example, contract test or equivalent when behavior changes.
 5. **Act and verify.** Use the decision table below. In apply mode change only affected project skills, their discovery entries and coverage rows. Preserve the package diff on the current branch. In report-only mode show the same decisions and proposed checks in the response. If an implementation or test is already requested, follow **Use a skill on a task** after the review.
+6. Finish an apply run with [Optional telemetry](#optional-telemetry). Use the saved setting and skip the opt-in prompt here.
 
 ### Preview skills bundled with npm packages
 
@@ -47,6 +49,14 @@ Leave replacements of existing skills as proposals unless the user requests the 
 Report the minimum supported version separately from the last verified version, even if the existing ledger lacks these columns. Cite the versioned docs, release note or check that established when the newest requirement in the guidance first became supported. If the evidence shows only that a particular version works, record it as last verified and mark the minimum unknown. Record the last verified version, exact check and result separately for each workspace or supported version that was actually tested. Confirm that the executable or library used for the check matches the workspace resolution. Carry forward prior verification evidence with its original version. Mark a check that could not run as unverified and include its proposed invocation. Record a failed result against the version tested and describe which requirement failed.
 
 The compatibility fields draw on [Zapier's Workflows Doctor](https://skills.sh/zapier/agent-skills/workflows-doctor). The staged major-upgrade checks draw on [Dependency Upgrade](https://skills.sh/wshobson/agents/dependency-upgrade).
+
+## Optional telemetry
+
+From the consuming project root, use the installed [telemetry helper](scripts/telemetry.mjs) with Node.js. Skip this section for report-only runs or when the helper or Node.js is unavailable.
+
+On `bootstrap apply`, run `node <skill-dir>/scripts/telemetry.mjs status`. If the state is `available`, show the endpoint and sample event. Ask whether to share the public Skills Upkeep release, upkeep workflow and verification result on future apply runs in this checkout. Mention how to turn it off. Run `enable <endpoint>` only on an explicit yes. Run `disable` on an explicit no to remember the choice. With no answer, finish upkeep with telemetry off. The helper reads a suggested receiver from `SKILLS_UPKEEP_TELEMETRY_URL`. An unconfigured, disabled or blocked state needs no prompt. CI uses its own explicit enablement and skips this prompt.
+
+After a completed apply run, call `node <skill-dir>/scripts/telemetry.mjs record apply <workflow> <verification>` once. Use `bootstrap` or `dependency-change`. Use `failed` if an upkeep verification check failed, `passed` if checks ran and passed, and `not_run` if none ran. The helper checks consent on every call. Continue normally if it skips the event or the receiver is unavailable.
 
 ## Use a skill on a task
 
