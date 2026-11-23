@@ -32,7 +32,9 @@ export function readDescription(directory, name) {
 function verifyLinks(directory, paths) {
   for (const path of paths.filter(file => file.endsWith('.md'))) {
     const markdown = readFileSync(join(directory, path), 'utf8');
-    for (const [, url] of markdown.matchAll(/\[[^\]\n]+\]\(([^()\s]+)\)/g)) {
+    const references = markdown.matchAll(/(?:\[[^\]\n]+\]\([ \t]*|^\s*\[[^\]\n]+\]:[ \t]+)(?:<([^>\n]+)>|([^()\s]+))(?=[ \t)\r\n]|$)/gm);
+    for (const [, angled, plain] of references) {
+      const url = angled ?? plain;
       if (/^[a-z][a-z\d+.-]*:/i.test(url) || url.startsWith('#')) continue;
       const target = resolve(directory, dirname(path), decodeURIComponent(url.split(/[?#]/, 1)[0]));
       const fromSkill = relative(directory, target);

@@ -26,6 +26,15 @@ Compared the pull request with its merge base. The web workspace's Vitest resolu
 
 The ledger preview contains these two workspace rows. Vitest 4.0.4 is the last verified version for `apps/web`. The minimum supported version is unknown. The recorded check is `npx --no-install vitest --help`, which showed the flags used in the skill. The run made no project changes.
 
+## Review a shared skill after a breaking change
+
+The queue reporting package's v2 migration note replaces `--format json` with `--output json`. The `Export a queue report` section of `queue-report/SKILL.md` now selects the flag from each workspace's lockfile. Running the commands from the two workspaces produced this ledger evidence.
+
+| Workspace | Resolved version | Minimum supported | Last verified version | Verification |
+|---|---|---|---|---|
+| `apps/admin` | `1.0.0` | `1.0.0` for `--format`, documented in the v1 CLI reference | `1.0.0` | `node queue-fixture.mjs report --format json` passed |
+| `apps/web` | `1.0.0` → `2.0.0` | `2.0.0` for `--output`, introduced in the v2 migration note | `2.0.0` | `node queue-fixture.mjs report --output json` passed and `--format json` failed with the expected unsupported flag error |
+
 ## Use a skill during implementation
 
 **Request:** “Add a checkout test for a signed-in customer.”
@@ -70,7 +79,7 @@ Proposed new skills (not installed)
 | EF Core migrations | `*.csproj` references EF Core, no skill covers it | example-org/dotnet-skills@ef-migrations | 4.2K / unverified / MIT | npx skills add example-org/dotnet-skills@ef-migrations |
 ```
 
-The ledger records the auditor, finding and source link for any result that influenced the decision. Example: the reviewer checked a warning about an external URL against the candidate SHA and found that the warning referred to an earlier revision. Stars for `example-org/dotnet-skills` are unverified.
+The ledger records how each relevant audit finding affected the decision. For example, a provider warned that `example-org/code-review@111aaaa` sends data to an external URL. The reviewer checked the cited file and its helper scripts at `example-org/code-review@222bbbb` and found the external call had been removed. The ledger links the warning, records both revisions and explains why the warning did not block the replacement proposal. Stars for `example-org/dotnet-skills` are unverified.
 
 ```
 Reviewed: 5 | Updated: 0 | Pointer: 0 | Supersede proposed: 1 | No change: 4 | Not covered: 3 | Gaps proposed: 1 | Branch: report-only | Confidence: Medium

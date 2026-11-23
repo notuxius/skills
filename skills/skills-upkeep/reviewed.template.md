@@ -18,9 +18,9 @@ Keep one row per reviewed skill. Reuse the existing row on later reviews. Use `u
 
 ## Project package coverage
 
-Add this table alongside existing review rows on the first write-enabled project run. Record a reviewed workflow once per workspace and package. Use the skill's project-relative path so an agent can open it during implementation. Give separate rows to workspaces with different versions or conventions.
+Add this table alongside existing review rows on the first write-enabled project run. If a coverage table already exists, add missing compatibility columns as needed and carry forward its existing evidence. Record a reviewed workflow once per workspace and package. Use the skill's project-relative path so an agent can open it during implementation. Give separate rows to workspaces with different versions or conventions.
 
-For a dependency change, show the previous and current values where known. For bootstrap or first use, a current value is enough. Use `unknown` for missing evidence and `absent` only when verified. Cite a manifest, lockfile importer, configuration file or actual usage. Record the minimum supported version only when it can be established. Record the version last checked and the command and result. When a check cannot run, carry forward previous results with their versions and mark the new version unverified. For breaking changes, cite the migration note and affected skill section.
+For a dependency change, show the previous and current values where known. For bootstrap or first use, a current value is enough. Use `unknown` for missing evidence and `absent` only when verified. Cite a manifest, lockfile importer, configuration file or actual usage. Cite the evidence next to any minimum supported version. Record the version last checked and the exact command and result. When a check cannot run, carry forward previous results with their versions and mark the new version unverified. For breaking changes, cite the upstream migration note, affected skill section and focused check in the verification entry.
 
 | Workspace | Package and workflow | Declared version | Resolved version | Evidence | Project skill or gap | Outcome | Minimum supported | Last verified version | Verification |
 |---|---|---|---|---|---|---|---|---|---|
