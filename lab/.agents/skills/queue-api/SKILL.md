@@ -16,5 +16,3 @@ Read the route, ticket representation, and existing contract tests before changi
 Validate the payload before writing. A malformed request and a missing ticket must leave the queue intact. Keep fixture state private to each test.
 
 Keep the ownership check and write atomic. With an in-memory handler, await input parsing before reading ownership and keep the check and assignment synchronous. For a database, use its conditional-write or transaction primitive and inspect the stored owner after a failed write to distinguish a retry from a conflict.
-
-After a competing claim, read the ticket through the public API and verify the original owner survived. Run the backend contract tests and report the route, observable response and persisted state.
