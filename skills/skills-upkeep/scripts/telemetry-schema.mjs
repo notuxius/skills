@@ -1,5 +1,5 @@
 export const schemaVersion = 1;
-export const release = '2.1.0';
+export const release = '2.2.0';
 export const workflows = ['bootstrap', 'dependency-change'];
 export const verificationResults = ['passed', 'failed', 'not_run'];
 
