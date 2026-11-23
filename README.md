@@ -51,6 +51,16 @@ After upgrading Playwright, ask the agent to check the guidance against the newl
 
 > Run skills-upkeep dependency-change apply for tests/e2e
 
+## Report a bug, suggest a feature or open a pull request
+
+If Skills Upkeep runs into a problem with its own workflow, it includes a copy-ready bug report in the result. You can also ask it to draft a feature suggestion or to submit a bug report, suggestion or pull request.
+
+> Use Skills Upkeep to file a feature request for custom skill review intervals.
+
+To submit on your behalf, the agent uses your existing GitHub connection or CLI login. If it can't submit, it gives you the title, Markdown body and a link for posting. [GitHub workflow](skills/skills-upkeep/github-workflow.md)
+
+To give feedback without running the skill, sign in to GitHub and choose **New issue**. Describe what happened and how to reproduce it, or explain the feature you’d like and when it would help. [Skills Upkeep issues](https://github.com/notuxius/skills/issues)
+
 ## Optional usage telemetry
 
 Telemetry starts off. If you set a receiver URL in `SKILLS_UPKEEP_TELEMETRY_URL`, `bootstrap apply` shows the exact destination and sample event before asking for an opt-in for that checkout. Future apply runs can send the public Skills Upkeep release, workflow, and verification result, along with the schema version. Report-only runs send no event. Run the installed telemetry helper with `disable` from the project root to revoke that checkout's consent. `DISABLE_TELEMETRY=1` or `DO_NOT_TRACK=1` blocks sending.

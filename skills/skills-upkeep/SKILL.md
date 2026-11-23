@@ -1,6 +1,6 @@
 ---
 name: skills-upkeep
-description: Set up shared coding-agent skills in a project, match them to the packages each workspace uses, and keep the guidance current when a dependency is added, upgraded or first used. Use for project skill setup, dependency-change reviews, selecting skills for package-specific work, and requests such as "refresh our skills", "audit our skills against upstream", or "what skills are we missing". Compare hand-maintained skills with vetted upstream sources while preserving project conventions.
+description: Set up shared coding-agent skills in a project, match them to the packages each workspace uses, and keep the guidance current when a dependency is added, upgraded or first used. Use for project skill setup, dependency-change reviews, selecting skills for package-specific work, and requests such as "refresh our skills", "audit our skills against upstream", or "what skills are we missing". Compare hand-maintained skills with vetted upstream sources while preserving project conventions. Also use for Skills Upkeep errors, bug reports, feature suggestions, and GitHub pull requests for skills upkeep changes.
 ---
 
 # Skills Upkeep
@@ -13,10 +13,13 @@ description: Set up shared coding-agent skills in a project, match them to the p
 | A dependency was added, changed version, or first used in code, config or CI | Run **dependency-change** in [Project workflow](project-workflow.md) against the working tree or PR under review. |
 | Develop, test or review something with an existing package | Read and apply the matching project skill for the workspace and task. See **Use a skill on a task** in [Project workflow](project-workflow.md). |
 | Compare local skills with public alternatives, refresh a named skill or audit a group | Use the upstream audit below. |
+| Skills Upkeep itself encounters an error, or the user wants to draft or submit a bug report, feature suggestion or pull request | Use the [GitHub workflow](github-workflow.md). |
 
 For project workflows, use `apply` when setup or edits are requested, including when the project's standing instructions authorize upkeep. A check, PR review, scheduled run or explicit `report-only`/dry run is read-only. Honor the narrower request if it limits sources, installations or edits. Audit scope, branch creation, recency limits and proposal-only decisions below apply to the **upstream audit**.
 
 Whenever this skill uses `npx skills find`, use public package names or generic terms and set `DISABLE_TELEMETRY=1` for the CLI invocation.
+
+When a run reveals an error in Skills Upkeep's own guidance or workflow, continue recovery, then include a copy-ready bug report in the outcome even if a workaround succeeded. Follow [When Skills Upkeep encounters an error](github-workflow.md#when-skills-upkeep-encounters-an-error).
 
 ## Upstream audit
 
