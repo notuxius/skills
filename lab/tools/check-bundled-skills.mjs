@@ -73,7 +73,10 @@ try {
   for (const agent of agents) assert.ok(!existsSync(installed(agent, bundledName)));
   sync();
   const before = readFileSync(skillLock, 'utf8');
-  assert.equal(JSON.parse(before).skills[bundledName].packageVersion, '1.0.0');
+  const original = JSON.parse(before).skills[bundledName];
+  assert.equal(original.source, packageName);
+  assert.equal(original.sourceType, 'node_modules');
+  assert.equal(original.version, '1.0.0');
   for (const agent of agents) {
     assert.match(readFileSync(installed(agent, bundledName), 'utf8'), /--format json/);
     assert.equal(readFileSync(installed(agent, collision), 'utf8'), local);
@@ -89,7 +92,8 @@ try {
   sync();
   assert.equal(readFileSync(appLock, 'utf8'), afterPackageUpgrade);
   const updated = JSON.parse(readFileSync(skillLock, 'utf8')).skills;
-  assert.equal(updated[bundledName].packageVersion, '2.0.0');
+  assert.equal(updated[bundledName].version, '2.0.0');
+  assert.notEqual(updated[bundledName].computedHash, original.computedHash);
   assert.ok(!Object.hasOwn(updated, collision), 'The local skill became a managed npm skill');
   for (const agent of agents) {
     assert.match(readFileSync(installed(agent, bundledName), 'utf8'), /--output json/);
