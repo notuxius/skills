@@ -1,5 +1,24 @@
 # Skills Upkeep
 
+## TL;DR
+
+**Install** from your work project’s root, assuming `project-skills` is a sibling folder.
+
+```sh
+npx skills add "../project-skills" --skill skills-upkeep -a claude-code -a codex
+```
+
+**Ask your coding agent**
+
+| When | Prompt |
+| --- | --- |
+| First setup | `Run skills-upkeep bootstrap apply.` |
+| Package added, upgraded, or first used | `Run skills-upkeep dependency-change apply for this branch.` |
+| Preview setup or review a PR | Use `report-only` in place of `apply`. |
+| Check against upstream | `Audit our playwright-* skills against upstream in report-only mode.` |
+
+`apply` updates project skills and instructions as needed. `report-only` previews proposed changes.
+
 Skills Upkeep maps a project's dependencies and workflows to coding-agent skills. It checks those skills when a package is added, upgraded or first used. The [hands-on lab](lab/README.md) uses a fictional support queue to try four role skills with Codex or Claude Code.
 
 | Skill | When to use it |
