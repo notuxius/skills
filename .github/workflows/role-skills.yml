@@ -1,0 +1,30 @@
+name: Role skill checks
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  exercises:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: lab
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: npm test
+      - run: npm run skills:verify -- ..
+      - run: python3 tools/replay_update.py
+      - name: Exercise installation and selective updates from the public catalog
+        env:
+          DISABLE_TELEMETRY: '1'
+        run: node tools/check-public-install.mjs

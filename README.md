@@ -1,6 +1,6 @@
-# Skills Upkeep (role skills catalog)
+# Skills Upkeep
 
-Four agent skills for a fictional support queue. Keep each skill name and directory stable when revising its guidance so consumers can update their existing installations.
+Four agent skills for a fictional support queue and a [hands-on lab](lab/README.md) to try them with Codex or Claude Code. The lab includes one exercise per role and a rehearsal for upgrading installed skills.
 
 | Skill | When to use it |
 |---|---|
@@ -18,7 +18,7 @@ npx skills add notuxius/skills-upkeep --skill queue-ui queue-api queue-aqa queue
 npx skills list --json
 ```
 
-Edit the source under `skills/`, run the matching exercise in [the companion role-skills-lab](https://github.com/notuxius/role-skills-lab), and merge the improvement into the default branch.
+Edit the source under `skills/`, refresh the two agent copies in `lab/`, and run the matching [lab exercise](lab/README.md). Keep each skill name and directory stable so consumers can update their existing installations.
 
 In the consuming project, run `npx skills check` and inspect the installed copies for local edits. Preserve any team-specific changes before refreshing. For an improved AQA skill, refresh the two project copies together.
 

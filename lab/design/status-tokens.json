@@ -1,0 +1,24 @@
+{
+  "statuses": {
+    "open": {
+      "label": "Open",
+      "light": { "text": "#193762", "surface": "#E1ECFE" },
+      "dark": { "text": "#C4DBFF", "surface": "#20334F" }
+    },
+    "waiting": {
+      "label": "Waiting",
+      "light": { "text": "#543800", "surface": "#FFF1CB" },
+      "dark": { "text": "#FFE0A2", "surface": "#473319" }
+    },
+    "resolved": {
+      "label": "Resolved",
+      "light": { "text": "#164B38", "surface": "#DFF5E9" },
+      "dark": { "text": "#B3E9D0", "surface": "#1C3C31" }
+    }
+  },
+  "fallback": {
+    "label": "Status unavailable",
+    "light": { "text": "#303030", "surface": "#EEEEEE" },
+    "dark": { "text": "#DDDDDD", "surface": "#353535" }
+  }
+}
