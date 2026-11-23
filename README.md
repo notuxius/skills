@@ -1,4 +1,4 @@
-# Support queue role skills
+# Skills Upkeep (role skills catalog)
 
 Four agent skills for a fictional support queue. Keep each skill name and directory stable when revising its guidance so consumers can update their existing installations.
 
@@ -14,7 +14,7 @@ Four agent skills for a fictional support queue. Keep each skill name and direct
 Run from the consuming project, using Node.js 22.20 or later.
 
 ```sh
-npx skills add notuxius/role-skill-catalog --skill queue-ui queue-api queue-aqa queue-design --agent codex claude-code --copy
+npx skills add notuxius/skills-upkeep --skill queue-ui queue-api queue-aqa queue-design --agent codex claude-code --copy
 npx skills list --json
 ```
 
@@ -23,7 +23,7 @@ Edit the source under `skills/`, run the matching exercise in [the companion rol
 In the consuming project, run `npx skills check` and inspect the installed copies for local edits. Preserve any team-specific changes before refreshing. For an improved AQA skill, refresh the two project copies together.
 
 ```sh
-npx skills add notuxius/role-skill-catalog --skill queue-aqa --agent codex claude-code --copy
+npx skills add notuxius/skills-upkeep --skill queue-aqa --agent codex claude-code --copy
 ```
 
 Verify that both `.agents/skills/queue-aqa/SKILL.md` and `.claude/skills/queue-aqa/SKILL.md` contain the revised guidance. Review the skill and lockfile changes, then run the AQA exercise. For another role, substitute its skill name. New installations from the default branch receive its current guidance. skills.sh indexes installations from the public repository. See the [directory FAQ](https://skills.sh/docs/faq) and the [CLI reference](https://github.com/vercel-labs/skills/blob/main/docs/commands.md).
