@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -14,7 +14,9 @@ const collision = 'queue-aqa';
 const unreviewed = 'queue-export';
 const agents = ['.agents', '.claude'];
 const cliPackage = 'skills@1.9.0';
-const catalogNames = ['skills-upkeep', 'queue-ui', 'queue-api', 'queue-aqa', 'queue-design'];
+const catalogSkills = join(catalog, 'skills');
+const catalogNames = readdirSync(catalogSkills, { withFileTypes: true })
+  .filter(entry => entry.isDirectory()).map(entry => entry.name);
 const npmCli = process.env.npm_execpath;
 assert.ok(npmCli, 'Run via npm run skills:bundle-test');
 
@@ -42,7 +44,7 @@ try {
   const fresh = join(temp, 'fresh-catalog');
   mkdirSync(fresh);
   skills(fresh, 'add', catalog, '--agent', 'codex', 'claude-code', '--copy', '--yes', '--skill', ...catalogNames);
-  verifyInstalls(fresh, catalogNames, join(catalog, 'skills'));
+  verifyInstalls(fresh, catalogNames, catalogSkills);
   const listed = JSON.parse(skills(fresh, 'list', '--json'));
   for (const name of catalogNames) {
     assert.ok(listed.some(entry => entry.name === name && entry.scope === 'project'), `CLI did not discover ${name}`);

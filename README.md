@@ -51,6 +51,25 @@ After upgrading Playwright, ask the agent to check the guidance against the newl
 
 > Run skills-upkeep dependency-change apply for tests/e2e
 
+## Install a role skill from the support queue catalog
+
+Choose the roles that fit your work. Each skill can be installed separately from your project's root.
+
+| Role | Skill | Covers |
+| --- | --- | --- |
+| Frontend developer | `queue-ui` | Queue filters, loading, retries, and stale responses. |
+| Backend developer | `queue-api` | Ticket claims, conflict handling, and persisted ownership. |
+| QA automation | `queue-aqa` | Regression tests for simultaneous claims and ownership readback. |
+| Designer | `queue-design` | Status badges, contrast, and fallback labels. |
+| DevOps | `queue-devops` | Deployment checks, release monitoring, and rollback decisions. |
+| Technical writer | `queue-docs` | Help articles for support agents working with tickets. |
+
+To install the DevOps and technical writing skills in Codex and Claude Code, run this from your project's root.
+
+```powershell
+npx skills add notuxius/skills-upkeep --skill queue-devops queue-docs --agent codex claude-code --copy
+```
+
 ## Skills Upkeep pricing survey
 
 > Run skills-upkeep pricing-survey.
