@@ -32,9 +32,6 @@ export function createQueue(initialTickets) {
       return errorResponse(400, 'invalid_agent');
     }
     const agentId = body.agentId.trim();
-    if (ticket.assignee !== null && ticket.assignee !== agentId) {
-      return errorResponse(409, 'already_claimed');
-    }
     ticket.assignee = agentId;
     return Response.json(ticket);
   };
