@@ -37,7 +37,7 @@ jobs:
           git -c core.autocrlf=false archive --format=zip --prefix=skills-upkeep/ \
             --output="skills-upkeep-$RELEASE_TAG.zip" HEAD:skills/skills-upkeep \
             SKILL.md project-workflow.md upstream-audit.md github-workflow.md \
-            reviewed.template.md example-report.md LICENSE
+            reviewed.template.md example-report.md LICENSE.txt
       - name: Attach the ZIP to the release
         env:
           GH_TOKEN: ${{ github.token }}
