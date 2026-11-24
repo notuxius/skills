@@ -1,8 +1,12 @@
-# Skills Upkeep — **From Zero to Shared Project Skills**
+# Skills Upkeep
+
+Set up, maintain, and update shared coding-agent skills for Codex, Claude Code, and GitHub Copilot. Audit project skills against the dependency versions each workspace actually uses, and find missing guidance when your team adopts a new library or tool.
+
+## From zero to shared project skills
 
 Imagine your checkout app already uses React and Playwright. It has a lockfile and a signed-in test fixture, but no project skills. Your team uses Codex, Claude Code, and GitHub Copilot.
 
-## 1. Install Skills Upkeep
+### 1. Install Skills Upkeep
 
 From the checkout app’s root, run this with Node.js 22.20 or later.
 
@@ -12,7 +16,7 @@ npx skills add notuxius/skills --skill skills-upkeep --agent codex claude-code g
 
 Codex and GitHub Copilot share `.agents/skills/`. Claude Code gets a copy in `.claude/skills/`. The Skills CLI requires `claude-code` as the agent ID. [Supported agents](https://github.com/vercel-labs/skills/blob/main/docs/agents.md)
 
-## 2. Preview and apply the project skills
+### 2. Preview and apply the project skills
 
 Open the checkout app in any of the three agents and ask for a preview.
 
@@ -31,7 +35,7 @@ Then ask the agent to apply the preview.
 
 The agent applies the skill changes, records the workspace and resolved package versions in `reviewed.md`, and updates the project instructions so the agents know when to use each skill. [Bootstrap workflow](https://github.com/notuxius/skills/blob/main/skills/skills-upkeep/project-workflow.md#bootstrap)
 
-## 3. Verify the installation
+### 3. Verify the installation
 
 ```powershell
 npx skills list
@@ -39,7 +43,7 @@ npx skills list
 
 Check for `skills-upkeep` and the skills selected during bootstrap. Commit the skill files, project instructions, `reviewed.md`, and `skills-lock.json` so teammates get the same setup on checkout.
 
-## 4. Use the skills and keep them current
+### 4. Keep project skills up to date
 
 Give any of the three agents a normal task.
 
@@ -47,7 +51,7 @@ Give any of the three agents a normal task.
 
 The project instructions guide the agent to `browser-tests`, where it finds the team’s fixture and the focused headless test command.
 
-After upgrading Playwright, ask the agent to check the guidance against the newly locked version.
+To keep up with dependency changes, ask the agent to check the guidance against the newly locked version after upgrading Playwright.
 
 > Run skills-upkeep dependency-change apply for tests/e2e
 
@@ -103,9 +107,9 @@ To install the DevOps and technical writing skills in Codex and Claude Code, run
 npx skills add notuxius/skills --skill queue-devops queue-docs --agent codex claude-code --copy
 ```
 
-## Agensi listing
+## Find Skills Upkeep
 
-[View Skills Upkeep on Agensi](https://www.agensi.io/skills/skills-upkeep)
+[View Skills Upkeep on Agensi](https://www.agensi.io/skills/skills-upkeep) or [find it on skills.sh](https://skills.sh/notuxius/skills/skills-upkeep).
 
 ## Release ZIP
 
