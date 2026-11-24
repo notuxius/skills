@@ -27,7 +27,7 @@ An example preview might propose these two skills.
 
 Then ask the agent to apply the preview.
 
-> Run skills-upkeep bootstrap apply for Codex, Claude Code, and GitHub Copilot.
+> Run skills-upkeep bootstrap apply for Codex, Claude Code, and GitHub Copilot. Apply the previewed skills and add the dependency-change rule to our project instructions.
 
 The agent applies the skill changes, records the workspace and resolved package versions in `reviewed.md`, and updates the project instructions so the agents know when to use each skill. [Bootstrap workflow](https://github.com/notuxius/skills/blob/main/skills/skills-upkeep/project-workflow.md#bootstrap)
 
@@ -67,7 +67,13 @@ The feedback workflow is available starting in `v2.2.0`. If your project install
 
 ## Optional usage telemetry
 
-Telemetry starts off. If you set a receiver URL in `SKILLS_UPKEEP_TELEMETRY_URL`, `bootstrap apply` shows the exact destination and sample event before asking for an opt-in for that checkout. Future apply runs can send the public Skills Upkeep release, workflow, and verification result, along with the schema version. Report-only runs send no event. Run the installed telemetry helper with `disable` from the project root to revoke that checkout's consent. `DISABLE_TELEMETRY=1` or `DO_NOT_TRACK=1` blocks sending.
+The repository's standalone telemetry helper records usage only when called directly. To use it, run it with Node.js 22.20 or later from the consuming project's root. Set `SKILLS_UPKEEP_TELEMETRY_URL` and run `status` to preview the destination and sample event. Run `enable <endpoint>` to opt in for that checkout or `disable` to revoke consent. [Telemetry helper](telemetry/telemetry.mjs)
+
+```sh
+node /path/to/skills/telemetry/telemetry.mjs record apply bootstrap passed
+```
+
+Substitute `dependency-change` for that workflow and use `passed`, `failed` or `not_run` for the actual verification result. The event contains the release, workflow, verification result and schema version. `DISABLE_TELEMETRY=1` or `DO_NOT_TRACK=1` blocks sending.
 
 CI requires both `SKILLS_UPKEEP_TELEMETRY=1` and a receiver URL. The repository includes a loopback SQLite receiver for testing and local collection using Node.js 22.20 or later.
 
@@ -75,8 +81,6 @@ CI requires both `SKILLS_UPKEEP_TELEMETRY=1` and a receiver URL. The repository 
 node telemetry/receiver.mjs serve events.sqlite
 node telemetry/receiver.mjs report events.sqlite
 ```
-
-See the [telemetry workflow](skills/skills-upkeep/project-workflow.md#optional-telemetry) for the consent and recording steps.
 
 ## Install a role skill from the support queue catalog
 
@@ -102,8 +106,6 @@ npx skills add notuxius/skills --skill queue-devops queue-docs --agent codex cla
 [View Skills Upkeep on Agensi](https://www.agensi.io/skills/skills-upkeep)
 
 ## Skills Upkeep pricing survey
-
-> Run skills-upkeep pricing-survey.
 
 Which would you choose for Skills Upkeep, a monthly subscription or a one-time purchase? Tell us what you’d pay and how likely you’d be to buy at the proposed one-time price of **$5 USD**.
 
