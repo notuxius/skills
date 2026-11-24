@@ -97,6 +97,10 @@ To install the DevOps and technical writing skills in Codex and Claude Code, run
 npx skills add notuxius/skills --skill queue-devops queue-docs --agent codex claude-code --copy
 ```
 
+## Agensi listing
+
+[View Skills Upkeep on Agensi](https://www.agensi.io/skills/skills-upkeep)
+
 ## Skills Upkeep pricing survey
 
 > Run skills-upkeep pricing-survey.
