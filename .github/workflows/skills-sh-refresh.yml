@@ -1,0 +1,57 @@
+name: Refresh Skills Upkeep on skills.sh
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+
+jobs:
+  refresh:
+    if: ${{ !github.event.release.prerelease && github.repository == 'notuxius/skills' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Verify the release is on the default branch
+        env:
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+        run: |
+          default_ref="refs/remotes/origin/$DEFAULT_BRANCH"
+          if ! git merge-base --is-ancestor HEAD "$default_ref"; then
+            echo "::error::The released commit must be on $DEFAULT_BRANCH before skills.sh can index it."
+            exit 1
+          fi
+          git show "$default_ref:skills/skills-upkeep/SKILL.md" > "$RUNNER_TEMP/skills-upkeep-expected.md"
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+      - name: Trigger skills.sh indexing
+        run: |
+          cd "$(mktemp -d)"
+          # Install telemetry tells skills.sh to reindex the public repository.
+          npx --yes skills@1.9.0 add "$GITHUB_REPOSITORY" --skill skills-upkeep --agent codex --copy --yes
+      - name: Verify the skills.sh snapshot
+        run: |
+          snapshot_url="https://www.skills.sh/api/download/$GITHUB_REPOSITORY/skills-upkeep"
+          expected="$RUNNER_TEMP/skills-upkeep-expected.md"
+          actual="$RUNNER_TEMP/skills-upkeep-indexed.md"
+          for attempt in {1..6}; do
+            if curl --fail --silent --show-error --max-time 20 "$snapshot_url" \
+              | jq -ej '.files[] | select(.path == "SKILL.md") | .contents | strings' > "$actual" \
+              && cmp -s "$expected" "$actual"; then
+              echo "skills.sh serves the current SKILL.md."
+              exit 0
+            fi
+            if [[ "$attempt" != 6 ]]; then
+              sleep 60
+            fi
+          done
+          echo "::error::Could not verify the current SKILL.md on skills.sh after the install."
+          exit 1
