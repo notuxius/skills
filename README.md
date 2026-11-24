@@ -123,7 +123,7 @@ npx skills add notuxius/skills --skill queue-devops queue-docs --copy
 
 When a stable `vMAJOR.MINOR.PATCH` release is published, GitHub Actions attaches `skills-upkeep-vMAJOR.MINOR.PATCH.zip` to its [release assets](https://github.com/notuxius/skills/releases). The ZIP contains one `skills-upkeep/` folder with `SKILL.md`, its workflow references, the ledger template, the example report and the license. The [support queue lab](lab/) and [eval scenarios](evals/skills-upkeep.md) stay in the repository source archive.
 
-Download the [v3.1.2 release ZIP](https://github.com/notuxius/skills/releases/download/v3.1.2/skills-upkeep-v3.1.2.zip). Use this archive when submitting or updating Skills Upkeep on Agensi. [Agensi packaging guide](https://www.agensi.io/docs/packaging)
+Download the [v3.1.3 release ZIP](https://github.com/notuxius/skills/releases/download/v3.1.3/skills-upkeep-v3.1.3.zip). Use this archive when submitting or updating Skills Upkeep on Agensi. [Agensi packaging guide](https://www.agensi.io/docs/packaging)
 
 Stable releases trigger a temporary install to refresh the public skills.sh listing. CI checks every installed file against Git. If the public snapshot still matches an older revision on the default branch after five minutes, CI reports the commit in a warning. An unrecognized snapshot or an unavailable download fails the check. The install sends the Skills CLI's install telemetry and can contribute to the public install count. [skills.sh FAQ](https://skills.sh/docs/faq#how-is-the-leaderboard-ranked)
 
