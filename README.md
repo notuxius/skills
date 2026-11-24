@@ -107,6 +107,12 @@ npx skills add notuxius/skills --skill queue-devops queue-docs --agent codex cla
 
 [View Skills Upkeep on Agensi](https://www.agensi.io/skills/skills-upkeep)
 
+## Release ZIP
+
+When a stable `vMAJOR.MINOR.PATCH` release is published, GitHub Actions attaches `skills-upkeep-vMAJOR.MINOR.PATCH.zip` to its [release assets](https://github.com/notuxius/skills/releases). The ZIP contains one `skills-upkeep/` folder with `SKILL.md`, its workflow references, the ledger template, the example report and the license. The support queue `lab/` stays in the repository source archive.
+
+Upload the release ZIP when submitting or updating Skills Upkeep on Agensi. [Agensi packaging guide](https://www.agensi.io/docs/packaging)
+
 ## Skills Upkeep pricing survey
 
 Which would you choose for Skills Upkeep, a monthly subscription or a one-time purchase? Tell us what you’d pay and how likely you’d be to buy at the proposed one-time price of **$5 USD**.
