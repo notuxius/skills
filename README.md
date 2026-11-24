@@ -1,24 +1,24 @@
 # Skills Upkeep
 
-Set up, maintain, and update shared coding-agent skills for Codex, Claude Code, and GitHub Copilot. Audit project skills against the dependency versions each workspace actually uses, and find missing guidance when your team adopts a new library or tool.
+Set up, maintain, and update shared coding-agent skills. Audit project skills against the dependency versions each workspace actually uses, and find missing guidance when your team adopts a new library or tool.
 
 ## From zero to shared project skills
 
-Imagine your checkout app already uses React and Playwright. It has a lockfile and a signed-in test fixture, but no project skills. Your team uses Codex, Claude Code, and GitHub Copilot.
+Imagine your checkout app already uses React and Playwright. It has a lockfile and a signed-in test fixture, but no project skills. Your team wants to share project guidance across its coding agents.
 
 ### 1. Install Skills Upkeep
 
 From the checkout app’s root, run this with Node.js 22.20 or later.
 
 ```powershell
-npx skills add notuxius/skills --skill skills-upkeep --agent codex claude-code github-copilot --copy
+npx skills add notuxius/skills --skill skills-upkeep --copy
 ```
 
-Codex and GitHub Copilot share `.agents/skills/`. Claude Code gets a copy in `.claude/skills/`. The Skills CLI requires `claude-code` as the agent ID. [Supported agents](https://github.com/vercel-labs/skills/blob/main/docs/agents.md)
+Select your team's coding agents when prompted and install at project scope. For scripted installs, pass their CLI IDs with `--agent`. [Supported agents](https://github.com/vercel-labs/skills/blob/main/docs/agents.md)
 
 ### 2. Preview and apply the project skills
 
-Open the checkout app in any of the three agents and ask for a preview.
+Open the checkout project in your coding agent and ask for a preview.
 
 > Run skills-upkeep bootstrap report-only. Check our lockfile and how we use React and Playwright. Show which skills you’d install or write.
 
@@ -31,7 +31,7 @@ An example preview might propose these two skills.
 
 Then ask the agent to apply the preview.
 
-> Run skills-upkeep bootstrap apply for Codex, Claude Code, and GitHub Copilot. Apply the previewed skills and add the dependency-change rule to our project instructions.
+> Run skills-upkeep bootstrap apply for the coding agents this project uses. Apply the previewed skills and add the dependency-change rule to our project instructions.
 
 The agent applies the skill changes, records the workspace and resolved package versions in `reviewed.md`, and updates the project instructions so the agents know when to use each skill. [Bootstrap workflow](https://github.com/notuxius/skills/blob/main/skills/skills-upkeep/project-workflow.md#bootstrap)
 
@@ -45,7 +45,7 @@ Check for `skills-upkeep` and the skills selected during bootstrap. Commit the s
 
 ### 4. Keep project skills up to date
 
-Give any of the three agents a normal task.
+Give your coding agent a normal task.
 
 > Add a Playwright test that checks a signed-in customer can place an order.
 
@@ -101,10 +101,10 @@ Choose the roles that fit your work. Each skill can be installed separately from
 | DevOps | `queue-devops` | Deployment checks, release monitoring, and rollback decisions. |
 | Technical writer | `queue-docs` | Help articles for support agents working with tickets. |
 
-To install the DevOps and technical writing skills in Codex and Claude Code, run this from your project's root.
+To install the DevOps and technical writing skills, run this from your project's root and select your coding agents.
 
 ```powershell
-npx skills add notuxius/skills --skill queue-devops queue-docs --agent codex claude-code --copy
+npx skills add notuxius/skills --skill queue-devops queue-docs --copy
 ```
 
 ## Find Skills Upkeep

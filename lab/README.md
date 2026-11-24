@@ -1,6 +1,6 @@
 # Support queue skills lab
 
-A fictional ticket queue for testing four project skills. The reference solution is on `main`. Both Claude Code and Codex receive the skills on checkout. The project uses Node.js 22.20 or later, with no application packages to install.
+A fictional ticket queue for testing four project skills. The reference solution is on `main`. The checkout includes project skills for the agents used in the exercises. The project uses Node.js 22.20 or later, with no application packages to install.
 
 | Role | Exercise | Improvement tested |
 |---|---|---|
@@ -52,16 +52,16 @@ python tools/replay_update.py
 
 Edit the four skills in [notuxius/skills](https://github.com/notuxius/skills). The default branch supplies current installations. The bundled catalog keeps the original two releases available for the offline rehearsal.
 
-To install the four skills in another project, run these commands from its root. Preserve any existing same-name local customizations as project rules before adopting the upstream copies.
+To install the four skills in another project, run these commands from its root and select your coding agents. Preserve any existing same-name local customizations as project rules before adopting the upstream copies.
 
 ```sh
-npx skills add notuxius/skills --skill queue-ui queue-api queue-aqa queue-design --agent codex claude-code --copy
+npx skills add notuxius/skills --skill queue-ui queue-api queue-aqa queue-design --copy
 npx skills list --json
 ```
 
 Confirm that each selected skill tracks the intended source in `skills-lock.json`. Commit the project skills and lockfile together so a fresh checkout includes the reviewed versions.
 
-After an improvement lands on the catalog's default branch, check for local edits and refresh the affected names. The command explicitly selects Codex and Claude Code so both copies receive the new guidance. For example, after an AQA improvement:
+After an improvement lands on the catalog's default branch, check for local edits and refresh the affected names. The lab's refresh command targets both copies used by the exercises. For example, after an AQA improvement:
 
 ```sh
 npx skills check
