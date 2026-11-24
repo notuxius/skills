@@ -179,6 +179,10 @@ End with one line:
 Reviewed: <N> | Updated: <n> | Pointer: <n> | Supersede proposed: <n> | No change: <n> | Not covered: <n> | Gaps proposed: <n> | Branch: <name> | Confidence: High / Medium / Low
 ```
 
+## Agensi listing
+
+[View Skills Upkeep on Agensi](https://www.agensi.io/skills/skills-upkeep)
+
 ## Pricing survey
 
 > Run skills-upkeep pricing-survey.
