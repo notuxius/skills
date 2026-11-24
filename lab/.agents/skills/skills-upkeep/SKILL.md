@@ -1,6 +1,6 @@
 ---
 name: skills-upkeep
-description: Set up shared coding-agent skills in a project, match them to the packages each workspace uses, and keep the guidance current when a dependency is added, upgraded or first used. Use for project skill setup, dependency-change reviews, selecting skills for package-specific work, and requests such as "refresh our skills", "audit our skills against upstream", or "what skills are we missing". Compare hand-maintained skills with vetted upstream sources while preserving project conventions. Also use for Skills Upkeep errors, bug reports, feature suggestions, and GitHub pull requests for skills upkeep changes.
+description: Set up, maintain, update, and audit shared coding-agent skills in a project. Match skills to the packages each workspace uses and keep project skills up to date when dependencies are added, upgraded, or first used. Use for project skill setup, dependency-change reviews, package-specific work, and requests such as "refresh our skills", "audit our skills against upstream", or "what skills are we missing". Compare hand-maintained skills with vetted upstream sources while preserving project conventions. Also use for Skills Upkeep errors, bug reports, feature suggestions, and GitHub pull requests for skills upkeep changes.
 ---
 
 # Skills Upkeep
