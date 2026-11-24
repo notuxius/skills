@@ -109,4 +109,4 @@ npx skills add notuxius/skills --skill queue-devops queue-docs --agent codex cla
 
 Which would you choose for Skills Upkeep, a monthly subscription or a one-time purchase? Tell us what you’d pay and how likely you’d be to buy at the proposed one-time price of **$5 USD**.
 
-[Reply publicly on GitHub](https://github.com/notuxius/skills/discussions/4) under your GitHub username, or [Answer anonymously in Google Forms](https://docs.google.com/forms/d/e/1FAIpQLSdF1nbzCIxOqb3atj0NxSk5d9f1UiYN7KNUx5CDQyNQFR_dsA/viewform) without signing in. We’ll share anonymous responses in aggregate.
+[Reply publicly on GitHub](https://github.com/notuxius/skills/discussions/4) under your GitHub username, or [Answer anonymously in Google Forms](https://docs.google.com/forms/d/e/1FAIpQLSdF1nbzCIxOqb3atj0NxSk5d9f1UiYN7KNUx5CDQyNQFR_dsA/viewform?entry.663372071=5) without signing in. We’ll share anonymous responses in aggregate.
