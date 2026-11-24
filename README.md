@@ -79,6 +79,8 @@ The feedback workflow is available starting in `v2.2.0`.
 
 ## Update Skills Upkeep
 
+In `v3.1.2`, Skills Upkeep installs reviewed npm-bundled skills as project copies for the selected agents. A later package upgrade leaves those instructions in place until you review and apply the update. When you ask Skills Upkeep to publish changes to an existing pull request, it checks the published diff and pushes any missing requested changes to the same branch. [Release notes](https://github.com/notuxius/skills/releases/tag/v3.1.2)
+
 Setup-change reviews are available starting in `v3.1.0`. To refresh a clean, tracked install that follows the default branch, run `npx skills update skills-upkeep --project` from the consuming project. If you edited the installed copy, compare it with the release and merge the relevant guidance by hand.
 
 ## Optional usage telemetry
@@ -121,7 +123,7 @@ npx skills add notuxius/skills --skill queue-devops queue-docs --copy
 
 When a stable `vMAJOR.MINOR.PATCH` release is published, GitHub Actions attaches `skills-upkeep-vMAJOR.MINOR.PATCH.zip` to its [release assets](https://github.com/notuxius/skills/releases). The ZIP contains one `skills-upkeep/` folder with `SKILL.md`, its workflow references, the ledger template, the example report and the license. The [support queue lab](lab/) and [eval scenarios](evals/skills-upkeep.md) stay in the repository source archive.
 
-Upload the release ZIP when submitting or updating Skills Upkeep on Agensi. [Agensi packaging guide](https://www.agensi.io/docs/packaging)
+Download the [v3.1.2 release ZIP](https://github.com/notuxius/skills/releases/download/v3.1.2/skills-upkeep-v3.1.2.zip). Use this archive when submitting or updating Skills Upkeep on Agensi. [Agensi packaging guide](https://www.agensi.io/docs/packaging)
 
 Stable releases trigger a temporary install to refresh the public skills.sh listing. That install sends the Skills CLI's install telemetry and can contribute to the public install count. [skills.sh FAQ](https://skills.sh/docs/faq#how-is-the-leaderboard-ranked)
 

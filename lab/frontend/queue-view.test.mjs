@@ -52,6 +52,22 @@ test('an earlier success cannot replace the newer result even for the same filte
   assert.deepEqual(view.snapshot(), { filter: 'open', phase: 'ready', rows: ['T-12'], error: null });
 });
 
+test('a rejected refresh exposes a message and can be retried', async () => {
+  const { view, requests } = controlledQueue();
+  const fallback = 'Unable to load the queue. Try again.';
+  for (const [reason, message] of [[null, fallback], [undefined, fallback], [' ', fallback], ['Offline', 'Offline']]) {
+    const pending = view.refresh('open');
+    requests.at(-1).reject(reason);
+    await pending;
+    assert.equal(view.snapshot().phase, 'error');
+    assert.equal(view.snapshot().error, message);
+  }
+  const retry = view.refresh('open');
+  requests.at(-1).resolve(['T-11']);
+  await retry;
+  assert.deepEqual(view.snapshot(), { filter: 'open', phase: 'ready', rows: ['T-11'], error: null });
+});
+
 test('an earlier failure cannot interrupt another filter that is still loading', async () => {
   const { view, requests } = controlledQueue();
   const earlier = view.refresh('open');
