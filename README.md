@@ -63,7 +63,7 @@ The review cites the project setup and rule files, distinguishes local developme
 
 ## Report a bug, suggest a feature or open a pull request
 
-If Skills Upkeep finds a problem in its own workflow, it includes a copy-ready bug report in the result, even if a workaround succeeds. You can ask it to draft or file an issue, or open a pull request for your skill changes.
+If Skills Upkeep finds a possible defect in its own workflow, it flags it briefly. You can ask it to draft or file an issue, or open a pull request for your skill changes.
 
 > Use Skills Upkeep to draft a feature request for custom skill review intervals.
 
@@ -89,7 +89,7 @@ The repository's standalone telemetry helper records usage only when called dire
 node /path/to/skills/telemetry/telemetry.mjs record apply bootstrap passed
 ```
 
-Substitute `dependency-change` for that workflow and use `passed`, `failed` or `not_run` for the actual verification result. The event contains the release, workflow, verification result and schema version. `DISABLE_TELEMETRY=1` or `DO_NOT_TRACK=1` blocks sending.
+Substitute `dependency-change` or `setup-change` for the relevant workflow and use `passed`, `failed` or `not_run` for the actual verification result. The event contains the release, workflow, verification result and schema version. `DISABLE_TELEMETRY=1` or `DO_NOT_TRACK=1` blocks sending.
 
 CI requires both `SKILLS_UPKEEP_TELEMETRY=1` and a receiver URL. The repository includes a loopback SQLite receiver for testing and local collection using Node.js 22.20 or later.
 
@@ -119,9 +119,11 @@ npx skills add notuxius/skills --skill queue-devops queue-docs --copy
 
 ## Release ZIP
 
-When a stable `vMAJOR.MINOR.PATCH` release is published, GitHub Actions attaches `skills-upkeep-vMAJOR.MINOR.PATCH.zip` to its [release assets](https://github.com/notuxius/skills/releases). The ZIP contains one `skills-upkeep/` folder with `SKILL.md`, its workflow references, the ledger template, the example report and the license. The support queue `lab/` stays in the repository source archive.
+When a stable `vMAJOR.MINOR.PATCH` release is published, GitHub Actions attaches `skills-upkeep-vMAJOR.MINOR.PATCH.zip` to its [release assets](https://github.com/notuxius/skills/releases). The ZIP contains one `skills-upkeep/` folder with `SKILL.md`, its workflow references, the ledger template, the example report and the license. The [support queue lab](lab/) and [eval scenarios](evals/skills-upkeep.md) stay in the repository source archive.
 
 Upload the release ZIP when submitting or updating Skills Upkeep on Agensi. [Agensi packaging guide](https://www.agensi.io/docs/packaging)
+
+Stable releases trigger a temporary install to refresh the public skills.sh listing. That install sends the Skills CLI's install telemetry and can contribute to the public install count. [skills.sh FAQ](https://skills.sh/docs/faq#how-is-the-leaderboard-ranked)
 
 ## Find Skills Upkeep
 
@@ -131,4 +133,4 @@ You can [buy Skills Upkeep on Agensi](https://www.agensi.io/skills/skills-upkeep
 
 Which would you choose for Skills Upkeep, a monthly subscription or a one-time purchase? Tell us what you’d pay and how likely you’d be to buy at the proposed one-time price of **$5 USD**.
 
-[Reply publicly on GitHub](https://github.com/notuxius/skills/discussions/4) under your GitHub username, or [Answer anonymously in Google Forms](https://docs.google.com/forms/d/e/1FAIpQLSdF1nbzCIxOqb3atj0NxSk5d9f1UiYN7KNUx5CDQyNQFR_dsA/viewform?entry.663372071=5) without signing in. We’ll share anonymous responses in aggregate.
+[Reply publicly on GitHub](https://github.com/notuxius/skills/discussions/4) under your GitHub username, or [answer anonymously in google forms](https://docs.google.com/forms/d/e/1FAIpQLSdF1nbzCIxOqb3atj0NxSk5d9f1UiYN7KNUx5CDQyNQFR_dsA/viewform?entry.663372071=5) without signing in. We’ll share anonymous responses in aggregate.

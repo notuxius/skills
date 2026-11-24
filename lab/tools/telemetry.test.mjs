@@ -80,6 +80,12 @@ test('interactive telemetry requires explicit consent in each checkout', async t
   const { day, ...countedEvent } = row;
   assert.match(day, /^\d{4}-\d{2}-\d{2}$/);
   assert.deepEqual(countedEvent, { ...status.sample, count: 1 });
+  assert.deepEqual(await run(['record', 'apply', 'setup-change', 'not_run']), { state: 'sent' });
+  const { day: setupDay, ...setupEvent } = (await report()).find(event => event.workflow === 'setup-change');
+  assert.match(setupDay, /^\d{4}-\d{2}-\d{2}$/);
+  assert.deepEqual(setupEvent, {
+    ...countedEvent, workflow: 'setup-change', verification: 'not_run',
+  });
 
   assert.deepEqual(await run(['disable']), { state: 'disabled' });
   assert.deepEqual(await run(record), { state: 'skipped' });

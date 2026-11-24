@@ -1,6 +1,6 @@
 export const schemaVersion = 1;
-export const release = '3.0.0';
-export const workflows = ['bootstrap', 'dependency-change'];
+export const release = '3.1.1';
+export const workflows = ['bootstrap', 'dependency-change', 'setup-change'];
 export const verificationResults = ['passed', 'failed', 'not_run'];
 
 export function isTelemetryEvent(event) {

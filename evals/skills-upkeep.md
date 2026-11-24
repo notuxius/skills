@@ -2,6 +2,18 @@
 
 Use a disposable project with the stated manifests, lockfiles, skills and source changes. Capture the initial branch and working-tree status, including untracked files. For a read-only run, compare both with the final state. The packages and version numbers in these examples are illustrative.
 
+## Run the write-boundary checks
+
+From the repository root, pass a headless agent command that reads a UTF-8 prompt on stdin and writes its final response to stdout in UTF-8. The runner creates a temporary Git checkout for each case and checks scenarios 6, 34, 42 and 54. Scenarios 6, 34 and 54 check branch refs, status, diffs and an existing untracked file. Scenario 42 checks that apply writes only the authorized skill and ledger.
+
+To run the three report-only cases with Codex:
+
+```sh
+python evals/check_skill_boundaries.py --scenario 6 --scenario 34 --scenario 54 codex exec --ephemeral --sandbox read-only -
+```
+
+Omit the `--scenario` flags to run all four cases. Scenario 42 requires a headless agent that can edit the disposable checkout's `.agents/skills/` directory. The remaining scenarios are manual. Live checks use the agent's existing login and model configuration.
+
 ## Public skill audit
 
 | # | Scenario | Prompt | Expected |
@@ -28,7 +40,7 @@ Use a disposable project with the stated manifests, lockfiles, skills and source
 | 20 | Combined groups | Prompt "check aqa + devops" where one skill is in both | Each skill reviewed once; group names shown in the report |
 | 21 | Unknown name in scope | Prompt names `k7-*` that matches nothing | Reported as matching no skill; the rest of the scope still runs |
 | 22 | Gaps stay in scope | Prompt "skills upkeep aqa" in a repo that also uses Terraform | No Terraform skill proposed, because it falls outside the scoped group; one note line at the end may mention it |
-| 23 | No mode given | Prompt "skills upkeep devops" with no mode | Asks once whether to run normally or report-only before any branch is created |
+| 23 | No mode given | Prompt "skills upkeep devops" with no mode | Asks once in an interactive audit before creating a branch. In a non-interactive run, defaults to report-only and continues with the available scope. |
 | 24 | Save inferred group | An inferred group the user confirmed | Offers to save it to the ledger `groups` block; writes it only on a yes and never in report-only mode |
 | 25 | Partly unmatched scope | Prompt `k7-*, vitest-*` | Proceeds with `vitest-*`; reports `k7-*` as matching nothing; does not swap in `k6-*`, at most asks about it |
 | 26 | Source label by CLI version | A hand-made skill shown as `Source: untracked` (newer CLI) or `Source: local` (older) | Treated the same: hand-maintained, never touched by `npx skills update`, reviewed through Search and Compare |
@@ -66,7 +78,7 @@ Use simulated GitHub responses or a disposable repository. Check the destination
 | 46 | GitHub access unavailable | The user requests a PR or bug report, and no authorized integration or CLI login is available. | Returns a copy-ready title and Markdown body, the destination and the next step. Leaves GitHub and the working tree untouched. |
 | 47 | Draft text versus draft PR | Compare “Draft PR text for these changes” with “Open a draft PR for these changes” from the same initial state. | The first returns copy-ready text without publishing. The second creates a GitHub draft PR with existing access and returns its URL. |
 | 48 | Submission times out after creation | GitHub creates the requested item, but the submit call times out. | Finds the item and returns its URL without creating a duplicate. If verification is unavailable, reports the uncertain result and returns the draft. |
-| 49 | Skills Upkeep error found during normal work | A bootstrap instruction fails reproducibly and a local workaround succeeds. GitHub access is available. The user only requested bootstrap. | Finishes bootstrap and includes a sanitized copy-ready bug report and workaround. Makes no GitHub write. |
+| 49 | Skills Upkeep error found during normal work | A bootstrap instruction fails reproducibly and a local workaround succeeds. GitHub access is available. The user only requested bootstrap. | Finishes bootstrap and adds a one-line note offering to draft a report. Makes no GitHub write. |
 | 50 | External failure during a run | A dependency lookup fails because the network is offline, with no evidence of a Skills Upkeep defect. | Reports the blocker and follows normal recovery. Generates no upstream bug report. |
 | 51 | Feature suggestion | Compare “Help me suggest custom review intervals for Skills Upkeep” with “File a feature request for custom review intervals in Skills Upkeep” with GitHub access available. | The first returns a draft and the issue tracker link. The second creates an issue in `notuxius/skills` and returns its URL. Both capture the use case and requested behavior. |
 

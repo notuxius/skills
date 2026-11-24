@@ -11,9 +11,12 @@ jobs:
     if: ${{ !github.event.release.prerelease }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24'
       - name: Package the released skill
         env:
           RELEASE_TAG: ${{ github.event.release.tag_name }}
@@ -24,9 +27,16 @@ jobs:
             exit 1
           fi
 
+          node --input-type=module -e '
+            import { release } from "./telemetry/telemetry-schema.mjs";
+            if (`v${release}` !== process.env.RELEASE_TAG) {
+              throw new Error(`Telemetry release ${release} must match ${process.env.RELEASE_TAG}.`);
+            }
+          '
+
           git -c core.autocrlf=false archive --format=zip --prefix=skills-upkeep/ \
             --output="skills-upkeep-$RELEASE_TAG.zip" HEAD:skills/skills-upkeep \
-            SKILL.md project-workflow.md github-workflow.md \
+            SKILL.md project-workflow.md upstream-audit.md github-workflow.md \
             reviewed.template.md example-report.md LICENSE
       - name: Attach the ZIP to the release
         env:
