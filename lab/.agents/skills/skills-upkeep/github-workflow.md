@@ -4,7 +4,7 @@ Publish only when the user explicitly asks to open, file or submit the item. A r
 
 ## When Skills Upkeep encounters an error
 
-Diagnose and recover as part of the current task. If the evidence points to a defect in Skills Upkeep's instructions or workflow, include a copy-ready bug report and any workaround in the outcome, even if recovery succeeds. Distinguish confirmed facts from suspected causes. An unrelated application failure, access restriction or network error does not warrant a Skills Upkeep issue on its own. Share the draft in chat and include the [Skills Upkeep issue tracker](https://github.com/notuxius/skills/issues) for manual submission.
+Diagnose and recover as part of the current task. If the evidence points to a defect in Skills Upkeep's instructions or workflow, add one line to the outcome and offer to draft a report. Draft it only on request.
 
 ## Resolve the target and prepare the draft
 

@@ -15,7 +15,7 @@ jobs:
       run:
         shell: bash
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
           persist-credentials: false
@@ -29,13 +29,13 @@ jobs:
             exit 1
           fi
           git show "$default_ref:skills/skills-upkeep/SKILL.md" > "$RUNNER_TEMP/skills-upkeep-expected.md"
-      - uses: actions/setup-node@v7
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: '24'
       - name: Trigger skills.sh indexing
         run: |
           cd "$(mktemp -d)"
-          # Install telemetry tells skills.sh to reindex the public repository.
+          # This install requests indexing and can contribute to the public install count.
           npx --yes skills@1.9.0 add "$GITHUB_REPOSITORY" --skill skills-upkeep --agent codex --copy --yes
       - name: Verify the skills.sh snapshot
         run: |

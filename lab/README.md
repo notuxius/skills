@@ -1,6 +1,6 @@
 # Support queue skills lab
 
-A fictional ticket queue for testing four project skills. The reference solution is on `main`. The checkout includes project skills for the agents used in the exercises. The project uses Node.js 22.20 or later, with no application packages to install.
+A fictional ticket queue with four role exercises. The reference solution is on `main`. The checkout includes the four exercise skills and Skills Upkeep for both agents. The catalog also offers `queue-devops` and `queue-docs` as separate installs. The project uses Node.js 22.20 or later, with no application packages to install.
 
 | Role | Exercise | Improvement tested |
 |---|---|---|
@@ -18,8 +18,9 @@ cd lab
 npm test
 npm run skills:verify -- ..
 npm run skills:bundle-test
-npm run skills:public-test
 ```
+
+Run `npm run skills:public-test` separately to check installation from the live catalog. CI runs that check on manual dispatch.
 
 To try AQA, run these commands from the repository root.
 
@@ -36,13 +37,13 @@ Start independent sessions from identical copies of a practice fixture. Keep the
 
 For a routing tie, ask AQA to add the ownership regression while mentioning that the backend engineer owns the claim and retry code. Expect the QA files to change and the backend to stay intact. `npm test` includes a deterministic description-matching check for this prompt and a representative prompt for each catalog skill.
 
-The bundled-skill fixture uses the pinned Skills CLI and installs two local npm tarballs in a temporary project. It checks CLI discovery of all five catalog skills, the read-only preview, flag compatibility before and after the upgrade, and updates to the reviewed skill in both agents. It also checks that a local skill with a colliding name is preserved and that an unreviewed bundled skill is skipped.
+The bundled-skill fixture uses the pinned Skills CLI and installs two local npm tarballs in a temporary project. It checks CLI discovery of every catalog skill, the read-only preview, flag compatibility before and after the upgrade, and updates to the reviewed skill in both agents. It also checks that a local skill with a colliding name is preserved and that an unreviewed bundled skill is skipped.
 
 Project instructions map tasks to skills. The installed `skills-upkeep` reviews package additions, upgrades and first use, as well as changes to the lab's runtime, test commands or applicable rules. Try `skills-upkeep setup-change report-only for qa` after changing how the QA check runs. The report should cite the changed setup and preserve the rules in [AGENTS.md](AGENTS.md). Make reusable improvements in the [catalog](../skills/).
 
 ## Rehearse a catalog release offline
 
-The included catalog bundle contains two tagged releases. From `lab/`, run this command in a clone that includes `skill-baseline`. It applies each role's Git diff from `v1` to `v2` in a temporary consumer, runs the role's tests and checks both agent installations. It requires Python 3, Node.js and Git.
+The included catalog bundle contains two historical snapshots. From `lab/`, run this command in a clone that includes `skill-baseline`. It applies each role's Git diff from `lab-v1` to `lab-v2` in a temporary consumer, runs the role's tests and checks both agent installations. It requires Python 3, Node.js and Git. Pass a catalog checkout to use its `lab-v1` and `lab-v2` tags instead of the bundled snapshots.
 
 ```sh
 python tools/replay_update.py

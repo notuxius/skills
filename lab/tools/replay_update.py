@@ -1,4 +1,4 @@
-"""Replay the four v1 to v2 skill updates in a disposable copy of the lab."""
+"""Replay the four lab baseline updates in a disposable copy of the lab."""
 
 import argparse
 import io
@@ -32,13 +32,14 @@ def snapshot(repo, revision, destination):
         archive.extractall(destination)
 
 
-def release_ref(repo, name):
-    candidates = (f"refs/tags/{name}", f"refs/heads/{name}", f"refs/remotes/origin/{name}")
+def release_ref(repo, *names):
+    candidates = [f"{prefix}/{name}" for name in names
+                  for prefix in ("refs/tags", "refs/heads", "refs/remotes/origin")]
     available = git(repo, "for-each-ref", "--format=%(refname)", *candidates).decode().splitlines()
     for candidate in candidates:
         if candidate in available:
             return candidate
-    raise RuntimeError(f"Fetch or restore the {name} ref in {repo}")
+    raise RuntimeError(f"Fetch or restore the {names[0]} ref in {repo}")
 
 
 def check_install(project, catalog):
@@ -55,11 +56,11 @@ def replay(catalog):
             upstream.mkdir()
             git(upstream, "init", "--quiet")
             git(upstream, "fetch", "--quiet", "--no-tags", str(catalog),
-                "refs/tags/v1:refs/tags/v1", "refs/tags/v2:refs/tags/v2")
+                "refs/tags/v1:refs/tags/lab-v1", "refs/tags/v2:refs/tags/lab-v2")
 
-        before, after, consumer = temp / "v1", temp / "v2", temp / "consumer"
-        first = release_ref(upstream, "v1")
-        second = release_ref(upstream, "v2")
+        before, after, consumer = temp / "lab-v1", temp / "lab-v2", temp / "consumer"
+        first = release_ref(upstream, "lab-v1", "v1")
+        second = release_ref(upstream, "lab-v2", "v2")
         snapshot(upstream, first, before)
         snapshot(upstream, second, after)
         baseline = release_ref(REPO, "skill-baseline")
@@ -79,7 +80,7 @@ def replay(catalog):
                         data=patch)
             subprocess.run(["node", "--test", test], cwd=consumer, check=True)
         check_install(consumer, after)
-        print("All four updated installations match v2 in both agent directories.")
+        print("All four updated installations match lab-v2 in both agent directories.")
 
 
 if __name__ == "__main__":
