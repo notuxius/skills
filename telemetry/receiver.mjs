@@ -1,6 +1,6 @@
 import { createServer } from 'node:http';
 import * as sqlite from 'node:sqlite';
-import { isTelemetryEvent } from '../skills/skills-upkeep/scripts/telemetry-schema.mjs';
+import { isTelemetryEvent } from './telemetry-schema.mjs';
 
 const Database = sqlite.Database ?? sqlite.DatabaseSync;
 const eventPath = '/v1/events';

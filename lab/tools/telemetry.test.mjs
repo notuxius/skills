@@ -8,10 +8,10 @@ import { createInterface } from 'node:readline';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
-import { release, schemaVersion } from '../../skills/skills-upkeep/scripts/telemetry-schema.mjs';
+import { release, schemaVersion } from '../../telemetry/telemetry-schema.mjs';
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
-const helper = join(root, 'skills', 'skills-upkeep', 'scripts', 'telemetry.mjs');
+const helper = join(root, 'telemetry', 'telemetry.mjs');
 const receiver = join(root, 'telemetry', 'receiver.mjs');
 const exec = promisify(execFile);
 const runNode = async (args, options) => {
