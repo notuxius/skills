@@ -53,9 +53,11 @@ After upgrading Playwright, ask the agent to check the guidance against the newl
 
 ## Report a bug, suggest a feature or open a pull request
 
-If Skills Upkeep finds a problem in its own workflow, it includes a copy-ready bug report in the result, even if a workaround succeeds. It can also draft feature requests and prepare pull requests for your skill changes.
+If Skills Upkeep finds a problem in its own workflow, it includes a copy-ready bug report in the result, even if a workaround succeeds. You can ask it to draft or file an issue, or open a pull request for your skill changes.
 
 > Use Skills Upkeep to draft a feature request for custom skill review intervals.
+
+> Use Skills Upkeep to file a feature request for custom skill review intervals.
 
 > Use Skills Upkeep to open a pull request for these skill changes.
 
