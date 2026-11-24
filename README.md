@@ -107,15 +107,15 @@ To install the DevOps and technical writing skills, run this from your project's
 npx skills add notuxius/skills --skill queue-devops queue-docs --copy
 ```
 
-## Find Skills Upkeep
-
-[View Skills Upkeep on Agensi](https://www.agensi.io/skills/skills-upkeep) or [find it on skills.sh](https://skills.sh/notuxius/skills/skills-upkeep).
-
 ## Release ZIP
 
 When a stable `vMAJOR.MINOR.PATCH` release is published, GitHub Actions attaches `skills-upkeep-vMAJOR.MINOR.PATCH.zip` to its [release assets](https://github.com/notuxius/skills/releases). The ZIP contains one `skills-upkeep/` folder with `SKILL.md`, its workflow references, the ledger template, the example report and the license. The support queue `lab/` stays in the repository source archive.
 
 Upload the release ZIP when submitting or updating Skills Upkeep on Agensi. [Agensi packaging guide](https://www.agensi.io/docs/packaging)
+
+## Find Skills Upkeep
+
+You can [buy Skills Upkeep on Agensi](https://www.agensi.io/skills/skills-upkeep) to help build and improve the project, or [find it on skills.sh](https://skills.sh/notuxius/skills/skills-upkeep).
 
 ## Skills Upkeep pricing survey
 
