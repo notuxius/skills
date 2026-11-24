@@ -1,6 +1,6 @@
 # Skills Upkeep
 
-Set up, maintain, and update shared coding-agent skills. Audit project skills against the dependency versions each workspace actually uses, and find missing guidance when your team adopts a new library or tool.
+Set up, maintain, and update shared coding-agent skills. Audit guidance against the dependencies and the runtime, build, and test setup each workspace uses. Preserve project rules when adapting upstream guidance.
 
 ## From zero to shared project skills
 
@@ -31,7 +31,7 @@ An example preview might propose these two skills.
 
 Then ask the agent to apply the preview.
 
-> Run skills-upkeep bootstrap apply for the coding agents this project uses. Apply the previewed skills and add the dependency-change rule to our project instructions.
+> Run skills-upkeep bootstrap apply for the coding agents this project uses. Apply the previewed skills and add the dependency and setup review rule to our project instructions.
 
 The agent applies the skill changes, records the workspace and resolved package versions in `reviewed.md`, and updates the project instructions so the agents know when to use each skill. [Bootstrap workflow](https://github.com/notuxius/skills/blob/main/skills/skills-upkeep/project-workflow.md#bootstrap)
 
@@ -55,6 +55,12 @@ To keep up with dependency changes, ask the agent to check the guidance against 
 
 > Run skills-upkeep dependency-change apply for tests/e2e
 
+When the way a workspace runs, builds, or tests changes, ask for a setup review. For example, after switching the local AppHost runtime to Podman:
+
+> Run skills-upkeep setup-change report-only for AppHost. Preserve our project rules and show which commands need to change.
+
+The review cites the project setup and rule files, distinguishes local development from CI, and shows which checks still need to run. A setup-only change can trigger a review with an unchanged lockfile. [Setup-change workflow](skills/skills-upkeep/project-workflow.md#setup-change)
+
 ## Report a bug, suggest a feature or open a pull request
 
 If Skills Upkeep finds a problem in its own workflow, it includes a copy-ready bug report in the result, even if a workaround succeeds. You can ask it to draft or file an issue, or open a pull request for your skill changes.
@@ -69,7 +75,11 @@ The agent submits to GitHub only when you ask it to publish, using your existing
 
 To give feedback directly, sign in to GitHub and choose **New issue**. For a bug, describe what happened and how to reproduce it. For a suggestion, explain what you'd like to change and when it would help. [Skills Upkeep issues](https://github.com/notuxius/skills/issues)
 
-The feedback workflow is available starting in `v2.2.0`. If your project install follows the default branch, refresh it from the project root with `npx skills update skills-upkeep --project`.
+The feedback workflow is available starting in `v2.2.0`.
+
+## Update Skills Upkeep
+
+Setup-change reviews are available starting in `v3.1.0`. To refresh a clean, tracked install that follows the default branch, run `npx skills update skills-upkeep --project` from the consuming project. If you edited the installed copy, compare it with the release and merge the relevant guidance by hand.
 
 ## Optional usage telemetry
 
