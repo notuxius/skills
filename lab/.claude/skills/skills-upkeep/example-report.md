@@ -26,6 +26,19 @@ Compared the pull request with its merge base. The web workspace's Vitest resolu
 
 The ledger preview contains these two workspace rows. Vitest 4.0.4 is the last verified version for `apps/web`. The minimum supported version is unknown. The recorded check is `npx --no-install vitest --help`, which showed the flags used in the skill. The run made no project changes.
 
+## Review a setup change
+
+**Request:** “Run setup-change report-only for AppHost and preserve our project rules.”
+
+The AppHost development runbook now specifies Podman. The Aspire package resolution is unchanged. The CI workflow still uses Docker.
+
+| Workspace and environment | Setup and rule evidence | Skill decision | Verification |
+|---|---|---|---|
+| `src/AppHost`, local development | `docs/apphost.md` changed the runtime from Docker to Podman. `scripts/start-apphost.ps1` selects Podman, and `AGENTS.md` directs skill examples to use that launcher. | Reopen `aspire` even though the ledger shows a recent review. Update the local startup example to use the project launcher and keep the existing readiness check. | Confirmed the configured runtime by reading the launcher. A background AppHost smoke check is pending. |
+| `src/AppHost`, CI | `.github/workflows/integration.yml` still selects Docker. | Keep the existing CI startup instructions scoped to CI. | Confirmed the CI configuration by inspection. |
+
+The report-only run previews the skill edit and ledger evidence for the local setup change. The branch, checkout and ledger are unchanged.
+
 ## Review a shared skill after a breaking change
 
 The queue reporting package's v2 migration note replaces `--format json` with `--output json`. The `Export a queue report` section of `queue-report/SKILL.md` now selects the flag from each workspace's lockfile. Running the commands from the two workspaces produced this ledger evidence.

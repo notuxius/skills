@@ -16,6 +16,7 @@ const probes = [
   ['queue-docs', 'Write help articles for agents using the ticket queue, with screenshots, prerequisites, and troubleshooting instructions.'],
   ['skills-upkeep', 'Audit our project skills after a dependency upgrade. Match them to the packages each workspace uses and flag outdated guidance.'],
   ['skills-upkeep', 'Maintain and update our project skills when dependencies change.'],
+  ['skills-upkeep', 'Review the project setup change and update the affected skills after switching the workspace runtime. Preserve our project rules.'],
   ['skills-upkeep', 'Open a GitHub pull request for these skills upkeep changes.'],
   ['skills-upkeep', 'File a bug report about Skills Upkeep skipping a package during bootstrap.'],
   ['skills-upkeep', 'File a feature suggestion for Skills Upkeep to support custom review intervals.'],

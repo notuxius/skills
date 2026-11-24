@@ -38,7 +38,7 @@ For a routing tie, ask AQA to add the ownership regression while mentioning that
 
 The bundled-skill fixture uses the pinned Skills CLI and installs two local npm tarballs in a temporary project. It checks CLI discovery of all five catalog skills, the read-only preview, flag compatibility before and after the upgrade, and updates to the reviewed skill in both agents. It also checks that a local skill with a colliding name is preserved and that an unreviewed bundled skill is skipped.
 
-Project instructions map tasks to skills. The installed `skills-upkeep` workflow handles package additions, upgrades and first use. Make reusable improvements in the [catalog](../skills/) and record lab-specific rules in [AGENTS.md](AGENTS.md).
+Project instructions map tasks to skills. The installed `skills-upkeep` reviews package additions, upgrades and first use, as well as changes to the lab's runtime, test commands or applicable rules. Try `skills-upkeep setup-change report-only for qa` after changing how the QA check runs. The report should cite the changed setup and preserve the rules in [AGENTS.md](AGENTS.md). Make reusable improvements in the [catalog](../skills/).
 
 ## Rehearse a catalog release offline
 
