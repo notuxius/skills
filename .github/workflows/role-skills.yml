@@ -24,6 +24,12 @@ jobs:
       - run: npm test
       - run: npm run skills:verify -- ..
       - run: python3 tools/replay_update.py
+      - name: Check the apply evaluator and release snapshot verifier
+        run: |
+          python3 -m venv "$RUNNER_TEMP/skills-eval-python"
+          python="$RUNNER_TEMP/skills-eval-python/bin/python"
+          "$python" -m pip install --only-binary=:all: -r ../evals/requirements.txt
+          "$python" -m unittest discover -s ../evals
       - name: Test a fresh install and an npm-bundled skill upgrade
         run: npm run skills:bundle-test
       - name: Exercise installation and selective updates from the public catalog

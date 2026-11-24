@@ -54,8 +54,11 @@ try {
   const appLock = join(project, 'package-lock.json');
   const skillLock = join(project, 'skills-lock.json');
   const installed = (agent, name) => join(project, agent, 'skills', name, 'SKILL.md');
-  const sync = (include, ...args) => skills(project, 'experimental_sync', '--agent', 'codex', 'claude-code',
-    '--copy', '--yes', '--no-remote', '--no-cleanup', '--no-frozen-lockfile', '--include', include, ...args);
+  const syncFlags = ['--agent', 'codex', 'claude-code', '--copy', '--no-remote', '--no-cleanup', '--no-frozen-lockfile'];
+  const workflow = readFileSync(join(catalogSkills, 'skills-upkeep', 'project-workflow.md'), 'utf8');
+  assert.ok(workflow.includes(`skills experimental_sync --dry-run ${syncFlags.join(' ')} --include '<package>'`),
+    'Exercise the preview and apply flags from the published workflow');
+  const sync = (include, ...args) => skills(project, 'experimental_sync', ...syncFlags, '--include', include, ...args, '--yes');
   const selection = `${packageName}#${bundledName}`;
   const local = skillFile(collision, 'Use the queue project ownership convention.');
   write(join(project, 'package.json'), '{"name":"queue-consumer","private":true}\n');
@@ -102,6 +105,12 @@ try {
   }
 
   installPackage('2.0.0', '--output json');
+  assert.equal(readFileSync(skillLock, 'utf8'), before);
+  for (const agent of agents) {
+    const directory = dirname(installed(agent, bundledName));
+    assert.match(readFileSync(join(directory, 'SKILL.md'), 'utf8'), /--format json/);
+    assert.match(readFileSync(join(directory, 'reporting.md'), 'utf8'), /--format json/);
+  }
   assert.throws(() => execFileSync(process.execPath, [sdkReport, '--format', 'json']), { status: 2 });
   execFileSync(process.execPath, [sdkReport, '--output', 'json']);
   const afterPackageUpgrade = readFileSync(appLock, 'utf8');

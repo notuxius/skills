@@ -28,7 +28,7 @@ jobs:
             echo "::error::The released commit must be on $DEFAULT_BRANCH before skills.sh can index it."
             exit 1
           fi
-          git show "$default_ref:skills/skills-upkeep/SKILL.md" > "$RUNNER_TEMP/skills-upkeep-expected.md"
+          git -c core.autocrlf=false archive --format=zip --output="$RUNNER_TEMP/skills-upkeep-expected.zip" "$default_ref:skills/skills-upkeep"
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: '24'
@@ -40,18 +40,17 @@ jobs:
       - name: Verify the skills.sh snapshot
         run: |
           snapshot_url="https://www.skills.sh/api/download/$GITHUB_REPOSITORY/skills-upkeep"
-          expected="$RUNNER_TEMP/skills-upkeep-expected.md"
-          actual="$RUNNER_TEMP/skills-upkeep-indexed.md"
+          expected="$RUNNER_TEMP/skills-upkeep-expected.zip"
+          actual="$RUNNER_TEMP/skills-upkeep-indexed.json"
           for attempt in {1..6}; do
-            if curl --fail --silent --show-error --max-time 20 "$snapshot_url" \
-              | jq -ej '.files[] | select(.path == "SKILL.md") | .contents | strings' > "$actual" \
-              && cmp -s "$expected" "$actual"; then
-              echo "skills.sh serves the current SKILL.md."
+            if curl --fail --silent --show-error --max-time 20 --output "$actual" "$snapshot_url" \
+              && python3 .github/scripts/check_skills_snapshot.py "$expected" "$actual"; then
+              echo "skills.sh serves every file in the current skill."
               exit 0
             fi
             if [[ "$attempt" != 6 ]]; then
               sleep 60
             fi
           done
-          echo "::error::Could not verify the current SKILL.md on skills.sh after the install."
+          echo "::error::Could not verify the complete skill on skills.sh after the install."
           exit 1

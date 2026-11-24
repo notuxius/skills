@@ -14,7 +14,9 @@ export function createQueueView(load) {
       }
     } catch (error) {
       if (id === requestId) {
-        state = { filter, phase: 'error', rows, error: error.message };
+        const reason = typeof error === 'string' ? error : error?.message;
+        const message = typeof reason === 'string' && reason.trim() ? reason : 'Unable to load the queue. Try again.';
+        state = { filter, phase: 'error', rows, error: message };
       }
     }
   }

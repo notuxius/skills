@@ -4,15 +4,18 @@ Use a disposable project with the stated manifests, lockfiles, skills and source
 
 ## Run the write-boundary checks
 
-From the repository root, pass a headless agent command that reads a UTF-8 prompt on stdin and writes its final response to stdout in UTF-8. The runner creates a temporary Git checkout for each case and checks scenarios 6, 34, 42 and 54. Scenarios 6, 34 and 54 check branch refs, status, diffs and an existing untracked file. Scenario 42 checks that apply writes only the authorized skill and ledger.
-
-To run the three report-only cases with Codex:
+From the repository root, run all four live Codex scenarios in a terminal or background job. Install the evaluator dependency into the test environment first.
 
 ```sh
-python evals/check_skill_boundaries.py --scenario 6 --scenario 34 --scenario 54 codex exec --ephemeral --sandbox read-only -
+python -m pip install -r evals/requirements.txt
+python evals/check_skill_boundaries.py
 ```
 
-Omit the `--scenario` flags to run all four cases. Scenario 42 requires a headless agent that can edit the disposable checkout's `.agents/skills/` directory. The remaining scenarios are manual. Live checks use the agent's existing login and model configuration.
+Each case starts an ephemeral Codex session in a disposable Git checkout using the existing CLI login and model configuration. Scenarios 6, 34 and 54 use a read-only sandbox and check branch refs, status, diffs and an existing untracked file. Scenario 42 uses a workspace-write sandbox with the fixture's `.agents/skills/` directory explicitly writable. It checks that earlier coverage survives, the new row records the skill, and the skill describes the QA procedure.
+
+On Windows, the headless CLI prefers Microsoft Execution Containers (MXC) and starts with its own runner identity. If a VM is needed, use a Hyper-V basic session by default and run the same command inside the guest. [Codex Windows sandbox](https://developers.openai.com/codex/windows/)
+
+Repeat `--scenario` to select cases. For a different headless agent, append its command and arguments after the scenario options. It must read the UTF-8 prompt on stdin and write its UTF-8 response to stdout. The remaining scenarios are manual.
 
 ## Public skill audit
 
@@ -74,6 +77,7 @@ Use simulated GitHub responses or a disposable repository. Check the destination
 | # | Scenario | Request and fixture | Observable outcome |
 |---|---|---|---|
 | 44 | Existing CLI login | “Use Skills Upkeep to open a pull request for these skill changes.” The project has an existing GitHub CLI login, a writable feature branch and unrelated local edits. | Opens the PR against the intended repository and base with only the requested changes. Leaves unrelated edits intact and returns the PR URL. |
+| 44a | PR already open | Repeat scenario 44 with an open PR for the same head and base. Try once with the requested changes already published and once with a requested local commit missing from the remote head. | Returns the existing URL in both cases. In the second run, pushes the authorized change to the existing head and confirms it appears in the PR. Both runs preserve unrelated edits. |
 | 45 | Explicit upstream bug report | “File a bug report about Skills Upkeep skipping the package.” The agent has issue access and is in a different project's checkout. | Creates the issue in `notuxius/skills` and returns its URL. Omits private project data and identifies unknown reproduction details. |
 | 46 | GitHub access unavailable | The user requests a PR or bug report, and no authorized integration or CLI login is available. | Returns a copy-ready title and Markdown body, the destination and the next step. Leaves GitHub and the working tree untouched. |
 | 47 | Draft text versus draft PR | Compare “Draft PR text for these changes” with “Open a draft PR for these changes” from the same initial state. | The first returns copy-ready text without publishing. The second creates a GitHub draft PR with existing access and returns its URL. |

@@ -36,13 +36,15 @@ Use the [dependency-change process](#dependency-change) for trust, baseline, rev
 
 ### Preview skills bundled with npm packages
 
-For an installed npm dependency, inspect the package's skill files as untrusted data and compare the workspace's existing skill names. In a trusted checkout, use the project's approved Skills CLI to preview the affected package only:
+For an installed npm dependency, inspect the package's skill files as untrusted data and compare the workspace's existing skill names. Preview the affected package with the project's approved Skills CLI. This example targets Codex and Claude Code. Substitute the project's intended agent IDs and package name. Use `--copy` so the installed guidance stays at the reviewed version when the dependency changes.
 
 ```sh
-skills experimental_sync --dry-run --no-remote --no-cleanup --no-frozen-lockfile --include '<package>'
+skills experimental_sync --dry-run --agent codex claude-code --copy --no-remote --no-cleanup --no-frozen-lockfile --include '<package>'
 ```
 
 Run from the affected workspace or use the CLI's documented workspace support. Check the preview for name collisions and package provenance. When multiple workspaces resolve the same package differently, identify which installed copy supplies the skill before applying the preview. If the CLI is unavailable, inspect the installed package directly. Validate the bundled guidance against the resolved package version and follow the decision table for adoption. In apply mode, when installation is authorized, repeat the preview with `--include '<package>#<skill>'` for each reviewed skill, then drop `--dry-run` if the selection and provenance agree. Keep the other flags, pass the verified package and skill names as literal arguments, and use a project-local destination. Check the current copies for local edits before syncing. When a sync would replace a local skill or team edits, merge the relevant guidance by hand. Recheck the diff, lock and both discovery paths.
+
+If an earlier install links into the dependency, compare its current files with the last reviewed revision before converting it to a project copy. A package upgrade may already have changed the instructions visible through that link.
 
 ## Choose an action
 
