@@ -1,4 +1,5 @@
 import json
+import os
 import subprocess
 import sys
 import tempfile
@@ -43,6 +44,58 @@ class ApplyResultTest(unittest.TestCase):
 
 
 class ReleaseSnapshotTest(unittest.TestCase):
+    def test_only_warns_for_a_complete_snapshot_from_default_branch_history(self):
+        checker = LAB.parent / ".github/scripts/check_skills_snapshot.py"
+        with tempfile.TemporaryDirectory() as directory:
+            repo = Path(directory)
+
+            git_env = {**os.environ, "GIT_CONFIG_GLOBAL": str(repo / "test.gitconfig")}
+
+            def git(*args):
+                return subprocess.check_output(
+                    ["git", "-c", "user.name=CI", "-c", "user.email=ci@example.com",
+                     "-c", "core.autocrlf=false", *args], cwd=repo, env=git_env
+                )
+
+            git("config", "--global", "safe.directory", repo.resolve().as_posix())
+            git("init", "--quiet", "-b", "main")
+            skill = repo / "skills/skills-upkeep"
+            skill.mkdir(parents=True)
+            entry = {"path": "SKILL.md", "contents": "Original\n"}
+            guide = {"path": "guide.md", "contents": "Keep this guide.\n"}
+            for file in (entry, guide):
+                (skill / file["path"]).write_bytes(file["contents"].encode())
+            git("add", "skills")
+            git("commit", "-qm", "Publish original skill")
+            original = git("rev-parse", "HEAD").decode().strip()
+
+            git("checkout", "-qb", "unmerged")
+            (skill / "SKILL.md").write_bytes(b"Branch only\n")
+            git("commit", "-qam", "Unmerged change")
+            git("checkout", "-q", "main")
+            (skill / "SKILL.md").write_bytes(b"Current\n")
+            git("commit", "-qam", "Publish current skill")
+
+            archive = repo / "expected.zip"
+            archive.write_bytes(git("archive", "--format=zip", "HEAD:skills/skills-upkeep"))
+            snapshot = repo / "actual.json"
+            for files, history, status, warning in (
+                ([guide, dict(entry, contents="Current\n")], ["HEAD"], 0, False),
+                ([guide, entry], [], 1, False),
+                ([guide, entry], ["HEAD"], 0, True),
+                ([guide, dict(entry, contents="Branch only\n")], ["HEAD"], 1, False),
+                ([entry], ["HEAD"], 1, False),
+                ([guide, entry, entry], ["HEAD"], 1, False),
+            ):
+                with self.subTest(files=files, history=history):
+                    snapshot.write_text(json.dumps({"files": files}), encoding="utf-8")
+                    result = subprocess.run([sys.executable, checker, archive, snapshot, *history],
+                                            cwd=repo, capture_output=True, text=True, env=git_env)
+                    self.assertEqual(result.returncode, status, result.stderr)
+                    self.assertEqual("::warning::" in result.stdout, warning)
+                    if warning:
+                        self.assertIn(original, result.stdout)
+
     def test_matches_every_path_and_its_contents(self):
         checker = LAB.parent / ".github/scripts/check_skills_snapshot.py"
         entry = {"path": "SKILL.md", "contents": "Use the workflow.\n"}

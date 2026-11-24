@@ -28,24 +28,31 @@ jobs:
             echo "::error::The released commit must be on $DEFAULT_BRANCH before skills.sh can index it."
             exit 1
           fi
-          git -c core.autocrlf=false archive --format=zip --output="$RUNNER_TEMP/skills-upkeep-expected.zip" "$default_ref:skills/skills-upkeep"
+          catalog_commit=$(git rev-parse "$default_ref")
+          echo "CATALOG_COMMIT=$catalog_commit" >> "$GITHUB_ENV"
+          git -c core.autocrlf=false archive --format=zip --output="$RUNNER_TEMP/skills-upkeep-expected.zip" "$catalog_commit:skills/skills-upkeep"
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: '24'
-      - name: Trigger skills.sh indexing
+      - name: Request indexing and verify the installed files
         run: |
           cd "$(mktemp -d)"
           # This install requests indexing and can contribute to the public install count.
-          npx --yes skills@1.9.0 add "$GITHUB_REPOSITORY" --skill skills-upkeep --agent codex --copy --yes
+          npx --yes skills@1.9.0 add "$GITHUB_REPOSITORY@$CATALOG_COMMIT" --skill skills-upkeep --agent codex --copy --yes
+          unzip -q "$RUNNER_TEMP/skills-upkeep-expected.zip" -d "$RUNNER_TEMP/skills-upkeep-expected"
+          diff -qr "$RUNNER_TEMP/skills-upkeep-expected" .agents/skills/skills-upkeep
       - name: Verify the skills.sh snapshot
         run: |
           snapshot_url="https://www.skills.sh/api/download/$GITHUB_REPOSITORY/skills-upkeep"
           expected="$RUNNER_TEMP/skills-upkeep-expected.zip"
           actual="$RUNNER_TEMP/skills-upkeep-indexed.json"
           for attempt in {1..6}; do
+            history=()
+            if [[ "$attempt" == 6 ]]; then
+              history=("$CATALOG_COMMIT")
+            fi
             if curl --fail --silent --show-error --max-time 20 --output "$actual" "$snapshot_url" \
-              && python3 .github/scripts/check_skills_snapshot.py "$expected" "$actual"; then
-              echo "skills.sh serves every file in the current skill."
+              && python3 .github/scripts/check_skills_snapshot.py "$expected" "$actual" "${history[@]}"; then
               exit 0
             fi
             if [[ "$attempt" != 6 ]]; then
