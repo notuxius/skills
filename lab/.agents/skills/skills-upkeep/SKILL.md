@@ -192,6 +192,6 @@ If people want to answer in chat, ask these questions in order.
 
 1. Ask which option they would choose for Skills Upkeep. Offer a monthly subscription, a one-time purchase, free only, would not use, and unsure.
 2. For a paid choice, ask what they would realistically pay. Ask for the amount and currency per month or as a single payment. Accept “unsure.”
-3. Ask how likely they would be to buy Skills Upkeep for a proposed one-time payment of **$9 USD**. Offer definitely would, probably would, probably wouldn’t, definitely wouldn’t, and unsure.
+3. Ask how likely they would be to buy Skills Upkeep for a proposed one-time payment of **$5 USD**. Offer definitely would, probably would, probably wouldn’t, definitely wouldn’t, and unsure.
 
 Give them a copy-ready reply to submit through the channel they choose.
