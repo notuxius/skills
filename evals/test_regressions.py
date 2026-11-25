@@ -7,7 +7,28 @@ import unittest
 from pathlib import Path
 from zipfile import ZipFile
 
-from check_skill_boundaries import LAB, LEDGER, NEW_SKILL, check_apply_result
+from check_skill_boundaries import (
+    LAB, LEDGER, NEW_SKILL, SKILL_DIRECTORIES, agent_command, check_apply_result, run_case,
+)
+
+
+class ReportOnlyTest(unittest.TestCase):
+    def test_codex_command_allows_project_and_skill_edits(self):
+        command = agent_command("codex")
+        self.assertEqual(command[command.index("--sandbox") + 1], "workspace-write")
+        self.assertEqual(command[command.index("--add-dir") + 1], SKILL_DIRECTORIES["codex"])
+
+    def test_checkout_write_fails_despite_a_correct_report(self):
+        for target, directory in SKILL_DIRECTORIES.items():
+            with self.subTest(target=target):
+                fake_agent = (
+                    "import sys; from pathlib import Path; "
+                    f"assert 'Use {directory}/skills-upkeep/SKILL.md' in sys.stdin.read(); "
+                    f"Path('{directory}/queue-aqa/SKILL.md').write_text('unexpected edit'); "
+                    "print('report-only for queue-aqa')"
+                )
+                with self.assertRaisesRegex(AssertionError, "report-only changed status, unstaged"):
+                    run_case(6, [sys.executable, "-c", fake_agent], target=target)
 
 
 class ApplyResultTest(unittest.TestCase):
@@ -19,12 +40,14 @@ class ApplyResultTest(unittest.TestCase):
         procedure = "Check claim conflicts and read back the owner. Run `node --test qa/claim-race.test.mjs`."
         with tempfile.TemporaryDirectory() as directory:
             repo = Path(directory)
-            skill = repo / NEW_SKILL
+            new_skill = f"{SKILL_DIRECTORIES['claude']}/{NEW_SKILL}"
+            skill = repo / new_skill
             skill.parent.mkdir(parents=True)
             ledger = repo / LEDGER
+            ledger.parent.mkdir(parents=True)
             ledger.write_text(updated, encoding="utf-8")
             skill.write_text(header + procedure, encoding="utf-8")
-            check_apply_result(repo, baseline)
+            check_apply_result(repo, baseline, new_skill)
 
             for contents, guidance, expected in (
                 ("queue-review", "", "lost coverage"),
@@ -40,7 +63,7 @@ class ApplyResultTest(unittest.TestCase):
                     ledger.write_text(contents, encoding="utf-8")
                     skill.write_text(guidance, encoding="utf-8")
                     with self.assertRaisesRegex(AssertionError, expected):
-                        check_apply_result(repo, baseline)
+                        check_apply_result(repo, baseline, new_skill)
 
 
 class ReleaseSnapshotTest(unittest.TestCase):
