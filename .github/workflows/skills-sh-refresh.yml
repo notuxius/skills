@@ -1,14 +1,13 @@
 name: Refresh Skills Upkeep on skills.sh
 on:
-  release:
-    types: [published]
+  workflow_call:
 
 permissions:
   contents: read
 
 jobs:
   refresh:
-    if: ${{ !github.event.release.prerelease && github.repository == 'notuxius/skills' }}
+    if: ${{ github.repository == 'notuxius/skills' }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
     defaults:
@@ -28,9 +27,7 @@ jobs:
             echo "::error::The released commit must be on $DEFAULT_BRANCH before skills.sh can index it."
             exit 1
           fi
-          catalog_commit=$(git rev-parse "$default_ref")
-          echo "CATALOG_COMMIT=$catalog_commit" >> "$GITHUB_ENV"
-          git -c core.autocrlf=false archive --format=zip --output="$RUNNER_TEMP/skills-upkeep-expected.zip" "$catalog_commit:skills/skills-upkeep"
+          git -c core.autocrlf=false archive --format=zip --output="$RUNNER_TEMP/skills-upkeep-expected.zip" "$GITHUB_SHA:skills/skills-upkeep"
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: '24'
@@ -38,7 +35,7 @@ jobs:
         run: |
           cd "$(mktemp -d)"
           # This install requests indexing and can contribute to the public install count.
-          npx --yes skills@1.9.0 add "$GITHUB_REPOSITORY@$CATALOG_COMMIT" --skill skills-upkeep --agent codex --copy --yes
+          npx --yes skills@1.9.0 add "$GITHUB_REPOSITORY@$GITHUB_SHA" --skill skills-upkeep --agent codex --copy --yes
           unzip -q "$RUNNER_TEMP/skills-upkeep-expected.zip" -d "$RUNNER_TEMP/skills-upkeep-expected"
           diff -qr "$RUNNER_TEMP/skills-upkeep-expected" .agents/skills/skills-upkeep
       - name: Verify the skills.sh snapshot
@@ -49,7 +46,7 @@ jobs:
           for attempt in {1..6}; do
             history=()
             if [[ "$attempt" == 6 ]]; then
-              history=("$CATALOG_COMMIT")
+              history=("$GITHUB_SHA")
             fi
             if curl --fail --silent --show-error --max-time 20 --output "$actual" "$snapshot_url" \
               && python3 .github/scripts/check_skills_snapshot.py "$expected" "$actual" "${history[@]}"; then

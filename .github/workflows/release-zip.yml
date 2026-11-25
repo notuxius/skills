@@ -82,3 +82,7 @@ jobs:
           if ! grep -Fxq -- "$asset" <<< "$assets"; then
             gh release upload "$RELEASE_TAG" "$asset"
           fi
+
+  refresh:
+    needs: package
+    uses: ./.github/workflows/skills-sh-refresh.yml

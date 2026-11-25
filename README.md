@@ -127,7 +127,7 @@ When a stable `vMAJOR.MINOR.PATCH` release is published, GitHub Actions attaches
 
 Download the `skills-upkeep-*.zip` asset from the [latest release](https://github.com/notuxius/skills/releases/latest). Submit the verified ZIP’s files through the Agensi connector, confirm it accepts the update, and compare the files Agensi serves after approval with the ZIP. [Agensi connector guide](https://www.agensi.io/docs/submit-from-your-agent)
 
-Stable releases trigger a temporary install to refresh the public skills.sh listing. CI checks every installed file against Git. If the public snapshot still matches an older revision on the default branch after five minutes, CI reports the commit in a warning. An unrecognized snapshot or an unavailable download fails the check. The install sends the Skills CLI's install telemetry and can contribute to the public install count. [skills.sh FAQ](https://skills.sh/docs/faq#how-is-the-leaderboard-ranked)
+After release validation and ZIP packaging succeed, the workflow temporarily installs the tagged revision to refresh the public skills.sh listing. CI checks every installed file against that revision. If the public snapshot still matches an older revision on the default branch after five minutes, CI reports the commit in a warning. An unrecognized snapshot or an unavailable download fails the check. The install sends the Skills CLI's install telemetry and can contribute to the public install count. [skills.sh FAQ](https://skills.sh/docs/faq#how-is-the-leaderboard-ranked)
 
 ## Find Skills Upkeep
 

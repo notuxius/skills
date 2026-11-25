@@ -10,16 +10,17 @@ From the repository root, run all four live scenarios with a signed-in CLI in a 
 python -m pip install -r evals/requirements.txt
 python evals/check_skill_boundaries.py
 python evals/check_skill_boundaries.py --target claude
+python evals/check_skill_boundaries.py --target copilot
 ```
 
-Each case starts a fresh headless session in a disposable Git checkout. Codex reads `.agents/skills/` and runs with `workspace-write`, with its skill directory explicitly writable. Claude Code reads `.claude/skills/` and uses `acceptEdits`. Scenarios 6, 34 and 54 check that the agent chooses report-only mode and preserves branch refs, status, diffs and an existing untracked file. Scenario 42 checks that apply creates a usable skill in the selected agent's directory and records it in the shared ledger without losing earlier coverage.
+The evaluator first checks that the selected command can create a Git branch and write to its skill directory. It stops if either action fails in the disposable probe checkout. Each scenario then starts a fresh headless session in its own disposable checkout. Codex uses `workspace-write` with `.git/` and `.agents/skills/` explicitly writable. Claude Code uses `.claude/skills/` and `acceptEdits` with Git commands allowed. GitHub Copilot uses `.agents/skills/` with Git and file edits allowed. Scenarios 6, 34 and 54 check that the agent chooses report-only mode and preserves branch refs, status, diffs and an existing untracked file. Scenario 42 checks that apply creates a usable skill in the selected agent's directory and records it in the shared ledger without losing earlier coverage.
 
 On Windows, the headless CLI prefers Microsoft Execution Containers (MXC) and starts with its own runner identity. If a VM is needed, use a Hyper-V basic session by default and run the same command inside the guest. [Codex Windows sandbox](https://developers.openai.com/codex/windows/)
 
 Repeat `--scenario` to select cases. Override the headless command by appending it and its arguments after the evaluator options. The command must read the UTF-8 prompt on stdin and write its UTF-8 response to stdout. For example, this runs scenario 34 with the default Claude Code command written out explicitly.
 
 ```sh
-python evals/check_skill_boundaries.py --target claude --scenario 34 claude -p --permission-mode acceptEdits --no-session-persistence
+python evals/check_skill_boundaries.py --target claude --scenario 34 claude -p --permission-mode acceptEdits --allowedTools "Bash(git:*)" --no-session-persistence
 ```
 
 The remaining scenarios are manual.

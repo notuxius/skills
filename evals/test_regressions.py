@@ -8,15 +8,27 @@ from pathlib import Path
 from zipfile import ZipFile
 
 from check_skill_boundaries import (
-    LAB, LEDGER, NEW_SKILL, SKILL_DIRECTORIES, agent_command, check_apply_result, run_case,
+    LAB, LEDGER, NEW_SKILL, SKILL_DIRECTORIES, agent_command, check_agent_permissions,
+    check_apply_result, run_case,
 )
 
 
 class ReportOnlyTest(unittest.TestCase):
-    def test_codex_command_allows_project_and_skill_edits(self):
+    def test_codex_command_allows_skill_edits_and_branch_creation(self):
         command = agent_command("codex")
         self.assertEqual(command[command.index("--sandbox") + 1], "workspace-write")
-        self.assertEqual(command[command.index("--add-dir") + 1], SKILL_DIRECTORIES["codex"])
+        writable = {command[index + 1] for index, arg in enumerate(command) if arg == "--add-dir"}
+        self.assertEqual(writable, {SKILL_DIRECTORIES["codex"], ".git"})
+
+    def test_claude_command_allows_branch_creation(self):
+        command = agent_command("claude")
+        self.assertEqual(command[command.index("--allowedTools") + 1], "Bash(git:*)")
+
+    def test_permission_check_rejects_an_agent_that_can_only_edit_files(self):
+        command = [sys.executable, "-c", "from pathlib import Path; "
+                   "Path('.claude/skills/permission-probe.md').write_text('permission probe')"]
+        with self.assertRaisesRegex(AssertionError, "expected branch creation"):
+            check_agent_permissions("claude", command)
 
     def test_checkout_write_fails_despite_a_correct_report(self):
         for target, directory in SKILL_DIRECTORIES.items():
@@ -29,6 +41,13 @@ class ReportOnlyTest(unittest.TestCase):
                 )
                 with self.assertRaisesRegex(AssertionError, "report-only changed status, unstaged"):
                     run_case(6, [sys.executable, "-c", fake_agent], target=target)
+
+    def test_branch_creation_fails_despite_a_correct_report(self):
+        command = [sys.executable, "-c", "import subprocess; "
+                   "subprocess.run(['git', 'checkout', '-b', 'chore/refresh-queue-aqa'], check=True); "
+                   "print('report-only for queue-aqa')"]
+        with self.assertRaisesRegex(AssertionError, "report-only changed branch, branches"):
+            run_case(6, command)
 
 
 class ApplyResultTest(unittest.TestCase):
@@ -67,6 +86,18 @@ class ApplyResultTest(unittest.TestCase):
 
 
 class ReleaseSnapshotTest(unittest.TestCase):
+    def test_refresh_runs_only_after_validated_packaging(self):
+        import yaml
+
+        workflows = LAB.parent / ".github/workflows"
+        release = yaml.load((workflows / "release-zip.yml").read_text(encoding="utf-8"), Loader=yaml.BaseLoader)
+        refresh = yaml.load((workflows / "skills-sh-refresh.yml").read_text(encoding="utf-8"), Loader=yaml.BaseLoader)
+        self.assertEqual(set(refresh["on"]), {"workflow_call"})
+        self.assertEqual(release["jobs"]["package"]["needs"], "validate")
+        self.assertEqual(release["jobs"]["refresh"], {
+            "needs": "package", "uses": "./.github/workflows/skills-sh-refresh.yml",
+        })
+
     def test_only_warns_for_a_complete_snapshot_from_default_branch_history(self):
         checker = LAB.parent / ".github/scripts/check_skills_snapshot.py"
         with tempfile.TemporaryDirectory() as directory:

@@ -1,6 +1,6 @@
 # Support queue skills lab
 
-A fictional ticket queue with four role exercises. The reference solution is on `main`. The checkout includes the four exercise skills and Skills Upkeep for both agents. The catalog also offers `queue-devops` and `queue-docs` as separate installs. The project uses Node.js 22.20 or later, with no application packages to install.
+A fictional ticket queue with four role exercises. The reference solution is on `main`. The checkout includes the four exercise skills and Skills Upkeep in the shared and Claude Code skill directories. The catalog also offers `queue-devops` and `queue-docs` as separate installs. The project uses Node.js 22.20 or later, with no application packages to install.
 
 | Role | Exercise | Improvement tested |
 |---|---|---|
@@ -28,9 +28,10 @@ To run all four live Skills Upkeep scenarios in the background, start these comm
 python -m pip install -r ../evals/requirements.txt
 python ../evals/check_skill_boundaries.py
 python ../evals/check_skill_boundaries.py --target claude
+python ../evals/check_skill_boundaries.py --target copilot
 ```
 
-Scenarios 6, 34 and 54 verify that report-only runs preserve a writable checkout. Scenario 42 verifies that apply creates a usable skill in the selected agent's directory and preserves earlier ledger entries. On Windows, the Codex runner prefers Microsoft Execution Containers. If the tests need a VM, use a Hyper-V basic session by default. [Live evaluation guide](../evals/skills-upkeep.md#run-the-write-boundary-checks)
+The evaluator verifies that the agent can create a branch and edit its skill directory before running the scenarios. Scenarios 6, 34 and 54 verify that report-only runs preserve the checkout. Scenario 42 verifies that apply creates a usable skill and preserves earlier ledger entries. On Windows, the Codex runner prefers Microsoft Execution Containers. If the tests need a VM, use a Hyper-V basic session by default. [Live evaluation guide](../evals/skills-upkeep.md#run-the-write-boundary-checks)
 
 To try AQA, run these commands from the repository root.
 
