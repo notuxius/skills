@@ -26,7 +26,7 @@ jobs:
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: '24'
-      - name: Check the telemetry version
+      - name: Check the skill and telemetry versions
         env:
           RELEASE_TAG: ${{ inputs.release_tag || github.event.release.tag_name || github.ref_name }}
         run: node .github/scripts/check_release_tag.mjs "$RELEASE_TAG"
@@ -69,7 +69,7 @@ jobs:
         run: |
           git -c core.autocrlf=false archive --format=zip --prefix=skills-upkeep/ \
             --output="skills-upkeep-$RELEASE_TAG.zip" HEAD:skills/skills-upkeep \
-            SKILL.md project-workflow.md upstream-audit.md github-workflow.md \
+            SKILL.md check-update.mjs check-ledger.mjs project-workflow.md upstream-audit.md github-workflow.md \
             reviewed.template.md example-report.md LICENSE.txt
       - name: Attach the ZIP to the release
         env:

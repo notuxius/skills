@@ -13,10 +13,12 @@ groups:
 
 Keep one row per reviewed skill. Reuse the existing row on later reviews. Use `updated`, `pointer`, `no change`, `supersede proposed` or `supersede declined` for audit outcomes. Record a declined gap under its topic as `gap declined`. Record the actual candidate revision as `owner/repo@sha` when a public source was read. Add the provider, status, finding and link for relevant audits, and explain any revision mismatch or unavailable evidence. Use the versions resolved for the relevant workspaces.
 
-In Reason, include the workspace and environment, the setup and rule sources that mattered, and the reviewed checkout revision or file content identity needed to recognize later changes. Use file content identities for inputs that differ from the recorded commit. For a setup-only workflow with no package, record the decision here. Existing ledgers can use their current columns. When a prior input is unknown, establish it during review.
+In Reason, include the workspace and environment, the setup and rule sources that mattered, and the reviewed checkout revision or file content identity needed to recognize later changes. Use file content identities for inputs that differ from the recorded commit. For a setup-only workflow with no package, record the decision here. When a prior input is unknown, establish it during review.
 
-| Skill | Reviewed | Outcome | Candidates considered | Upstream read | Versions seen | Audit evidence | Reason |
-|---|---|---|---|---|---|---|---|
+Record Reviewed as `YYYY-MM-DD`. Generate Next due with `node <installed-check-ledger.mjs> --next-due YYYY-MM-DD`, using the Reviewed date. For a vendored skill supplied by a tool, record the source as `tool@version` in Synced from. Leave it blank when the source version is unknown or the skill was not vendored from a tool. Update Synced from only after verifying a sync. Add these columns to older review tables on the next authorized ledger write. See the [ledger health check](upstream-audit.md#ledger-health-check).
+
+| Skill | Reviewed | Next due | Outcome | Candidates considered | Upstream read | Versions seen | Synced from | Audit evidence | Reason |
+|---|---|---|---|---|---|---|---|---|---|
 
 ## Project package coverage
 
