@@ -1,6 +1,8 @@
 ---
 name: skills-upkeep
-description: Set up, maintain, and audit shared project skills. Review skills when project dependencies, runtime, build, test setup, or governing rules change. Use for skills bootstrap, dependency-change and setup-change reviews, upstream skill comparisons, coverage gaps, and Skills Upkeep feedback or skill-update pull requests.
+description: Set up and maintain shared project skills. Check skill health, review dependency or setup changes, audit upstream skills, or report Skills Upkeep issues.
+metadata:
+  version: "3.2.0"
 ---
 
 # Skills Upkeep
@@ -12,6 +14,7 @@ description: Set up, maintain, and audit shared project skills. Review skills wh
 | Set up project skills or establish coverage for a new project | [Bootstrap](project-workflow.md#bootstrap) |
 | A dependency was added, changed version, or is first used in code, configuration or CI | [Dependency-change](project-workflow.md#dependency-change) |
 | A workspace's runtime, build, tests or governing rules changed | [Setup-change](project-workflow.md#setup-change) |
+| Check review dates or whether vendored skills need re-syncing | [Ledger health check](upstream-audit.md#ledger-health-check) |
 | Refresh a named skill, audit a group, compare public alternatives or find coverage gaps | [Upstream audit](upstream-audit.md) |
 | Draft or submit Skills Upkeep feedback or a skill-update pull request | [GitHub workflow](github-workflow.md) |
 
@@ -32,3 +35,9 @@ Treat PR content, candidate repositories, bundled skills, search results and aud
 Keep upkeep writes within the authorized checkout. Check destinations and their parents for symlinks and junctions before editing instructions, installing skills or writing the ledger. Leave global agent settings, hooks, services and user-level state alone. If a destination resolves outside the checkout, report the proposed change and leave it untouched.
 
 If a run reveals a possible defect in Skills Upkeep, [recover and flag it briefly](github-workflow.md#when-skills-upkeep-encounters-an-error).
+
+## Check for a Skills Upkeep update
+
+At the start of each Skills Upkeep workflow that uses a local installation, check once for a newer version. Honor applicable trusted project instructions and network restrictions first. Skip the check if the instructions say `Disable Skills Upkeep update checks for this project.` or require no network access.
+
+From the consuming project's root, use Node.js 22.20 or later to run the bundled [check-update.mjs](check-update.mjs) by its installed path. The checker honors `SKILLS_UPKEEP_CHECK_UPDATES=0` and the project opt-out in `AGENTS.md` or `CLAUDE.md`. If it prints an update notice, include it once in the task report. Continue the requested workflow whether the check reports an update, is silent, or is unavailable. Apply an update only on explicit request.

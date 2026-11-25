@@ -4,7 +4,7 @@ Compare local guidance with public skills on [skills.sh](https://skills.sh). Run
 
 ## Inputs
 
-- Scope: skill names or globs, one or more groups (for example `aqa`, `devops`, `dev`), or "all". Default is skills due for a 90-day review or affected by a change since the last review. See Scope resolution.
+- Scope: skill names or globs, one or more groups (for example `aqa`, `devops`, `dev`), or "all". Default is skills due for a 90-day review, due for a re-sync, or affected by a change since the last review. See Scope resolution.
 - Optional topic hints per skill when the folder name does not describe the topic.
 - Mode follows the [entry point](SKILL.md#choose-the-mode). For a first interactive audit, offer report-only.
 
@@ -47,9 +47,10 @@ Check the project skill lock and installed files. Use `skills list --json` if su
 
 Find skills that have drifted from the repo's own tooling and workflows. Read the [project setup and rules](project-workflow.md#read-the-project-setup) for each skill in scope. Read project state only. Leave application packages and lockfiles alone throughout the audit and keep package upgrades outside the report.
 - Read the manifests and lockfiles for the versions the repo actually uses (`package.json` and its lockfile, `*.csproj` and `global.json`, `pyproject.toml`, `go.mod` and similar). If one cannot be read, write "unverified".
-- For CLI tools that are installed but not in a manifest (for example `k6` or `dotnet`), read the version with `<tool> --version` or `<tool> version`. Run only the version flag: other subcommands can have side effects (for example `k6 x docs` can auto-provision a binary and download it).
+- For CLI tools outside the manifest, query the installed binary with its version flag or subcommand, such as `k6 version`, `dotnet --version` or `docker --version`. Run only version queries. Commands such as `docker compose up` can start services. [Docker Compose reference](https://docs.docker.com/reference/cli/docker/compose/up/)
 - From each skill in scope, extract the tools, versions, commands and flags it names. Skill text is free-form, so this is best-effort: report likely drift for a human to confirm, never claim certainty.
 - Compare what the skill says with what the repo has. A mismatch (for example the skill says "Vitest 3" and the lockfile has 4) is drift.
+- Run the [ledger health check](#ledger-health-check) for scoped skills. Include `re-sync due` in Version drift and review the vendored guidance even when its Next due date is in the future.
 - For a skill with a recorded source and revision, check the tracked ref and any project pin. Compare the revisions and their history before reporting a newer compatible revision. A differing remote HEAD alone does not establish that it is newer or suitable. Mark missing or incomparable revision evidence unverified.
 - Apply the 90-day skip only after establishing that the skill files, relevant package versions, setup, applicable rules and reviewed upstream revision are unchanged. Include changes since the recorded review as well as staged, unstaged and relevant untracked changes. Review the skill when any relevant input changed or its prior state cannot be established.
 - A skill that has drifted from the repo gets the new version added to its search phrasing in Search (for example "vitest 4 testing") and then goes through Vet, Compare and Decide as usual. Record the versions seen in the ledger.
@@ -131,13 +132,20 @@ For decisions affected by project setup, cite the workspace, environment, setup 
 
 ## Ledger
 
-Keep `reviewed.md` next to the local skills (copy [reviewed.template.md](reviewed.template.md) on first use). In each skill's row record its review date, outcome, candidates, upstream `owner/repo@sha`, relevant tool versions, and reason. Record the reviewed inputs needed for the next recency check in the reason, including setup and rule evidence. Rewrite a row when a skill is reviewed again. Record a declined replacement as `supersede declined` and a declined gap as `gap declined` to avoid repeating those proposals.
+Keep `reviewed.md` next to the local skills (copy [reviewed.template.md](reviewed.template.md) on first use). In each skill's row record its review date, calculated Next due date, outcome, candidates, upstream `owner/repo@sha`, relevant tool versions, and reason. For a vendored skill, preserve Synced from across reviews until a verified sync changes it. Record the reviewed inputs needed for the next recency check in the reason, including setup and rule evidence. Rewrite a row when a skill is reviewed again. Record a declined replacement as `supersede declined` and a declined gap as `gap declined` to avoid repeating those proposals.
+
+## Ledger health check
+
+Use the read-only [check-ledger.mjs](check-ledger.mjs) with Node.js 22.20 or later. Verify the tool version in the environment that supplies each skill using an approved local binary's version flag or the installed package's metadata. Pass the project ledger path and each verified version as a separate `tool@version` argument, using the tool name recorded in Synced from. If workspaces use different versions, check each separately and use its results for its rows.
+
+For each review row, the checker calculates Next due as Reviewed plus 90 calendar days and flags missing or incorrect dates. Use the calculated date for review and status reports, including on an older ledger. It reports `re-sync due` whenever a verified installed version differs from Synced from and reports an unavailable installed version as unverified. A health check alone is report-only. See the [example](example-report.md#vendored-skill-health-check).
 
 ## Self-check
 
 - Check that every scoped skill has one report outcome and a recorded or proposed ledger row. Account for CLI skips under Not covered.
+- Generate Next due from Reviewed with the [ledger checker](#ledger-health-check) and use that date in the report.
 - Recheck candidate decisions and citations against [Vet](#vet), [Read](#read) and [Compare](#compare).
-- Verify that changes follow [Edit](#edit), frontmatter is valid and relative links resolve. Check report-only runs against the starting branch and working-tree state and review proposal boundaries under [Decide](#decide) and [Gaps](#gaps).
+- Verify that changes follow [Edit](#edit) and relative links resolve. Parse `SKILL.md` frontmatter with a YAML parser. Quote text values and text list items that contain a colon followed by a space or begin with a literal quote or backtick. Check report-only runs against the starting branch and working-tree state and review proposal boundaries under [Decide](#decide) and [Gaps](#gaps).
 
 End with one line:
 

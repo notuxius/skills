@@ -44,6 +44,8 @@ skills experimental_sync --dry-run --agent codex claude-code --copy --no-remote 
 
 Run from the affected workspace or use the CLI's documented workspace support. Check the preview for name collisions and package provenance. When multiple workspaces resolve the same package differently, identify which installed copy supplies the skill before applying the preview. If the CLI is unavailable, inspect the installed package directly. Validate the bundled guidance against the resolved package version and follow the decision table for adoption. In apply mode, when installation is authorized, repeat the preview with `--include '<package>#<skill>'` for each reviewed skill, then drop `--dry-run` if the selection and provenance agree. Keep the other flags, pass the verified package and skill names as literal arguments, and use a project-local destination. Check the current copies for local edits before syncing. When a sync would replace a local skill or team edits, merge the relevant guidance by hand. Recheck the diff, lock and both discovery paths.
 
+After a verified sync, record the source package and version in Synced from in the [skill review ledger](reviewed.template.md#skill-reviews). Use the same field for copies shipped by a non-package CLI, using its tool name and version. On later reviews, use the [ledger health check](upstream-audit.md#ledger-health-check) to compare against the installed tool.
+
 If an earlier install links into the dependency, compare its current files with the last reviewed revision before converting it to a project copy. A package upgrade may already have changed the instructions visible through that link.
 
 ## Choose an action

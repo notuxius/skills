@@ -16,6 +16,7 @@ LEDGER = ".agents/skills/reviewed.md"
 AGENT_NAMES = {"codex": "Codex", "claude": "Claude Code", "copilot": "GitHub Copilot"}
 SKILL_DIRECTORIES = {"codex": ".agents/skills", "claude": ".claude/skills", "copilot": ".agents/skills"}
 NEW_SKILL = "queue-review/SKILL.md"
+SKILL_FRONTMATTER = re.compile(r"\A---[ \t]*\n(.*?)\n---[ \t]*(?:\n|$)", re.DOTALL)
 SCENARIOS = {
     6: ("Dry run: check the queue-aqa skill against upstream.", "queue-aqa"),
     34: (
@@ -134,7 +135,7 @@ def check_apply_result(repo, original_ledger, new_skill):
         raise AssertionError("Scenario 42: missing queue-review coverage row")
 
     source = (repo / new_skill).read_text(encoding="utf-8")
-    header = re.match(r"\A---[ \t]*\n(.*?)\n---[ \t]*(?:\n|$)", source, re.DOTALL)
+    header = SKILL_FRONTMATTER.match(source)
     if not header:
         raise AssertionError("Scenario 42: missing skill frontmatter")
     try:

@@ -8,9 +8,22 @@ from pathlib import Path
 from zipfile import ZipFile
 
 from check_skill_boundaries import (
-    LAB, LEDGER, NEW_SKILL, SKILL_DIRECTORIES, agent_command, check_agent_permissions,
+    LAB, LEDGER, NEW_SKILL, SKILL_DIRECTORIES, SKILL_FRONTMATTER, agent_command, check_agent_permissions,
     check_apply_result, run_case,
 )
+
+
+class SkillFrontmatterTest(unittest.TestCase):
+    def test_shipped_frontmatter_parses_as_yaml(self):
+        import yaml
+
+        skill_roots = (LAB.parent / "skills", LAB / ".agents/skills", LAB / ".claude/skills")
+        for root in skill_roots:
+            for path in sorted(root.glob("*/SKILL.md")):
+                with self.subTest(skill=str(path.relative_to(LAB.parent))):
+                    header = SKILL_FRONTMATTER.match(path.read_text(encoding="utf-8"))
+                    self.assertIsNotNone(header, "Missing skill frontmatter")
+                    self.assertIsInstance(yaml.safe_load(header[1]), dict)
 
 
 class ReportOnlyTest(unittest.TestCase):
