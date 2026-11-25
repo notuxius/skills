@@ -22,14 +22,15 @@ npm run skills:bundle-test
 
 Run `npm run skills:public-test` separately to check installation from the live catalog. CI runs that check on manual dispatch.
 
-To run all four live Skills Upkeep scenarios in the background, start these commands from `lab/` with Python and a signed-in Codex CLI.
+To run all four live Skills Upkeep scenarios in the background, start these commands from `lab/` with Python and the signed-in agent CLIs.
 
 ```sh
 python -m pip install -r ../evals/requirements.txt
 python ../evals/check_skill_boundaries.py
+python ../evals/check_skill_boundaries.py --target claude
 ```
 
-Scenarios 6, 34 and 54 verify that report-only runs preserve the checkout. Scenario 42 verifies that apply creates a usable skill and preserves earlier ledger entries. On Windows, the runner prefers Microsoft Execution Containers. If the tests need a VM, use a Hyper-V basic session by default. [Live evaluation guide](../evals/skills-upkeep.md#run-the-write-boundary-checks)
+Scenarios 6, 34 and 54 verify that report-only runs preserve a writable checkout. Scenario 42 verifies that apply creates a usable skill in the selected agent's directory and preserves earlier ledger entries. On Windows, the Codex runner prefers Microsoft Execution Containers. If the tests need a VM, use a Hyper-V basic session by default. [Live evaluation guide](../evals/skills-upkeep.md#run-the-write-boundary-checks)
 
 To try AQA, run these commands from the repository root.
 

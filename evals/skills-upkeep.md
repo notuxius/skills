@@ -1,21 +1,28 @@
 # Evals
 
-Use a disposable project with the stated manifests, lockfiles, skills and source changes. Capture the initial branch and working-tree status, including untracked files. For a read-only run, compare both with the final state. The packages and version numbers in these examples are illustrative.
+Use a disposable project with the stated manifests, lockfiles, skills and source changes. Capture the initial branch and working-tree status, including untracked files. For a report-only run, compare both with the final state. The packages and version numbers in these examples are illustrative.
 
 ## Run the write-boundary checks
 
-From the repository root, run all four live Codex scenarios in a terminal or background job. Install the evaluator dependency into the test environment first.
+From the repository root, run all four live scenarios with a signed-in CLI in a terminal or background job. Install the evaluator dependency into the test environment first.
 
 ```sh
 python -m pip install -r evals/requirements.txt
 python evals/check_skill_boundaries.py
+python evals/check_skill_boundaries.py --target claude
 ```
 
-Each case starts an ephemeral Codex session in a disposable Git checkout using the existing CLI login and model configuration. Scenarios 6, 34 and 54 use a read-only sandbox and check branch refs, status, diffs and an existing untracked file. Scenario 42 uses a workspace-write sandbox with the fixture's `.agents/skills/` directory explicitly writable. It checks that earlier coverage survives, the new row records the skill, and the skill describes the QA procedure.
+Each case starts a fresh headless session in a disposable Git checkout. Codex reads `.agents/skills/` and runs with `workspace-write`, with its skill directory explicitly writable. Claude Code reads `.claude/skills/` and uses `acceptEdits`. Scenarios 6, 34 and 54 check that the agent chooses report-only mode and preserves branch refs, status, diffs and an existing untracked file. Scenario 42 checks that apply creates a usable skill in the selected agent's directory and records it in the shared ledger without losing earlier coverage.
 
 On Windows, the headless CLI prefers Microsoft Execution Containers (MXC) and starts with its own runner identity. If a VM is needed, use a Hyper-V basic session by default and run the same command inside the guest. [Codex Windows sandbox](https://developers.openai.com/codex/windows/)
 
-Repeat `--scenario` to select cases. For a different headless agent, append its command and arguments after the scenario options. It must read the UTF-8 prompt on stdin and write its UTF-8 response to stdout. The remaining scenarios are manual.
+Repeat `--scenario` to select cases. Override the headless command by appending it and its arguments after the evaluator options. The command must read the UTF-8 prompt on stdin and write its UTF-8 response to stdout. For example, this runs scenario 34 with the default Claude Code command written out explicitly.
+
+```sh
+python evals/check_skill_boundaries.py --target claude --scenario 34 claude -p --permission-mode acceptEdits --no-session-persistence
+```
+
+The remaining scenarios are manual.
 
 ## Public skill audit
 

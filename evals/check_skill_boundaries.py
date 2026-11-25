@@ -13,7 +13,8 @@ from pathlib import Path
 
 LAB = Path(__file__).resolve().parents[1] / "lab"
 LEDGER = ".agents/skills/reviewed.md"
-NEW_SKILL = ".agents/skills/queue-review/SKILL.md"
+SKILL_DIRECTORIES = {"codex": ".agents/skills", "claude": ".claude/skills"}
+NEW_SKILL = "queue-review/SKILL.md"
 SCENARIOS = {
     6: ("Dry run: check the queue-aqa skill against upstream.", "queue-aqa"),
     34: (
@@ -21,8 +22,8 @@ SCENARIOS = {
         "queue-lab-sdk",
     ),
     42: (
-        f"Run bootstrap apply. Create a local queue-review skill for the review workflow "
-        f"in qa/review.md at {NEW_SKILL} and update {LEDGER}. Target Codex.",
+        "Run bootstrap apply. Create a local queue-review skill for the review workflow "
+        "in qa/review.md at {new_skill} and update {ledger}. Target {target}.",
         "queue-review",
     ),
     54: ("Run setup-change report-only for the test workflow in qa/.", "test:qa"),
@@ -120,7 +121,7 @@ def coverage_rows(ledger):
                 yield dict(zip(headers, cells))
 
 
-def check_apply_result(repo, original_ledger):
+def check_apply_result(repo, original_ledger, new_skill):
     import yaml
 
     rows = list(coverage_rows((repo / LEDGER).read_text(encoding="utf-8")))
@@ -131,7 +132,7 @@ def check_apply_result(repo, original_ledger):
                for row in rows):
         raise AssertionError("Scenario 42: missing queue-review coverage row")
 
-    source = (repo / NEW_SKILL).read_text(encoding="utf-8")
+    source = (repo / new_skill).read_text(encoding="utf-8")
     header = re.match(r"\A---[ \t]*\n(.*?)\n---[ \t]*(?:\n|$)", source, re.DOTALL)
     if not header:
         raise AssertionError("Scenario 42: missing skill frontmatter")
@@ -156,7 +157,14 @@ def check_apply_result(repo, original_ledger):
             raise AssertionError(f"Scenario 42: skill is missing {requirement}")
 
 
-def run_case(number, agent=None):
+def agent_command(target):
+    if target == "claude":
+        return ["claude", "-p", "--permission-mode", "acceptEdits", "--no-session-persistence"]
+    return ["codex", "-a", "never", "exec", "--ephemeral", "--sandbox", "workspace-write",
+            "--add-dir", ".agents/skills", "-"]
+
+
+def run_case(number, agent=None, *, target="codex"):
     with tempfile.TemporaryDirectory(prefix="skills-upkeep-eval-") as temp:
         repo = Path(temp) / "project"
         shutil.copytree(LAB, repo, ignore=shutil.ignore_patterns(".git", "node_modules", "__pycache__"))
@@ -172,15 +180,14 @@ def run_case(number, agent=None):
         before = snapshot(repo)
 
         request, topic = SCENARIOS[number]
+        skill_dir = SKILL_DIRECTORIES[target]
+        new_skill = f"{skill_dir}/{NEW_SKILL}"
+        request = request.format(new_skill=new_skill, ledger=LEDGER,
+                                 target={"codex": "Codex", "claude": "Claude Code"}[target])
         print(f"Running scenario {number}", flush=True)
-        prompt = f"Use .agents/skills/skills-upkeep/SKILL.md and local fixture evidence. {request}\n"
-        if not agent:
-            agent = [shutil.which("codex") or "codex", "-a", "never", "exec", "--ephemeral", "--sandbox"]
-            if number == 42:
-                agent.extend(["workspace-write", "--add-dir", ".agents/skills"])
-            else:
-                agent.append("read-only")
-            agent.append("-")
+        prompt = f"Use {skill_dir}/skills-upkeep/SKILL.md and local fixture evidence. {request}\n"
+        command = agent or agent_command(target)
+        agent = [shutil.which(command[0]) or command[0], *command[1:]]
         env = fixture_env(repo)
         if os.name == "nt" and Path(agent[0]).stem.casefold() == "codex":
             # The CLI child has its own process identity, even when launched by the desktop app.
@@ -195,19 +202,19 @@ def run_case(number, agent=None):
             capture_output=True,
             creationflags=subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0,
         )
-        if result.returncode:
-            stderr = result.stderr.decode("utf-8", errors="replace")
-            raise RuntimeError(f"Scenario {number}: headless agent exited with {result.returncode}\n{stderr}")
-        after = snapshot(repo)
         response = result.stdout.decode("utf-8", errors="replace").strip()
+        if result.returncode:
+            stderr = result.stderr.decode("utf-8", errors="replace").strip()
+            raise RuntimeError(f"Scenario {number}: headless agent exited with {result.returncode}\n{stderr or response}")
+        after = snapshot(repo)
         if number == 42:
-            allowed = {f" M {LEDGER}", f"?? {NEW_SKILL}"}
+            allowed = {f" M {LEDGER}", f"?? {new_skill}"}
             paths = set(after["status"].decode().splitlines())
             expected = set(before["status"].decode().splitlines()) | allowed
             protected = ("branch", "branches", "staged", "scratch")
             if paths != expected or any(after[key] != before[key] for key in protected):
                 raise AssertionError(f"Scenario {number}: unexpected apply changes: {after['status']!r}\n{response}")
-            check_apply_result(repo, git(repo, "show", f"HEAD:{LEDGER}").decode("utf-8"))
+            check_apply_result(repo, git(repo, "show", f"HEAD:{LEDGER}").decode("utf-8"), new_skill)
         else:
             changed = [key for key in before if before[key] != after[key]]
             if changed:
@@ -222,10 +229,11 @@ def run_case(number, agent=None):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--scenario", type=int, choices=SCENARIOS, action="append")
+    parser.add_argument("--target", choices=SKILL_DIRECTORIES, default="codex", help="Agent skill installation to test")
     parser.add_argument("agent", nargs=argparse.REMAINDER, help="Alternative headless agent command that reads stdin")
     args = parser.parse_args()
     scenarios = args.scenario or SCENARIOS
     if 42 in scenarios and find_spec("yaml") is None:
         parser.error("scenario 42 needs PyYAML: python -m pip install -r evals/requirements.txt")
     for number in scenarios:
-        run_case(number, args.agent)
+        run_case(number, args.agent, target=args.target)

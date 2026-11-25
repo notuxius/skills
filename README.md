@@ -121,9 +121,11 @@ npx skills add notuxius/skills --skill queue-devops queue-docs --copy
 
 ## Release ZIP
 
+On the default branch, run [Skills Upkeep release ZIP](https://github.com/notuxius/skills/actions/workflows/release-zip.yml) with the planned tag. The workflow checks the telemetry version and creates the tag for that revision. If you push the tag yourself, wait for **Validate release tag** to pass. Publish the release from the verified tag. The check runs again before packaging.
+
 When a stable `vMAJOR.MINOR.PATCH` release is published, GitHub Actions attaches `skills-upkeep-vMAJOR.MINOR.PATCH.zip` to its [release assets](https://github.com/notuxius/skills/releases). The ZIP contains one `skills-upkeep/` folder with `SKILL.md`, its workflow references, the ledger template, the example report and the MIT notice in `LICENSE.txt`. The [support queue lab](lab/) and [eval scenarios](evals/skills-upkeep.md) stay in the repository source archive.
 
-Download the [v3.1.4 release ZIP](https://github.com/notuxius/skills/releases/download/v3.1.4/skills-upkeep-v3.1.4.zip). Submit the verified ZIP’s files through the Agensi connector, confirm it accepts the update, and compare the files Agensi serves after approval with the ZIP. [Agensi connector guide](https://www.agensi.io/docs/submit-from-your-agent)
+Download the `skills-upkeep-*.zip` asset from the [latest release](https://github.com/notuxius/skills/releases/latest). Submit the verified ZIP’s files through the Agensi connector, confirm it accepts the update, and compare the files Agensi serves after approval with the ZIP. [Agensi connector guide](https://www.agensi.io/docs/submit-from-your-agent)
 
 Stable releases trigger a temporary install to refresh the public skills.sh listing. CI checks every installed file against Git. If the public snapshot still matches an older revision on the default branch after five minutes, CI reports the commit in a warning. An unrecognized snapshot or an unavailable download fails the check. The install sends the Skills CLI's install telemetry and can contribute to the public install count. [skills.sh FAQ](https://skills.sh/docs/faq#how-is-the-leaderboard-ranked)
 
@@ -135,4 +137,4 @@ You can [buy Skills Upkeep on Agensi](https://www.agensi.io/skills/skills-upkeep
 
 Which would you choose for Skills Upkeep, a monthly subscription or a one-time purchase? Tell us what you’d pay and how likely you’d be to buy at the proposed one-time price of **$5 USD**.
 
-[Reply publicly on GitHub](https://github.com/notuxius/skills/discussions/4) under your GitHub username, or [answer anonymously in google forms](https://docs.google.com/forms/d/e/1FAIpQLSdF1nbzCIxOqb3atj0NxSk5d9f1UiYN7KNUx5CDQyNQFR_dsA/viewform?entry.663372071=5) without signing in. We’ll share anonymous responses in aggregate.
+[Reply publicly on GitHub](https://github.com/notuxius/skills/discussions/4) under your GitHub username, or [answer anonymously in Google Forms](https://docs.google.com/forms/d/e/1FAIpQLSdF1nbzCIxOqb3atj0NxSk5d9f1UiYN7KNUx5CDQyNQFR_dsA/viewform?entry.663372071=5) without signing in. We’ll share anonymous responses in aggregate.
