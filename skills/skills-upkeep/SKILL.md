@@ -20,7 +20,8 @@ For routine implementation, tests and reviews, follow the project's instructions
 ## Choose the mode
 
 - Treat dry runs, PR reviews and scheduled checks as report-only. Other non-interactive runs default to report-only when no mode is given.
-- For project skill changes, use apply when the user or trusted project policy authorizes the scoped edits. Bootstrap may add a standing project instruction only with user authorization.
+- For project skill changes, use apply when the user or trusted project policy authorizes the scoped edits.
+- Creating a skill and recording its ledger entry are scoped to those files. Editing `AGENTS.md`, `CLAUDE.md` or another project instruction or routing file requires explicit user authorization for the instruction change. Include any proposed routing edits in the report.
 - For an interactive upstream audit with no clear mode, ask once whether to apply or report only before creating a branch.
 - In report-only mode, preserve the branch, worktree, lockfiles and ledger. Label the report as report-only at the top and include proposed changes and ledger rows.
 

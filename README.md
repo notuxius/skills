@@ -33,7 +33,7 @@ Then ask the agent to apply the preview.
 
 > Run skills-upkeep bootstrap apply for the coding agents this project uses. Apply the previewed skills and add the dependency and setup review rule to our project instructions.
 
-The agent applies the skill changes, records the workspace and resolved package versions in `reviewed.md`, and updates the project instructions so the agents know when to use each skill. [Bootstrap workflow](https://github.com/notuxius/skills/blob/main/skills/skills-upkeep/project-workflow.md#bootstrap)
+The agent applies the skill changes and records the workspace and resolved package versions in `reviewed.md`. The example also explicitly authorizes updating the project instructions so the agents know when to use each skill. Requests scoped to skills and the ledger receive instruction changes as proposals. [Bootstrap workflow](https://github.com/notuxius/skills/blob/main/skills/skills-upkeep/project-workflow.md#bootstrap)
 
 ### 3. Verify the installation
 
