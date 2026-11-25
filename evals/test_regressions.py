@@ -127,28 +127,39 @@ class ReleaseSnapshotTest(unittest.TestCase):
             (skill / "SKILL.md").write_bytes(b"Branch only\n")
             git("commit", "-qam", "Unmerged change")
             git("checkout", "-q", "main")
-            (skill / "SKILL.md").write_bytes(b"Current\n")
-            git("commit", "-qam", "Publish current skill")
+            (skill / "SKILL.md").write_bytes(b"Tagged\n")
+            git("commit", "-qam", "Publish tagged skill")
+            git("tag", "v1.0.0")
+            release = git("rev-parse", "HEAD").decode().strip()
+            (skill / "SKILL.md").write_bytes(b"Newer\n")
+            git("commit", "-qam", "Publish newer skill")
+            newer = git("rev-parse", "HEAD").decode().strip()
+            default_ref = "refs/remotes/origin/main"
+            git("update-ref", default_ref, "HEAD")
+            git("checkout", "-q", "--detach", "v1.0.0")
 
             archive = repo / "expected.zip"
             archive.write_bytes(git("archive", "--format=zip", "HEAD:skills/skills-upkeep"))
             snapshot = repo / "actual.json"
+            fallback = [default_ref, release]
             for files, history, status, warning in (
-                ([guide, dict(entry, contents="Current\n")], ["HEAD"], 0, False),
-                ([guide, entry], [], 1, False),
-                ([guide, entry], ["HEAD"], 0, True),
-                ([guide, dict(entry, contents="Branch only\n")], ["HEAD"], 1, False),
-                ([entry], ["HEAD"], 1, False),
-                ([guide, entry, entry], ["HEAD"], 1, False),
+                ([guide, dict(entry, contents="Tagged\n")], fallback, 0, None),
+                ([guide, dict(entry, contents="Newer\n")], [], 1, None),
+                ([guide, dict(entry, contents="Newer\n")], fallback, 0, f"newer skill from default-branch commit {newer}"),
+                ([guide, entry], [], 1, None),
+                ([guide, entry], fallback, 0, f"{original}. Indexing is pending."),
+                ([guide, dict(entry, contents="Branch only\n")], fallback, 1, None),
+                ([entry], fallback, 1, None),
+                ([guide, entry, entry], fallback, 1, None),
             ):
                 with self.subTest(files=files, history=history):
                     snapshot.write_text(json.dumps({"files": files}), encoding="utf-8")
                     result = subprocess.run([sys.executable, checker, archive, snapshot, *history],
                                             cwd=repo, capture_output=True, text=True, env=git_env)
                     self.assertEqual(result.returncode, status, result.stderr)
-                    self.assertEqual("::warning::" in result.stdout, warning)
+                    self.assertEqual("::warning::" in result.stdout, warning is not None)
                     if warning:
-                        self.assertIn(original, result.stdout)
+                        self.assertIn(warning, result.stdout)
 
     def test_matches_every_path_and_its_contents(self):
         checker = LAB.parent / ".github/scripts/check_skills_snapshot.py"
