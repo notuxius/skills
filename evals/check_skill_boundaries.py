@@ -13,7 +13,8 @@ from pathlib import Path
 
 LAB = Path(__file__).resolve().parents[1] / "lab"
 LEDGER = ".agents/skills/reviewed.md"
-SKILL_DIRECTORIES = {"codex": ".agents/skills", "claude": ".claude/skills"}
+AGENT_NAMES = {"codex": "Codex", "claude": "Claude Code", "copilot": "GitHub Copilot"}
+SKILL_DIRECTORIES = {"codex": ".agents/skills", "claude": ".claude/skills", "copilot": ".agents/skills"}
 NEW_SKILL = "queue-review/SKILL.md"
 SCENARIOS = {
     6: ("Dry run: check the queue-aqa skill against upstream.", "queue-aqa"),
@@ -159,9 +160,63 @@ def check_apply_result(repo, original_ledger, new_skill):
 
 def agent_command(target):
     if target == "claude":
-        return ["claude", "-p", "--permission-mode", "acceptEdits", "--no-session-persistence"]
+        return ["claude", "-p", "--permission-mode", "acceptEdits", "--allowedTools", "Bash(git:*)",
+                "--no-session-persistence"]
+    if target == "copilot":
+        return ["copilot", "--trust-folder", "--silent", "--no-ask-user", "--allow-tool=shell(git:*)",
+                "--allow-tool=write"]
     return ["codex", "-a", "never", "exec", "--ephemeral", "--sandbox", "workspace-write",
-            "--add-dir", ".agents/skills", "-"]
+            "--add-dir", ".agents/skills", "--add-dir", ".git", "-"]
+
+
+def init_repo(repo):
+    git(repo, "init", "--quiet", "-b", "main")
+    git(repo, "add", ".")
+    git(repo, "-c", "user.name=Skills Upkeep Eval", "-c", "user.email=eval@example.invalid",
+        "-c", "commit.gpgsign=false", "commit", "--quiet", "--allow-empty", "-m", "Baseline")
+
+
+def run_agent(repo, command, prompt, label):
+    agent = [shutil.which(command[0]) or command[0], *command[1:]]
+    env = fixture_env(repo)
+    if os.name == "nt" and Path(agent[0]).stem.casefold() == "codex":
+        # The CLI child has its own process identity, even when launched by the desktop app.
+        env.pop("CODEX_WINDOWS_REGISTERED_CORE", None)
+        agent = [agent[0], "-c", "features.prefer_mxc=true", *agent[1:]]
+    result = subprocess.run(
+        agent,
+        cwd=repo,
+        env=env,
+        input=prompt.encode("utf-8"),
+        timeout=240,
+        capture_output=True,
+        creationflags=subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0,
+    )
+    response = result.stdout.decode("utf-8", errors="replace").strip()
+    if result.returncode:
+        stderr = result.stderr.decode("utf-8", errors="replace").strip()
+        raise RuntimeError(f"{label}: headless agent exited with {result.returncode}\n{stderr or response}")
+    return response
+
+
+def check_agent_permissions(target, command):
+    print(f"Checking {target} write permissions", flush=True)
+    with tempfile.TemporaryDirectory(prefix="skills-upkeep-permissions-") as temp:
+        repo = Path(temp)
+        probe = Path(SKILL_DIRECTORIES[target]) / "permission-probe.md"
+        (repo / probe).parent.mkdir(parents=True)
+        init_repo(repo)
+        response = run_agent(
+            repo, command,
+            "This disposable repository is a write-permission test. "
+            "Run `git checkout -b permission-probe` and leave that branch checked out. "
+            f"Then create `{probe.as_posix()}` with the text `permission probe`.\n",
+            "Write permission check",
+        )
+        if (git(repo, "branch", "--show-current").strip() != b"permission-probe"
+                or not (repo / probe).is_file()):
+            raise AssertionError(f"Write permission check: expected branch creation and a skill directory edit\n{response}")
+    print(f"{target} write permissions verified", flush=True)
 
 
 def run_case(number, agent=None, *, target="codex"):
@@ -169,10 +224,7 @@ def run_case(number, agent=None, *, target="codex"):
         repo = Path(temp) / "project"
         shutil.copytree(LAB, repo, ignore=shutil.ignore_patterns(".git", "node_modules", "__pycache__"))
         configure(repo, number)
-        git(repo, "init", "--quiet", "-b", "main")
-        git(repo, "add", ".")
-        git(repo, "-c", "user.name=Skills Upkeep Eval", "-c", "user.email=eval@example.invalid",
-            "-c", "commit.gpgsign=false", "commit", "--quiet", "-m", "Baseline")
+        init_repo(repo)
         configure(repo, number, changed=True)
         if number == 34:
             git(repo, "add", "package-lock.json")
@@ -182,30 +234,10 @@ def run_case(number, agent=None, *, target="codex"):
         request, topic = SCENARIOS[number]
         skill_dir = SKILL_DIRECTORIES[target]
         new_skill = f"{skill_dir}/{NEW_SKILL}"
-        request = request.format(new_skill=new_skill, ledger=LEDGER,
-                                 target={"codex": "Codex", "claude": "Claude Code"}[target])
+        request = request.format(new_skill=new_skill, ledger=LEDGER, target=AGENT_NAMES[target])
         print(f"Running scenario {number}", flush=True)
         prompt = f"Use {skill_dir}/skills-upkeep/SKILL.md and local fixture evidence. {request}\n"
-        command = agent or agent_command(target)
-        agent = [shutil.which(command[0]) or command[0], *command[1:]]
-        env = fixture_env(repo)
-        if os.name == "nt" and Path(agent[0]).stem.casefold() == "codex":
-            # The CLI child has its own process identity, even when launched by the desktop app.
-            env.pop("CODEX_WINDOWS_REGISTERED_CORE", None)
-            agent = [agent[0], "-c", "features.prefer_mxc=true", *agent[1:]]
-        result = subprocess.run(
-            agent,
-            cwd=repo,
-            env=env,
-            input=prompt.encode("utf-8"),
-            timeout=240,
-            capture_output=True,
-            creationflags=subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0,
-        )
-        response = result.stdout.decode("utf-8", errors="replace").strip()
-        if result.returncode:
-            stderr = result.stderr.decode("utf-8", errors="replace").strip()
-            raise RuntimeError(f"Scenario {number}: headless agent exited with {result.returncode}\n{stderr or response}")
+        response = run_agent(repo, agent or agent_command(target), prompt, f"Scenario {number}")
         after = snapshot(repo)
         if number == 42:
             allowed = {f" M {LEDGER}", f"?? {new_skill}"}
@@ -235,5 +267,7 @@ if __name__ == "__main__":
     scenarios = args.scenario or SCENARIOS
     if 42 in scenarios and find_spec("yaml") is None:
         parser.error("scenario 42 needs PyYAML: python -m pip install -r evals/requirements.txt")
+    command = args.agent or agent_command(args.target)
+    check_agent_permissions(args.target, command)
     for number in scenarios:
-        run_case(number, args.agent, target=args.target)
+        run_case(number, command, target=args.target)
