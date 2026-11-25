@@ -36,7 +36,7 @@ def mismatch(archive_path, indexed):
     return None
 
 
-def check_snapshot(archive_path, snapshot_path, history_ref=None):
+def check_snapshot(archive_path, snapshot_path, history_ref=None, release_commit=None):
     indexed = read_snapshot(snapshot_path)
     error = mismatch(archive_path, indexed)
     if error is None:
@@ -56,7 +56,12 @@ def check_snapshot(archive_path, snapshot_path, history_ref=None):
                 ["git", "-c", "core.autocrlf=false", "archive", "--format=zip", f"{commit}:{path}"]
             )
             if mismatch(io.BytesIO(archive), indexed) is None:
-                print(f"::warning::skills.sh still serves the skill from {commit}. Indexing is pending.")
+                if release_commit and subprocess.check_output(
+                    ["git", "merge-base", release_commit, commit], text=True
+                ).strip() == release_commit:
+                    print(f"::warning::skills.sh serves a newer skill from default-branch commit {commit}.")
+                else:
+                    print(f"::warning::skills.sh still serves the skill from {commit}. Indexing is pending.")
                 return
     raise ValueError(error)
 

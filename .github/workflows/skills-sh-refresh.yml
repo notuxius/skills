@@ -10,6 +10,8 @@ jobs:
     if: ${{ github.repository == 'notuxius/skills' }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    env:
+      DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
     defaults:
       run:
         shell: bash
@@ -19,8 +21,6 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
       - name: Verify the release is on the default branch
-        env:
-          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
         run: |
           default_ref="refs/remotes/origin/$DEFAULT_BRANCH"
           if ! git merge-base --is-ancestor HEAD "$default_ref"; then
@@ -44,13 +44,17 @@ jobs:
           expected="$RUNNER_TEMP/skills-upkeep-expected.zip"
           actual="$RUNNER_TEMP/skills-upkeep-indexed.json"
           for attempt in {1..6}; do
-            history=()
-            if [[ "$attempt" == 6 ]]; then
-              history=("$GITHUB_SHA")
-            fi
-            if curl --fail --silent --show-error --max-time 20 --output "$actual" "$snapshot_url" \
-              && python3 .github/scripts/check_skills_snapshot.py "$expected" "$actual" "${history[@]}"; then
-              exit 0
+            if curl --fail --silent --show-error --max-time 20 --output "$actual" "$snapshot_url"; then
+              if python3 .github/scripts/check_skills_snapshot.py "$expected" "$actual"; then
+                exit 0
+              fi
+              if [[ "$attempt" == 6 ]]; then
+                default_ref="refs/remotes/origin/$DEFAULT_BRANCH"
+                git fetch --no-tags origin "+refs/heads/$DEFAULT_BRANCH:$default_ref"
+                if python3 .github/scripts/check_skills_snapshot.py "$expected" "$actual" "$default_ref" "$GITHUB_SHA"; then
+                  exit 0
+                fi
+              fi
             fi
             if [[ "$attempt" != 6 ]]; then
               sleep 60
