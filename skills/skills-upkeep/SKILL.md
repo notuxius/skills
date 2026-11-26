@@ -2,7 +2,7 @@
 name: skills-upkeep
 description: Set up and maintain shared project skills. Check skill health, review dependency or setup changes, audit upstream skills, or report Skills Upkeep issues.
 metadata:
-  version: "3.3.0"
+  version: "3.3.1"
 ---
 
 # Skills Upkeep
@@ -19,6 +19,15 @@ metadata:
 | Draft or submit skill feedback or a skill-update pull request | [GitHub workflow](github-workflow.md) |
 
 For routine implementation, tests and reviews, follow the project's instructions and use the matching domain skill.
+
+## Optional tools
+
+A coding agent with read access to the local checkout can review the project's files and report findings. Use these tools when the workflow calls for them.
+
+- Node.js 22.20 or later runs the [ledger health check](upstream-audit.md#ledger-health-check).
+- Git supports local history and diffs, branch-based audits, and preparing or pushing pull requests.
+- The Vercel Skills CLI (`skills`) supports CLI discovery and approved installs or syncs. Use npm when running the CLI through `npx`.
+- An authorized GitHub integration or signed-in GitHub CLI (`gh`) lets the agent [publish issues or pull requests](github-workflow.md#publish-with-existing-access) when the user asks.
 
 ## Choose the mode
 
