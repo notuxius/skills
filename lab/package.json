@@ -4,7 +4,7 @@
   "type": "module",
   "engines": { "node": ">=22.20.0" },
   "scripts": {
-    "test": "node --test frontend/queue-view.test.mjs backend/claim.test.mjs qa/claim-race.test.mjs design/status-badge.test.mjs tools/skill-routing.test.mjs tools/telemetry.test.mjs tools/update-check.test.mjs tools/ledger-check.test.mjs",
+    "test": "node --test frontend/queue-view.test.mjs backend/claim.test.mjs qa/claim-race.test.mjs design/status-badge.test.mjs tools/skill-routing.test.mjs tools/telemetry.test.mjs",
     "skills:verify": "node tools/verify-installs.mjs",
     "skills:bundle-test": "node tools/check-bundled-skills.mjs",
     "skills:public-test": "node tools/check-public-install.mjs",

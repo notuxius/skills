@@ -99,6 +99,20 @@ class ApplyResultTest(unittest.TestCase):
 
 
 class ReleaseSnapshotTest(unittest.TestCase):
+    def test_release_tag_matches_the_single_file_skill(self):
+        import yaml
+
+        catalog = LAB.parent
+        skill = catalog / "skills/skills-upkeep"
+        self.assertEqual(sorted(path.name for path in skill.iterdir()), ["SKILL.md"])
+        header = SKILL_FRONTMATTER.match((skill / "SKILL.md").read_text(encoding="utf-8"))
+        self.assertIsNotNone(header, "Missing skill frontmatter")
+        version = yaml.safe_load(header[1])["metadata"]["version"]
+
+        validator = catalog / ".github/scripts/check_release_tag.mjs"
+        result = subprocess.run(["node", validator, f"v{version}"], capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
+
     def test_refresh_runs_only_after_validated_packaging(self):
         import yaml
 

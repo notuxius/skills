@@ -16,6 +16,8 @@ npx skills add notuxius/skills --skill skills-upkeep --copy
 
 Select your team's coding agents when prompted and install at project scope. For scripted installs, pass their CLI IDs with `--agent`. [Supported agents](https://github.com/vercel-labs/skills/blob/main/docs/agents.md)
 
+For a manual install, place [SKILL.md](skills/skills-upkeep/SKILL.md) in the `skills-upkeep/` folder within your agent's project skills directory. The file includes the workflows, ledger template, and license.
+
 ### 2. Preview and apply the project skills
 
 Open the checkout project in your coding agent and ask for a preview.
@@ -33,7 +35,7 @@ Then ask the agent to apply the preview.
 
 > Run skills-upkeep bootstrap apply for the coding agents this project uses. Apply the previewed skills and add the dependency and setup review rule to our project instructions.
 
-The agent applies the skill changes and records the workspace and resolved package versions in `reviewed.md`. The example also explicitly authorizes updating the project instructions so the agents know when to use each skill. Requests scoped to skills and the ledger receive instruction changes as proposals. [Bootstrap workflow](https://github.com/notuxius/skills/blob/main/skills/skills-upkeep/project-workflow.md#bootstrap)
+The agent applies the skill changes and records the workspace and resolved package versions in `reviewed.md`. The example also explicitly authorizes updating the project instructions so the agents know when to use each skill. Requests scoped to skills and the ledger receive instruction changes as proposals. [Bootstrap workflow](skills/skills-upkeep/SKILL.md#bootstrap)
 
 ### 3. Verify the installation
 
@@ -55,15 +57,15 @@ To keep up with dependency changes, ask the agent to check the guidance against 
 
 > Run skills-upkeep dependency-change apply for tests/e2e
 
-When a tool version changes, Skills Upkeep reports which bundled, official, and public skills it checked for that version. If it finds no better guidance, it offers to adapt your project skill. If a later review finds a newer official revision for a customized skill, it offers to compare the two, adopt the better revision or merge useful changes, and report relevant bugs or suggestions to the maintainer with your approval. [Version and customization review](skills/skills-upkeep/upstream-audit.md#review-a-customized-skill)
+When a tool version changes, Skills Upkeep reports which bundled, official, and public skills it checked for that version. If it finds no better guidance, it offers to adapt your project skill. If a later review finds a newer official revision for a customized skill, it offers to compare the two, adopt the better revision or merge useful changes, and report relevant bugs or suggestions to the maintainer with your approval. [Version and customization review](skills/skills-upkeep/SKILL.md#review-a-customized-skill)
 
 When the way a workspace runs, builds, or tests changes, ask for a setup review. For example, after switching the local AppHost runtime to Podman:
 
 > Run skills-upkeep setup-change report-only for AppHost. Preserve our project rules and show which commands need to change.
 
-The review cites the project setup and rule files, distinguishes local development from CI, and shows which checks still need to run. A setup-only change can trigger a review with an unchanged lockfile. [Setup-change workflow](skills/skills-upkeep/project-workflow.md#setup-change)
+The review cites the project setup and rule files, distinguishes local development from CI, and shows which checks still need to run. A setup-only change can trigger a review with an unchanged lockfile. [Setup-change workflow](skills/skills-upkeep/SKILL.md#setup-change)
 
-Ask for a Skills Upkeep health check to see what to check now when a copied skill's package version differs and when routine reviews are scheduled for the other skills. [Ledger health check](skills/skills-upkeep/upstream-audit.md#ledger-health-check)
+Ask for a Skills Upkeep health check to see what to check now when a copied skill's package version differs and when routine reviews are scheduled for the other skills. [Ledger health check](skills/skills-upkeep/SKILL.md#ledger-health-check)
 
 > Run Skills Upkeep for all our project skills in report-only mode. Show which are current, where we need a local edit, and where an official update is worth reviewing.
 
@@ -77,13 +79,15 @@ If Skills Upkeep finds a possible defect in its own workflow, it flags it briefl
 
 > Use Skills Upkeep to open a pull request for these skill changes.
 
-The agent submits to GitHub only when you ask it to publish, using your existing GitHub connection or CLI login. If it can't submit, it gives you a copy-ready title, Markdown body and link for posting. [GitHub workflow](skills/skills-upkeep/github-workflow.md)
+The agent submits to GitHub only when you ask it to publish, using your existing GitHub connection or CLI login. If it can't submit, it gives you a copy-ready title, Markdown body and link for posting. [GitHub workflow](skills/skills-upkeep/SKILL.md#github-workflow)
 
 To give feedback directly, sign in to GitHub and choose **New issue**. For a bug, describe what happened and how to reproduce it. For a suggestion, explain what you'd like to change and when it would help. [Skills Upkeep issues](https://github.com/notuxius/skills/issues)
 
 The feedback workflow is available starting in `v2.2.0`.
 
 ## Update Skills Upkeep
+
+In `v4.0.0`, the skill ships as a single `SKILL.md`. The standalone Node.js update and ledger commands have been retired. Ask your agent to run the ledger health check, and it will check for a newer stable release using an available HTTP tool. [Release notes](https://github.com/notuxius/skills/releases/tag/v4.0.0)
 
 In `v3.3.2`, the skill examples use a generic test runner so Agensi lists the tools buyers need for Skills Upkeep.
 
@@ -96,7 +100,7 @@ Starting in `v3.2.0`, locally installed copies check GitHub for a newer stable r
 - To disable the check for a project, add `Disable Skills Upkeep update checks for this project.` to its agent instructions, such as `AGENTS.md` or `CLAUDE.md`.
 - To disable the check for an agent session or CI job, set `SKILLS_UPKEEP_CHECK_UPDATES=0` in the environment that launches the agent.
 
-Either opt-out prevents the GitHub request. If GitHub is unreachable, the workflow continues quietly.
+Either opt-out prevents the GitHub request. The workflow continues quietly if the lookup is unavailable.
 
 In `v3.1.2`, Skills Upkeep installs reviewed npm-bundled skills as project copies for the selected agents. A later package upgrade leaves those instructions in place until you review and apply the update. When you ask Skills Upkeep to publish changes to an existing pull request, it checks the published diff and pushes any missing requested changes to the same branch. [Release notes](https://github.com/notuxius/skills/releases/tag/v3.1.2)
 
@@ -142,9 +146,9 @@ npx skills add notuxius/skills --skill queue-devops queue-docs --copy
 
 On the default branch, run [Skills Upkeep release ZIP](https://github.com/notuxius/skills/actions/workflows/release-zip.yml) with the planned tag. The workflow checks the skill and telemetry versions and creates the tag for that revision. If you push the tag yourself, wait for **Validate release tag** to pass. Publish the release from the verified tag. The check runs again before packaging.
 
-When a stable `vMAJOR.MINOR.PATCH` release is published, GitHub Actions attaches `skills-upkeep-vMAJOR.MINOR.PATCH.zip` to its [release assets](https://github.com/notuxius/skills/releases). The ZIP contains one `skills-upkeep/` folder with `SKILL.md`, its workflow references, the update and ledger checkers, the ledger template, the example report and the MIT notice in `LICENSE.txt`. The [support queue lab](lab/) and [eval scenarios](evals/skills-upkeep.md) stay in the repository source archive.
+When a stable `vMAJOR.MINOR.PATCH` release is published, GitHub Actions attaches `skills-upkeep-vMAJOR.MINOR.PATCH.zip` to its [release assets](https://github.com/notuxius/skills/releases). The ZIP contains one file at `skills-upkeep/SKILL.md`, with the workflow guidance, ledger template, examples, and MIT notice inline. The [support queue lab](lab/) and [eval scenarios](evals/skills-upkeep.md) stay in the repository source archive.
 
-Download the [v3.3.2 release ZIP](https://github.com/notuxius/skills/releases/download/v3.3.2/skills-upkeep-v3.3.2.zip) or find the ZIP for a newer version in the [latest release](https://github.com/notuxius/skills/releases/latest). To publish to Agensi, upload the verified ZIP from the existing listing’s edit page in Creator Studio. Set the version and changelog, then compare the files Agensi serves after approval with the ZIP. [Agensi update guide](https://www.agensi.io/docs/updates)
+Download the [v4.0.0 release ZIP](https://github.com/notuxius/skills/releases/download/v4.0.0/skills-upkeep-v4.0.0.zip) or find the ZIP for a newer version in the [latest release](https://github.com/notuxius/skills/releases/latest). To publish to Agensi, upload the verified ZIP from the existing listing’s edit page in Creator Studio. Set the version and changelog, then compare the files Agensi serves after approval with the ZIP. [Agensi update guide](https://www.agensi.io/docs/updates)
 
 After release validation and ZIP packaging succeed, the workflow temporarily installs the tagged revision to refresh the public skills.sh listing. CI checks every installed file against that revision. After five minutes, a public snapshot that exactly matches another revision on the default branch passes with a warning. The warning identifies the commit and says whether the snapshot is newer or indexing is still pending. An unrecognized snapshot or an unavailable download fails the check. The install sends the Skills CLI's install telemetry and can contribute to the public install count. [skills.sh FAQ](https://skills.sh/docs/faq#how-is-the-leaderboard-ranked)
 
