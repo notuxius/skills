@@ -45,24 +45,34 @@ export function checkLedger(ledger, installedVersions, today = new Date().toLoca
     const recordedDue = cells[columns.indexOf('Next due')];
     const syncedFrom = cells[columns.indexOf('Synced from')];
     const status = [];
-    try {
-      const due = nextDue(reviewed);
-      status.push(`Next due ${due}${today >= due ? ' (review due)' : ''}`);
-      if (!recordedDue) status.push('ledger Next due missing');
-      else if (recordedDue !== due) status.push(`ledger Next due is ${recordedDue}`);
-    } catch (error) {
-      status.push(error.message);
-    }
-
+    let versionDiffers = false;
     if (syncedFrom) {
       try {
         const { tool, version } = toolVersion(syncedFrom);
         const current = installed.get(tool);
-        if (!current) status.push(`installed ${tool} version unverified`);
-        else if (version !== current) status.push(`re-sync due (${tool} synced from ${version}, installed ${current})`);
+        if (!current) {
+          status.push(`Version unverified (${tool})`);
+        } else if (version !== current) {
+          versionDiffers = true;
+          status.push(`Version differs (${tool}: copied from ${version}, installed ${current})`);
+          status.push('Compare the local skill with the guidance bundled in the installed version');
+        } else {
+          status.push(`Version match (${tool}@${current})`);
+        }
       } catch (error) {
         status.push(error.message);
       }
+    }
+
+    try {
+      const due = nextDue(reviewed);
+      if (!versionDiffers) status.push(`${today >= due ? 'Needs review' : 'Review scheduled'} (${due})`);
+      if (!recordedDue) status.push('ledger Next due missing');
+      else if (recordedDue !== due) {
+        status.push(versionDiffers ? 'ledger Next due is incorrect' : `ledger Next due is ${recordedDue}`);
+      }
+    } catch (error) {
+      status.push(error.message);
     }
     results.push(`${skill} | ${status.join(' | ')}`);
   }

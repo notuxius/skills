@@ -8,7 +8,7 @@ Diagnose and recover as part of the current task. If the evidence points to a de
 
 ## Resolve the target and prepare the draft
 
-Use the repository the user names. For a bug or feature suggestion about Skills Upkeep itself, default to `github.com/notuxius/skills`. For work in a consuming project, use its intended GitHub repository. Resolve the target from project instructions or the Git remotes when clear. Ask if the target is ambiguous, and provide the draft text while it is unresolved. Share only task-relevant material appropriate for that repository. Leave credentials, private logs and unrelated project data out of both the draft and the submission.
+Use the repository the user names. For a bug or feature suggestion about Skills Upkeep itself, default to `github.com/notuxius/skills`. For feedback about another skill, verify the official repository that owns the reviewed skill and follow its contribution guidelines. For work in a consuming project, use its intended GitHub repository. Resolve the target from project instructions or the Git remotes when clear. Ask if the target is ambiguous, and provide the draft text while it is unresolved. Share only task-relevant material appropriate for that repository. Leave credentials, private logs and unrelated project data out of both the draft and the submission.
 
 Use the repository's template when available. Give the item a title and a Markdown body.
 

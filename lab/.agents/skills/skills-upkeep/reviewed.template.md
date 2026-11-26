@@ -15,6 +15,8 @@ Keep one row per reviewed skill. Reuse the existing row on later reviews. Use `u
 
 In Reason, include the workspace and environment, the setup and rule sources that mattered, and the reviewed checkout revision or file content identity needed to recognize later changes. Use file content identities for inputs that differ from the recorded commit. For a setup-only workflow with no package, record the decision here. When a prior input is unknown, establish it during review.
 
+For a customized skill, record the original upstream source and revision or bundled version in Reason, along with the local changes or their file identities. Record any later revision reviewed and sections adopted separately. If a comparison is pending, note it here and keep the original baseline.
+
 Record Reviewed as `YYYY-MM-DD`. Generate Next due with `node <installed-check-ledger.mjs> --next-due YYYY-MM-DD`, using the Reviewed date. For a vendored skill supplied by a tool, record the source as `tool@version` in Synced from. Leave it blank when the source version is unknown or the skill was not vendored from a tool. Update Synced from only after verifying a sync. Add these columns to older review tables on the next authorized ledger write. See the [ledger health check](upstream-audit.md#ledger-health-check).
 
 | Skill | Reviewed | Next due | Outcome | Candidates considered | Upstream read | Versions seen | Synced from | Audit evidence | Reason |
