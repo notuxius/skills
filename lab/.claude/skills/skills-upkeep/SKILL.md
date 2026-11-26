@@ -2,7 +2,7 @@
 name: skills-upkeep
 description: Set up and maintain shared project skills. Check skill health, review dependency or setup changes, audit upstream skills, or report Skills Upkeep issues.
 metadata:
-  version: "3.3.1"
+  version: "3.3.2"
 ---
 
 # Skills Upkeep
