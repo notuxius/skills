@@ -85,6 +85,8 @@ The feedback workflow is available starting in `v2.2.0`.
 
 ## Update Skills Upkeep
 
+In `v3.3.1`, the skill documents which workflows use Node.js, Git, the Skills CLI, and GitHub publishing access. A report based on project files needs a coding agent with read access to the local checkout. [Optional tools](skills/skills-upkeep/SKILL.md#optional-tools)
+
 In `v3.3.0`, version reviews show which skills were checked and offer local adaptations when needed. A new upstream revision can be compared with a customized copy before you adopt or merge it. The ledger health check prioritizes version mismatches and shows routine review dates for the other skills. [Release notes](https://github.com/notuxius/skills/releases/tag/v3.3.0)
 
 Starting in `v3.2.0`, locally installed copies check GitHub for a newer stable release each time you run a Skills Upkeep workflow, including report-only runs. A newer release adds one line with your installed version and a release-notes link. The check works for CLI installs and manually copied release ZIPs. Applying an update is a separate step.
@@ -140,7 +142,7 @@ On the default branch, run [Skills Upkeep release ZIP](https://github.com/notuxi
 
 When a stable `vMAJOR.MINOR.PATCH` release is published, GitHub Actions attaches `skills-upkeep-vMAJOR.MINOR.PATCH.zip` to its [release assets](https://github.com/notuxius/skills/releases). The ZIP contains one `skills-upkeep/` folder with `SKILL.md`, its workflow references, the update and ledger checkers, the ledger template, the example report and the MIT notice in `LICENSE.txt`. The [support queue lab](lab/) and [eval scenarios](evals/skills-upkeep.md) stay in the repository source archive.
 
-Download the [v3.3.0 release ZIP](https://github.com/notuxius/skills/releases/download/v3.3.0/skills-upkeep-v3.3.0.zip) or find the ZIP for a newer version in the [latest release](https://github.com/notuxius/skills/releases/latest). To publish to Agensi, upload the verified ZIP from the existing listing’s edit page in Creator Studio. Set the version and changelog, then compare the files Agensi serves after approval with the ZIP. [Agensi update guide](https://www.agensi.io/docs/updates)
+Download the [v3.3.1 release ZIP](https://github.com/notuxius/skills/releases/download/v3.3.1/skills-upkeep-v3.3.1.zip) or find the ZIP for a newer version in the [latest release](https://github.com/notuxius/skills/releases/latest). To publish to Agensi, upload the verified ZIP from the existing listing’s edit page in Creator Studio. Set the version and changelog, then compare the files Agensi serves after approval with the ZIP. [Agensi update guide](https://www.agensi.io/docs/updates)
 
 After release validation and ZIP packaging succeed, the workflow temporarily installs the tagged revision to refresh the public skills.sh listing. CI checks every installed file against that revision. After five minutes, a public snapshot that exactly matches another revision on the default branch passes with a warning. The warning identifies the commit and says whether the snapshot is newer or indexing is still pending. An unrecognized snapshot or an unavailable download fails the check. The install sends the Skills CLI's install telemetry and can contribute to the public install count. [skills.sh FAQ](https://skills.sh/docs/faq#how-is-the-leaderboard-ranked)
 
