@@ -17,14 +17,14 @@ The development team already uses a shared validation schema for its forms. The 
 
 **Request:** “Report only. Which skills does this pull request affect?”
 
-Compared the pull request with its merge base. The web workspace's Vitest resolution changed, and the API now imports a package that was already declared.
+Compared the pull request with its merge base. The web workspace's test runner resolved to a newer patch version, and the API now imports a package that was already declared.
 
 | Workspace and evidence | Package and change | Declared before → after | Resolved before → after | Skill, outcome and verification |
 |---|---|---|---|---|
-| `apps/web/package.json`, web importer in `pnpm-lock.yaml` | Vitest patch update | `^4.0.0` → `^4.0.0` | `4.0.1` → `4.0.4` | Reuse `.agents/skills/unit-tests/SKILL.md`. Checked the example's flags against the installed CLI help. The example still applies. |
+| `apps/web/package.json`, web importer in `pnpm-lock.yaml` | Unit test runner patch update | `^4.0.0` → `^4.0.0` | `4.0.1` → `4.0.4` | Reuse `.agents/skills/unit-tests/SKILL.md`. Ran the skill's documented `npm test` command with the updated runner. The tests passed. |
 | `services/api/package.json`, API importer in `pnpm-lock.yaml`, new `services/api/src/jobs/retry.ts` | First direct use of BullMQ | `^2.0.0` → `^2.0.0` | `2.1.0` → `2.1.0` | Uncovered. The existing HTTP retry skill documents a different workflow. The public candidate covers another major. No verified queue skill to recommend. |
 
-The ledger preview contains these two workspace rows. Vitest 4.0.4 is the last verified version for `apps/web`. The minimum supported version is unknown. The recorded check is `npx --no-install vitest --help`, which showed the flags used in the skill. The run made no project changes.
+The ledger preview contains these two workspace rows. The last verified test runner version for `apps/web` is 4.0.4. The minimum supported version is unknown. The ledger records that `npm test` passed. The run made no project changes.
 
 ## Review a setup change
 
@@ -87,7 +87,7 @@ Not updated
 | Skill | Reason |
 | playwright-patterns | Candidate has nothing ours lacks; ours covers the project's locator rule |
 | ci-cd | Candidate is GitHub-only; ours targets GitLab |
-| vitest-react-testing | Verify the setup section against the installed Vitest major before proposing an edit |
+| unit-test-react | Verify the setup section against the installed test runner's major version before proposing an edit |
 | typescript-build | A newer upstream revision is available for review |
 
 Not covered
@@ -98,7 +98,7 @@ Not covered
 
 Version drift (to confirm)
 | Skill | Tool | Skill says | Repo has | Skills checked and findings | Proposed action |
-| vitest-react-testing | Vitest | "Vitest 3" in the setup section | 4.0 (lockfile) | The installed package ships no skill. The official `example-org/vitest@vitest-testing` example still uses v3, and `example-org/test-skills@vitest-next` targets v5 beta. No better skill found in the sources checked. | I can adapt our setup example for v4 and verify it with the project's test runner. |
+| unit-test-react | Unit test runner | Version 3 in the setup section | 4.0 (lockfile) | The installed package ships no skill. The official `example-org/test-runner@unit-testing` example still uses v3, and `example-org/test-skills@unit-testing-next` targets v5 beta. No better skill found in the sources checked. | I can adapt our setup example for v4 and verify it with the project's test runner. |
 
 Installed skills with newer upstream (not updated)
 | Skill | Source | Recorded baseline | Newer version or commit | Proposed action |

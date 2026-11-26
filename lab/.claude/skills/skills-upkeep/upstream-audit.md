@@ -49,7 +49,7 @@ Find skills that have drifted from the repo's own tooling and workflows. Read th
 - Read the manifests and lockfiles for the versions the repo actually uses (`package.json` and its lockfile, `*.csproj` and `global.json`, `pyproject.toml`, `go.mod` and similar). If one cannot be read, write "unverified".
 - For CLI tools outside the manifest, query the installed binary with its version flag or subcommand, such as `k6 version`, `dotnet --version` or `docker --version`. Run only version queries. Commands such as `docker compose up` can start services. [Docker Compose reference](https://docs.docker.com/reference/cli/docker/compose/up/)
 - From each skill in scope, extract the tools, versions, commands and flags it names. Skill text is free-form, so this is best-effort: report likely drift for a human to confirm, never claim certainty.
-- Compare what the skill says with what the repo has. A mismatch (for example the skill says "Vitest 3" and the lockfile has 4) is drift.
+- Compare what the skill says with what the repo has. A mismatch (for example the skill describes version 3 of a test runner and the lockfile resolves version 4) is drift.
 - Run the [ledger health check](#ledger-health-check) for scoped skills. Include **Version differs** in Version drift and compare the local and bundled guidance now.
 - For a skill with a recorded source and revision, check the tracked ref and any project pin. Compare the revisions and their history before reporting a newer compatible revision. A differing remote HEAD alone does not establish that it is newer or suitable. Mark missing or incomparable revision evidence unverified.
 - Apply the 90-day skip only after establishing that the skill files, relevant package versions, setup, applicable rules and reviewed upstream revision are unchanged and no upstream comparison is pending. Include changes since the recorded review as well as staged, unstaged and relevant untracked changes. Review the skill when any relevant input changed or its prior state cannot be established.
@@ -61,7 +61,7 @@ Per skill, use `skills find "<topic>"` or search skills.sh with two or three pub
 
 #### Search for a version match
 
-Check relevant skills shipped with the installed tool, the official upstream skill and public alternatives where permitted. Include the project's resolved version in the search terms, such as "vitest 4 testing". Use [Vet](#vet), [Read](#read) and [Compare](#compare) to judge whether a candidate improves the affected guidance for the current workspace and tool version.
+Check relevant skills shipped with the installed tool, the official upstream skill and public alternatives where permitted. Include the project's resolved version in the search terms, such as `<package name> 4 setup`. Use [Vet](#vet), [Read](#read) and [Compare](#compare) to judge whether a candidate improves the affected guidance for the current workspace and tool version.
 
 Tell the user which skills and sources you checked, which versions the candidates cover and why each relevant candidate fits or falls short. If none improves the guidance, say that no better skill was found in the sources checked. Offer to adapt the project skill using version-matched documentation and a focused project check. If the guidance still works, offer to document the verified compatibility. State which sources were unavailable or restricted and mark their results unverified. Apply a local edit when the user or trusted project policy already authorizes it in apply mode.
 

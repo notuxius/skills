@@ -6,7 +6,7 @@ The example groups below are optional. Replace them with names or globs that mat
 groups:
   aqa: [playwright-*, k6-*, test-plan-strategy]
   devops: [ci-cd]
-  dev: [vitest-*]
+  dev: [unit-test-*]
 ```
 
 ## Skill reviews
