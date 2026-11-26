@@ -55,7 +55,7 @@ try {
   const skillLock = join(project, 'skills-lock.json');
   const installed = (agent, name) => join(project, agent, 'skills', name, 'SKILL.md');
   const syncFlags = ['--agent', 'codex', 'claude-code', '--copy', '--no-remote', '--no-cleanup', '--no-frozen-lockfile'];
-  const workflow = readFileSync(join(catalogSkills, 'skills-upkeep', 'project-workflow.md'), 'utf8');
+  const workflow = readFileSync(join(catalogSkills, 'skills-upkeep', 'SKILL.md'), 'utf8');
   assert.ok(workflow.includes(`skills experimental_sync --dry-run ${syncFlags.join(' ')} --include '<package>'`),
     'Exercise the preview and apply flags from the published workflow');
   const sync = (include, ...args) => skills(project, 'experimental_sync', ...syncFlags, '--include', include, ...args, '--yes');
