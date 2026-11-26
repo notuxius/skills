@@ -41,7 +41,7 @@ If on the default branch or an unrelated branch, create `chore/refresh-<scope>-s
 
 ### Installed skills
 
-Check the project skill lock and installed files. Use `skills list --json` if supported to distinguish clean tracked installs, modified files, untracked skills and missing files. Treat hand edits as local guidance even when the skill has a recorded upstream. Keep updates scoped to the selected skills. For a clean install, inspect the candidate revision and check its fit against Versions and setup before applying it. Apply an update only in Edit, if authorized and the CLI can safely target the selected install and reviewed revision. Otherwise report it for manual review.
+Check the project skill lock and installed files. Use `skills list --json` if supported to identify tracked, untracked and missing skills. Check the installed copies and supporting files against the locked source or recorded baseline before treating a skill as clean. Treat hand edits as local guidance even when the skill has a recorded upstream. Keep updates scoped to the selected skills. For a clean install, inspect the candidate revision and check its fit against Versions and setup before applying it. Apply an update only in Edit, if authorized and the CLI can safely target the selected install and reviewed revision. Otherwise report it for manual review.
 
 ### Versions and setup
 
@@ -50,14 +50,20 @@ Find skills that have drifted from the repo's own tooling and workflows. Read th
 - For CLI tools outside the manifest, query the installed binary with its version flag or subcommand, such as `k6 version`, `dotnet --version` or `docker --version`. Run only version queries. Commands such as `docker compose up` can start services. [Docker Compose reference](https://docs.docker.com/reference/cli/docker/compose/up/)
 - From each skill in scope, extract the tools, versions, commands and flags it names. Skill text is free-form, so this is best-effort: report likely drift for a human to confirm, never claim certainty.
 - Compare what the skill says with what the repo has. A mismatch (for example the skill says "Vitest 3" and the lockfile has 4) is drift.
-- Run the [ledger health check](#ledger-health-check) for scoped skills. Include `re-sync due` in Version drift and review the vendored guidance even when its Next due date is in the future.
+- Run the [ledger health check](#ledger-health-check) for scoped skills. Include **Version differs** in Version drift and compare the local and bundled guidance now.
 - For a skill with a recorded source and revision, check the tracked ref and any project pin. Compare the revisions and their history before reporting a newer compatible revision. A differing remote HEAD alone does not establish that it is newer or suitable. Mark missing or incomparable revision evidence unverified.
-- Apply the 90-day skip only after establishing that the skill files, relevant package versions, setup, applicable rules and reviewed upstream revision are unchanged. Include changes since the recorded review as well as staged, unstaged and relevant untracked changes. Review the skill when any relevant input changed or its prior state cannot be established.
-- A skill that has drifted from the repo gets the new version added to its search phrasing in Search (for example "vitest 4 testing") and then goes through Vet, Compare and Decide as usual. Record the versions seen in the ledger.
+- Apply the 90-day skip only after establishing that the skill files, relevant package versions, setup, applicable rules and reviewed upstream revision are unchanged and no upstream comparison is pending. Include changes since the recorded review as well as staged, unstaged and relevant untracked changes. Review the skill when any relevant input changed or its prior state cannot be established.
+- If the tool version changed or the skill targets a different version, [search for a version match](#search-for-a-version-match). Record the versions seen in the ledger.
 
 ### Search
 
 Per skill, use `skills find "<topic>"` or search skills.sh with two or three public phrasings. Check the skills.sh leaderboard first for well-known domains.
+
+#### Search for a version match
+
+Check relevant skills shipped with the installed tool, the official upstream skill and public alternatives where permitted. Include the project's resolved version in the search terms, such as "vitest 4 testing". Use [Vet](#vet), [Read](#read) and [Compare](#compare) to judge whether a candidate improves the affected guidance for the current workspace and tool version.
+
+Tell the user which skills and sources you checked, which versions the candidates cover and why each relevant candidate fits or falls short. If none improves the guidance, say that no better skill was found in the sources checked. Offer to adapt the project skill using version-matched documentation and a focused project check. If the guidance still works, offer to document the verified compatibility. State which sources were unavailable or restricted and mark their results unverified. Apply a local edit when the user or trusted project policy already authorizes it in apply mode.
 
 ### Vet
 
@@ -78,6 +84,10 @@ Inspect the `SKILL.md` and relevant files within the same skill directory at a r
 
 Per skill, list what each side contributes. Use the project's setup and applicable rules to decide which commands and examples fit. Adapt compatible ideas to local conventions and cite the rule or setup source that shaped the decision. If adoption requires a project rule change, report it for the owner and continue with independent improvements. When the user explicitly authorizes a convention change, update the file that owns it in the same change and follow the project's authorized handoff. Check commands or flags against version-matched official references or the installed tool before porting them.
 
+When there is a newer official revision for a skill with local edits, follow [Review a customized skill](#review-a-customized-skill).
+
+Use **Update available** when comparison confirms changed guidance relevant to the project. Use **Better fit available** when a vetted alternative meets the workspace's needs better. Cite the evidence behind either status and show the proposed action.
+
 ### Decide
 
 Choose one outcome per skill.
@@ -93,7 +103,7 @@ Skip this step for named skills or globs. In a group audit, keep proposals withi
 
 ### Edit
 
-Keep each skill's existing frontmatter shape and hand edits, including project rules. Merge individual improvements into the existing files. Report a rewrite as separate work and leave that skill untouched. Credit each ported source by repo and skill at the end of the edited skill and keep its licence terms.
+Keep each skill's existing frontmatter shape and hand edits, including project rules. Merge individual improvements into the existing files. For an official update the user explicitly approved after a [customized-skill comparison](#review-a-customized-skill), preserve the local requirements identified in the comparison. Report other rewrites as separate work. Credit each ported source by repo and skill at the end of the edited skill and keep its licence terms.
 
 ### Verify
 
@@ -102,6 +112,16 @@ Run the [self-check](#self-check).
 ### Record
 
 Use [Ledger](#ledger) for review evidence and [Report format](#report-format) for the outcome. In apply mode update the ledger before presenting the report. Commit only if the user asks.
+
+## Review a customized skill
+
+Verify the newer version or revision and the identity of the upstream maintainer from the recorded source. Tell the user it is available and offer to compare it with their customized copy. If the user has already requested the comparison, include it in the current review. While comparison is pending, keep the custom copy and report the pending review.
+
+Compare the actual project files and relevant supporting files with the newer official revision and the original upstream baseline, when available. Use the baseline to identify which changes came from the project and which came from upstream. If the baseline is unknown, compare what is available, explain the uncertainty and preserve local edits. Show which official sections improve the skill, which local sections still work better, and what evidence supports each decision.
+
+Offer to adopt the reviewed official revision when it is better overall and all local requirements can be preserved. If each copy has useful changes, offer a selective merge that keeps project rules and stronger local guidance. If the local copy works better, recommend keeping it. In apply mode, adopt only the reviewed revision or merge the reviewed sections as authorized. Verify the result with the project's focused checks. Keep any project pin unless changing it is authorized.
+
+When local guidance is stronger in any area that would benefit other users, list the specific suggestions or bugs. Offer submission as a separate follow-up, including in report-only runs. Say, for example, “I can send the maintainer a report about these findings if you’d like.” Use the verified maintainer's feedback channel and the [GitHub workflow](github-workflow.md#resolve-the-target-and-prepare-the-draft) for GitHub issues. Include the reviewed upstream revision, affected sections, observed behavior and a proposed correction or sanitized reproduction. Keep project-specific rules and private material local. Send only when the user explicitly asks to submit the report.
 
 ## Report format
 
@@ -116,10 +136,10 @@ Not covered
 | Skill | Why it was out of scope (project workflow, deferred by budget, or skipped by the CLI with the error) |
 
 Version drift (to confirm)
-| Skill | Tool | Skill says | Repo has | Proposed action |
+| Skill | Tool | Skill says | Repo has | Skills checked and findings | Proposed action |
 
 Installed skills with newer upstream
-| Skill | Source | Recorded commit | Remote head |
+| Skill | Source | Recorded baseline | Newer version or commit | Proposed action |
 
 Proposed replacements (not applied)
 | Local skill | Candidate (owner/repo@skill) | What it does better | Local rules to keep | Installs / stars / licence | Migration plan |
@@ -134,16 +154,22 @@ For decisions affected by project setup, cite the workspace, environment, setup 
 
 Keep `reviewed.md` next to the local skills (copy [reviewed.template.md](reviewed.template.md) on first use). In each skill's row record its review date, calculated Next due date, outcome, candidates, upstream `owner/repo@sha`, relevant tool versions, and reason. For a vendored skill, preserve Synced from across reviews until a verified sync changes it. Record the reviewed inputs needed for the next recency check in the reason, including setup and rule evidence. Rewrite a row when a skill is reviewed again. Record a declined replacement as `supersede declined` and a declined gap as `gap declined` to avoid repeating those proposals.
 
+When applying a customization, keep the original upstream source and revision or bundled version in the reason, along with the local changes or their file identities. Record later upstream revisions reviewed and any sections adopted, separately from the customization baseline. A pending comparison remains due for review.
+
 ## Ledger health check
 
 Use the read-only [check-ledger.mjs](check-ledger.mjs) with Node.js 22.20 or later. Verify the tool version in the environment that supplies each skill using an approved local binary's version flag or the installed package's metadata. Pass the project ledger path and each verified version as a separate `tool@version` argument, using the tool name recorded in Synced from. If workspaces use different versions, check each separately and use its results for its rows.
 
-For each review row, the checker calculates Next due as Reviewed plus 90 calendar days and flags missing or incorrect dates. Use the calculated date for review and status reports, including on an older ledger. It reports `re-sync due` whenever a verified installed version differs from Synced from and reports an unavailable installed version as unverified. A health check alone is report-only. See the [example](example-report.md#vendored-skill-health-check).
+Use **Version differs** when the verified installed version differs from Synced from. Show both versions and what to check now. Omit the skill's routine review date from the report. Use **Version match** when the versions match and **Version unverified** when the installed version cannot be confirmed.
+
+The checker calculates Next due as Reviewed plus 90 calendar days and flags missing or incorrect ledger dates. For skills without **Version differs**, show **Review scheduled** before the calculated date or **Needs review** on or after it. Use the calculated date even on older ledgers.
+
+If a newer bundle is confirmed for a customized copy, offer to [compare them](#review-a-customized-skill). A health check alone is report-only. See the [example](example-report.md#vendored-skill-health-check).
 
 ## Self-check
 
 - Check that every scoped skill has one report outcome and a recorded or proposed ledger row. Account for CLI skips under Not covered.
-- Generate Next due from Reviewed with the [ledger checker](#ledger-health-check) and use that date in the report.
+- Generate Next due from Reviewed with the [ledger checker](#ledger-health-check). Show it in the report when there is no version mismatch.
 - Recheck candidate decisions and citations against [Vet](#vet), [Read](#read) and [Compare](#compare).
 - Verify that changes follow [Edit](#edit) and relative links resolve. Parse `SKILL.md` frontmatter with a YAML parser. Quote text values and text list items that contain a colon followed by a space or begin with a literal quote or backtick. Check report-only runs against the starting branch and working-tree state and review proposal boundaries under [Decide](#decide) and [Gaps](#gaps).
 

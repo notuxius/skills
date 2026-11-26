@@ -52,6 +52,8 @@ The bundled-skill fixture uses the pinned Skills CLI and installs two local npm 
 
 Project instructions map tasks to skills. The installed `skills-upkeep` reviews package additions, upgrades and first use, as well as changes to the lab's runtime, test commands or applicable rules. Try `skills-upkeep setup-change report-only for qa` after changing how the QA check runs. The report should cite the changed setup and preserve the rules in [AGENTS.md](AGENTS.md). Make reusable improvements in the [catalog](../skills/).
 
+Try `Run Skills Upkeep for all our project skills in report-only mode` to audit the lab's skills together. The report shows what it checked for version drift, whether a local edit would help, and which official updates are worth comparing with customized copies. [Version drift and customization scenarios](../evals/skills-upkeep.md#version-drift-and-custom-skills)
+
 ## Rehearse a catalog release offline
 
 The included catalog bundle contains two historical snapshots. From `lab/`, run this command in a clone that includes `skill-baseline`. It applies each role's Git diff from `lab-v1` to `lab-v2` in a temporary consumer, runs the role's tests and checks both agent installations. It requires Python 3, Node.js and Git. Pass a catalog checkout to use its `lab-v1` and `lab-v2` tags instead of the bundled snapshots.

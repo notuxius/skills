@@ -50,10 +50,9 @@ ESLint 9 makes flat config the default. The `linting` skill now tells agents whi
 
 ## Vendored skill health check
 
-| Skill | Reviewed | Next due | Synced from |
-|---|---|---|---|
-| `adopt-rtk-query` | 2026-11-25 | 2027-02-23 | `@reduxjs/toolkit@2.12.0` |
-| `playwright-cli` | 2026-11-25 | 2027-02-23 | `@playwright/cli@0.1.22` |
+**Request**
+
+> Check the copied agent skills in our web workspace after the Redux Toolkit upgrade. For any skill whose package version differs, show what to check now. Show the next review date for skills whose versions match. Keep this report-only.
 
 Read the `version` field in the installed `@reduxjs/toolkit` and `@playwright/cli` packages' `package.json` files. Use the installation that supplies each skill. [Redux Toolkit bundled skills](https://github.com/reduxjs/redux-toolkit/releases/tag/v2.12.0) · [Playwright CLI skills](https://playwright.dev/docs/getting-started-cli#installing-skills)
 
@@ -63,7 +62,12 @@ From the project root, pass those versions to the checker. Adjust the helper pat
 node .agents/skills/skills-upkeep/check-ledger.mjs .agents/skills/reviewed.md '@reduxjs/toolkit@2.13.0' '@playwright/cli@0.1.22'
 ```
 
-The check reports `re-sync due` for `adopt-rtk-query` because the installed Redux Toolkit version has changed. The Playwright CLI version matches its recorded source.
+| Copied skill | Copied from | Installed version | Status | Next action |
+|---|---|---|---|---|
+| `adopt-rtk-query` | `@reduxjs/toolkit@2.12.0` | `2.13.0` | **Version differs** | Compare the local instructions with the guidance bundled in `2.13.0`. |
+| `playwright-cli` | `@playwright/cli@0.1.22` | `0.1.22` | **Version match** | **Review scheduled** · February 23, 2027 |
+
+If the bundled Redux Toolkit guidance changed, report **Update available** and preview the edits and a focused verification check. Apply the approved edits and record the source version after verifying the re-sync.
 
 ## Use a skill during implementation
 
@@ -93,12 +97,12 @@ Not covered
 | k6-performance-testing | Deferred by budget (15 skills per pass) |
 
 Version drift (to confirm)
-| Skill | Tool | Skill says | Repo has | Proposed action |
-| vitest-react-testing | Vitest | "Vitest 3" in the setup section | 4.0 (lockfile) | Search with "vitest 4"; Update if a fitting candidate exists |
+| Skill | Tool | Skill says | Repo has | Skills checked and findings | Proposed action |
+| vitest-react-testing | Vitest | "Vitest 3" in the setup section | 4.0 (lockfile) | The installed package ships no skill. The official `example-org/vitest@vitest-testing` example still uses v3, and `example-org/test-skills@vitest-next` targets v5 beta. No better skill found in the sources checked. | I can adapt our setup example for v4 and verify it with the project's test runner. |
 
 Installed skills with newer upstream (not updated)
-| Skill | Source | Recorded commit | Remote head |
-| typescript-build | example-org/typescript-skills | a1b2c3d | f4e5d6c |
+| Skill | Source | Recorded baseline | Newer version or commit | Proposed action |
+| typescript-build | example-org/typescript-skills | a1b2c3d | f4e5d6c | I can compare f4e5d6c with our customized copy, including the build instructions we added locally. |
 
 Proposed replacements (not applied)
 | Local skill | Candidate | What it does better | Local rules to keep | Installs / stars / licence | Migration plan |
