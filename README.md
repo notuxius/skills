@@ -67,7 +67,21 @@ The review cites the project setup and rule files, distinguishes local developme
 
 Ask for a Skills Upkeep health check to see what to check now when a copied skill's package version differs and when routine reviews are scheduled for the other skills. [Ledger health check](skills/skills-upkeep/SKILL.md#ledger-health-check)
 
-> Run Skills Upkeep for all our project skills in report-only mode. Show which are current, where we need a local edit, and where an official update is worth reviewing.
+Once the project has skills in place, ask for a review of what to add or improve.
+
+> Review the skills configured for this project. Recommend any additional skills worth installing and suggest improvements to the existing skills. Keep the review read-only and briefly explain why each recommendation would help.
+
+**Example output**
+
+**Report-only** · Checkout app
+
+| Recommendation | Why it helps |
+| --- | --- |
+| Improve `unit-test-react` | The skill still shows version 3 of the test runner. Use the checkout app’s version 4 configuration and test command so agents can run the examples against the installed version. |
+| Install `tailwind-v4` | The app uses Tailwind CSS 4. This skill would fill the gap in guidance for the app’s CSS-first configuration. |
+| Keep `vercel-react-best-practices` | Its component and data-fetching guidance still fits the web app. |
+
+See the [full example report](skills/skills-upkeep/SKILL.md#audit-against-public-skills) for the evidence and proposed ledger entries.
 
 ## Report a bug, suggest a feature or open a pull request
 

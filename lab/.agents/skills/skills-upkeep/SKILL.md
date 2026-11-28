@@ -406,6 +406,8 @@ When a package-backed workflow changes setup, keep the package versions in the r
 
 ## Example reports
 
+These examples use illustrative paths, versions, and results.
+
 ### Project workflow examples
 
 - Bootstrap. Map the web app's shared Zod schema workflow and the test workspace's signed-in fixture to their project skills. Cite each manifest, lockfile importer and representative use.
@@ -431,45 +433,41 @@ Compare the local `adopt-rtk-query` instructions with the guidance bundled in `2
 
 ### Audit against public skills
 
+> Review the skills configured for this project. Recommend any additional skills worth installing and suggest improvements to the existing skills. Keep the review read-only and briefly explain why each recommendation would help.
+
+**Report-only** · Checkout app · As of 2026-11-26
+
+#### Existing skills
+
+| Skill | Proposed action | Evidence and benefit |
+| --- | --- | --- |
+| `unit-test-react` | Update the setup example for version 4 of the test runner. Use the workspace’s existing `test` script and preserve its `jsdom` setup. | The skill shows version 3 of the test runner. The lockfile resolves `4.0.0`, and `apps/web/vitest.config.ts` configures `jsdom`. The package ships no skill. `example-org/test-runner@unit-testing` covers v3 and `example-org/test-skills@unit-testing-next` covers v5 beta. A local edit would give agents steps that fit the installed version. |
+| `vercel-react-best-practices` | Keep the current guidance. | Its component and parallel data-fetching guidance fits the checkout app’s React workflow. |
+
+The project-specific `browser-tests` runbook is outside the public audit scope. Verify the proposed edit by running `npm test` from `apps/web` after the edit is applied.
+
+#### Recommended install
+
+| Skill | Evidence and benefit | Reviewed source |
+| --- | --- | --- |
+| `tailwind-v4` | `apps/web/package.json` declares Tailwind CSS 4, and `apps/web/src/app.css` uses CSS-first configuration. The candidate covers that setup and fills a gap in the installed guidance. | `example-org/tailwind-skills@f4e5d6c`, MIT, 4,200 installs, 650 stars, last commit 2026-11-20. |
+
+Before using the example command, check for a same-name project skill and confirm that the source still matches the reviewed revision.
+
+```sh
+npx skills add example-org/tailwind-skills --skill tailwind-v4 --copy
 ```
-Updated
-(none: report-only)
 
-Not updated
-| Skill | Reason |
-| playwright-patterns | Candidate has nothing ours lacks; ours covers the project's locator rule |
-| ci-cd | Candidate is GitHub-only; ours targets GitLab |
-| unit-test-react | Verify the setup section against the installed test runner's major version before proposing an edit |
-| typescript-build | A newer upstream revision is available for review |
+#### Proposed ledger entries
 
-Not covered
-| Skill | Why it was out of scope |
-| deploy-runbook | Project workflow |
-| api-testing | Skipped by the CLI: YAML parse error at line 13 (fix the frontmatter first) |
-| k6-performance-testing | Deferred by budget (15 skills per pass) |
+| Skill | Reviewed | Next due | Proposed entry |
+| --- | --- | --- | --- |
+| `unit-test-react` | 2026-11-26 | — | Review now. Update the version 3 example for locked Vitest `4.0.0` and run the workspace test. |
+| `vercel-react-best-practices` | 2026-11-26 | 2027-02-24 | Keep the current guidance for the checkout app’s React workflow. |
 
-Version drift (to confirm)
-| Skill | Tool | Skill says | Repo has | Skills checked and findings | Proposed action |
-| unit-test-react | Unit test runner | Version 3 in the setup section | 4.0 (lockfile) | The installed package ships no skill. The official `example-org/test-runner@unit-testing` example still uses v3, and `example-org/test-skills@unit-testing-next` targets v5 beta. No better skill found in the sources checked. | I can adapt our setup example for v4 and verify it with the project's test runner. |
-
-Installed skills with newer upstream (not updated)
-| Skill | Source | Recorded baseline | Newer version or commit | Proposed action |
-| typescript-build | example-org/typescript-skills | a1b2c3d | f4e5d6c | I can compare f4e5d6c with our customized copy, including the build instructions we added locally. |
-
-Proposed replacements (not applied)
-| Local skill | Candidate | What it does better | Local rules to keep | Installs / stars / licence | Migration plan |
-| code-review | example-org/code-review@skill | Severity scale and a coverage note | Our severity labels, "tests first" rule | 12K / 3.1K / MIT | Install under another name, move our rules into a short overlay, remove the old skill after you confirm |
-
-Proposed new skills (not installed)
-| Topic | Evidence in repo | Candidate | Installs / stars / licence | Install command |
-| Tailwind CSS utilities | `apps/web/package.json` declares `tailwindcss` v4 and no skill covers it | example-org/tailwind-skills@tailwind-v4 | 4.2K / unverified / MIT | Approved Skills CLI install for example-org/tailwind-skills@tailwind-v4 |
-```
+Reviewed 2 skills. Proposed 1 local improvement and 1 install. Verification of the proposed edit is pending. No branch or file changes were made.
 
 The ledger records how each relevant audit finding affected the decision. For example, a provider warned that `example-org/code-review@111aaaa` sends data to an external URL. The reviewer checked the cited file and its helper scripts at `example-org/code-review@222bbbb` and found the external call had been removed. The ledger links the warning, records both revisions and explains why the warning did not block the replacement proposal. Stars for `example-org/tailwind-skills` are unverified.
-
-```
-Reviewed: 5 | Updated: 0 | Pointer: 0 | Supersede proposed: 1 | No change: 4 | Not covered: 3 | Gaps proposed: 1 | Branch: report-only | Confidence: Medium
-```
 
 ## License
 
